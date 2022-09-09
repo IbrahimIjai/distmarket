@@ -1,0 +1,126 @@
+.header {
+  background-color: black;
+  background-image: url("/desktop-black.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+.banner {
+  height: max(50vh, 400px);
+  position: relative;
+  .bannerImage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .bannerContent {
+      position: absolute;
+      bottom: 0;
+      background: rgba(146, 133, 133, 0.2);
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border: 1px solid rgba(146, 133, 133, 1);
+      z-index: 8;
+      width: 100%;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      padding: 1vh 7vw;
+      overflow-y: hidden;
+      gap: 5px;
+      .bannerContentImage {
+        height: 90px;
+        width: 90px;
+        position: relative;
+        background: rgba(255, 255, 255, 0.2);
+        border: 6px solid rgba(255, 255, 255, 1);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(5px);
+        border-radius: 8px;
+      }
+      .bannerContentDetails {
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        h1 {
+          font-size: clamp(1rem, 1.3rem, 1.5vw);
+        }
+        p {
+          font-size: clamp(0.75rem, 1rem, 1.2vw);
+        }
+        .pointer {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+.description {
+  padding: 30px 7vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    div {
+      margin: 10px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      p {
+        font-weight: 300;
+        color: gray;
+      }
+    }
+  }
+  .links {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    li {
+      list-style: none;
+      font-size: 20px;
+      display: flex;
+      padding: 10px 0;
+    }
+  }
+}
+.nfts {
+  padding: 0 7vw;
+  margin-bottom: 40px;
+  .nftFlex {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-auto-rows: 1fr;
+    grid-auto-flow: dense;
+    gap: 26px;
+    .nft {
+      min-height: 400px;
+      height: 450px;
+      width: 100%;
+      border-radius: 25px;
+      display: flex;
+      flex-direction: column;
+      background-color: #232121;
+      overflow: hidden;
+      will-change: transform;
+      border-radius: 8px;
+      .nftImage {
+        position: relative;
+        height: 100%;
+        width: 100%;
+      }
+      .content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: start;
+        padding: 10px 20px;
+      }
+    }
+  }
+}

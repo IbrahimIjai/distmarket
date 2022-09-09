@@ -2,6 +2,15 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-}
+  images: {
+    domains: [
+      "ipfs.io",
+      "coolmining.io",
+      "vignette.wikia.nocookie.net",
+      "gateway.pinata.cloud",
+      "distant.mypinata.cloud",
+    ],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

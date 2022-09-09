@@ -1,0 +1,175 @@
+.container {
+  .connect {
+    display: block;
+    cursor: pointer;
+    color: white;
+    font-weight: 400;
+    border-radius: 5rem;
+    font-size: 1.1rem;
+  }
+  .disconnect {
+    display: block;
+    cursor: pointer;
+    color: white;
+    font-weight: 400;
+    border-radius: 5rem;
+    font-size: 1.1rem;
+  }
+  .modal {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 95px 24px;
+    height: 100vh;
+    inset: 0px;
+    overflow: auto;
+    display: flex;
+    transform: translate3d(0px, 0px, 0px);
+    will-change: opacity;
+    color: black;
+    backface-visibility: hidden;
+    backdrop-filter: blur(20px);
+    perspective: 1000px;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 2222;
+    .closeModal {
+      display: flex;
+      position: fixed;
+      color: white;
+      top: 32px;
+      right: 24px;
+      background-color: black;
+      transform: none;
+      width: 50px;
+      height: 50px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 99999px;
+      cursor: pointer;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+      will-change: transform;
+    }
+    .modalMenu {
+      opacity: 1;
+      transform: none;
+      outline: none;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 350px;
+      align-content: center;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+      .modalInternal {
+        padding: 50px;
+        h1 {
+          font-weight: 600;
+          margin-bottom: 16px;
+          text-align: center;
+          font-size: 32px;
+          letter-spacing: -0.02em;
+        }
+        .wallets {
+          display: grid;
+          gap: 32px;
+          margin-bottom: 32px;
+          .walletLists {
+            display: grid;
+            gap: 12px;
+            .walletList {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              text-align: center;
+              text-decoration: none;
+              border: none;
+              appearance: none;
+              font-size: 16px;
+              font-weight: 600;
+              border-radius: 12px;
+              cursor: pointer;
+              will-change: transform;
+            }
+          }
+        }
+      }
+    }
+  }
+  .board {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 95px 24px;
+    height: 100vh;
+    inset: 0px;
+    overflow: auto;
+    color: black;
+    display: flex;
+    transform: translate3d(0px, 0px, 0px);
+    will-change: opacity;
+    backface-visibility: hidden;
+    backdrop-filter: blur(20px);
+    perspective: 1000px;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 2222;
+    .closeModal {
+      display: flex;
+      position: fixed;
+      color: white;
+      top: 32px;
+      right: 24px;
+      background-color: black;
+      transform: none;
+      width: 50px;
+      height: 50px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 99999px;
+      cursor: pointer;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+      will-change: transform;
+    }
+    .smallBoard {
+      //   opacity: 1;
+      //   transform: none;
+      //   outline: none;
+      //   border-radius: 24px;
+      //   width: 290px;
+      //   align-content: center;
+      //   height: 200px;
+      //   align-items: center;
+      //   justify-content: center;
+      //   display: flex;
+      //   flex-direction: column;
+      //   background-color: white;
+      //   align-items: center;
+      //   justify-content: center;
+      //   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+
+      opacity: 1;
+      transform: none;
+      outline: none;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 350px;
+      align-content: center;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+      padding: 50px;
+      p {
+        margin: 20px;
+      }
+    }
+  }
+}

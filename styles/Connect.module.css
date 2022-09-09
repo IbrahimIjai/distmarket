@@ -1,0 +1,163 @@
+.container .connect {
+  display: block;
+  cursor: pointer;
+  color: white;
+  font-weight: 400;
+  border-radius: 5rem;
+  font-size: 1.1rem;
+}
+.container .disconnect {
+  display: block;
+  cursor: pointer;
+  color: white;
+  font-weight: 400;
+  border-radius: 5rem;
+  font-size: 1.1rem;
+}
+.container .modal {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 95px 24px;
+  height: 100vh;
+  inset: 0px;
+  overflow: auto;
+  display: flex;
+  transform: translate3d(0px, 0px, 0px);
+  will-change: opacity;
+  color: black;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+  perspective: 1000px;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 2222;
+}
+.container .modal .closeModal {
+  display: flex;
+  position: fixed;
+  color: white;
+  top: 32px;
+  right: 24px;
+  background-color: black;
+  transform: none;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 99999px;
+  cursor: pointer;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  will-change: transform;
+}
+.container .modal .modalMenu {
+  opacity: 1;
+  transform: none;
+  outline: none;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 350px;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+}
+.container .modal .modalMenu .modalInternal {
+  padding: 50px;
+}
+.container .modal .modalMenu .modalInternal h1 {
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-align: center;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+}
+.container .modal .modalMenu .modalInternal .wallets {
+  display: grid;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+.container .modal .modalMenu .modalInternal .wallets .walletLists {
+  display: grid;
+  gap: 12px;
+}
+.container .modal .modalMenu .modalInternal .wallets .walletLists .walletList {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  will-change: transform;
+}
+.container .board {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 95px 24px;
+  height: 100vh;
+  inset: 0px;
+  overflow: auto;
+  color: black;
+  display: flex;
+  transform: translate3d(0px, 0px, 0px);
+  will-change: opacity;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+  perspective: 1000px;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 2222;
+}
+.container .board .closeModal {
+  display: flex;
+  position: fixed;
+  color: white;
+  top: 32px;
+  right: 24px;
+  background-color: black;
+  transform: none;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 99999px;
+  cursor: pointer;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  will-change: transform;
+}
+.container .board .smallBoard {
+  opacity: 1;
+  transform: none;
+  outline: none;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 350px;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  padding: 50px;
+}
+.container .board .smallBoard p {
+  margin: 20px;
+}/*# sourceMappingURL=Connect.module.css.map */

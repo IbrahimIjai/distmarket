@@ -1,0 +1,19 @@
+import { InjectedConnector } from "@web3-react/injected-connector";
+import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
+
+const injected = new InjectedConnector({
+  supportedChainIds: [321, 322],
+});
+
+const walletconnect = new WalletConnectConnector({
+  rpc: {
+    321: "https://rpc-mainnet.kcc.network",
+  },
+  bridge: "https://bridge.walletconnect.org",
+  qrcode: true,
+});
+
+export const connectors = {
+  injected: injected,
+  walletConnect: walletconnect,
+};

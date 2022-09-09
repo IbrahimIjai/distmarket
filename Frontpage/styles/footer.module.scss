@@ -1,0 +1,117 @@
+$bp-phone-1: 360px;
+$bp-phone: 480px;
+$bp-tablet-1: 520px;
+$bp-tablet: 720px;
+$bp-pc: 1025px;
+$bp-tv: 1600px;
+
+$h3: clamp(1.2rem, 1.4rem, 2vw);
+$p: clamp(0.7rem, 1.1rem, 2rem);
+
+.footer {
+  // background-color: black;
+  width: 100%;
+  list-style-type: none;
+  // color: white;
+  padding: 1vw 5vw;
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 20px;
+    line-height: 2;
+    @media (min-width: $bp-tablet-1) {
+      text-align: center;
+    }
+    @media (min-width: $bp-tablet) {
+      display: flex;
+      flex-direction: row;
+    }
+    .socials,
+    .resources,
+    .jobs,
+    .contact {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      h2 {
+        margin: 5% auto;
+        font-size: $h3;
+        font-family: "robotoregular";
+        font-weight: 300;
+        color: white;
+        span {
+          font-size: 20px;
+        }
+      }
+      li {
+        list-style: none;
+        font-size: $p;
+        font-family: "robotolight_italic";
+
+        a:link {
+          text-decoration: none;
+          color: gray;
+          transition: color 300ms ease-in-out;
+        }
+        a:visited {
+          text-decoration: none;
+          color: gray;
+        }
+        a:hover {
+          text-decoration: none;
+          color: aqua;
+        }
+        svg {
+          font-size: 24px;
+        }
+      }
+    }
+  }
+  .hr {
+    width: 70%;
+    margin: 1em auto;
+    margin-bottom: 0;
+    .copyright {
+      line-height: 1.6rem;
+      position: relative;
+      outline: 0;
+      border: 0;
+      color: white;
+      text-align: center;
+      height: 2.1rem;
+      opacity: 0.5;
+      &:before {
+        content: "";
+        background: linear-gradient(
+          to right,
+          transparent,
+          #818078,
+          transparent
+        );
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 1px;
+      }
+      &:after {
+        content: attr(data-content);
+        position: relative;
+        display: inline-block;
+        color: white;
+        padding: 0 0.8em;
+        line-height: 2.1rem;
+        color: #818078;
+        background-color: black;
+        font-size: 0.5rem;
+      }
+    }
+  }
+  p {
+    text-align: center;
+    padding: 1em;
+  }
+}
+.cross {
+  text-decoration: line-through;
+}

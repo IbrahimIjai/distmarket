@@ -1,0 +1,674 @@
+.main {
+  padding: 0 max(10px, 7vw);
+  background-image: url("/white.png");
+  background-color: #f0f0f0;
+  color: #000;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.main .container {
+  padding-top: min(70px, 12vh);
+  position: relative;
+}
+.main .container .headerContainer {
+  display: flex;
+  flex-direction: column;
+}
+.main .container .headerContainer .imageContainer {
+  position: relative;
+  min-height: 250px;
+  height: 300px;
+  max-height: 400px;
+  width: min(100%, 300px);
+  max-width: 350px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 auto;
+  border-image-slice: 42 42 42 42;
+  border-image-width: 42px 42px 42px 42px;
+  border-image-outset: 0px 0px 0px 0px;
+  border-image-repeat: round round;
+  border-image-source: url("https://mdn.github.io/css-examples/tools/border-image-generator/border-image-6.svg");
+  border-style: solid;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+}
+.main .container .headerContainer aside .openContent {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  flex-direction: column;
+}
+.main .container .headerContainer aside .openContent .openContentOwner {
+  display: flex;
+  align-items: center;
+}
+@media (min-width: 750px) {
+  .main .container .headerContainer aside .openContent {
+    flex-direction: row;
+  }
+}
+.main .container .headerContainer aside .purchase {
+  border-radius: 24px;
+  border: solid 1px #e6e6e6;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 6px;
+  justify-content: space-around;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+}
+.main .container .headerContainer aside .purchase .offers {
+  display: flex;
+  padding: 16px;
+  flex-direction: column;
+}
+.main .container .headerContainer aside .purchase .offers p {
+  padding-bottom: 8px;
+  letter-spacing: 0;
+  font-size: 16px;
+}
+.main .container .headerContainer aside .purchase .offers .offerButton {
+  background-color: transparent;
+  border-radius: 12px;
+  border: solid 2px #e6e6e6;
+  color: #000;
+  display: block;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: clamp(16px, 1.2rem, 2.1vw);
+  transition: all 200ms ease-in-out;
+  width: 100%;
+  height: 52px;
+}
+.main .container .headerContainer aside .purchase .offers .offerButton:hover {
+  background-color: black;
+  color: white;
+}
+@media (min-width: 600px) {
+  .main .container .headerContainer aside .purchase .offers {
+    flex-direction: row;
+  }
+  .main .container .headerContainer aside .purchase .offers p {
+    display: flex;
+    align-items: center;
+    flex: 1;
+  }
+  .main .container .headerContainer aside .purchase .offers .offerButton {
+    flex: 1;
+  }
+}
+.main .container .headerContainer aside .purchase .buy {
+  padding: 16px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #e6e6e6;
+}
+.main .container .headerContainer aside .purchase .buy span {
+  margin-left: min(10%, 20px);
+  color: #666;
+  letter-spacing: 0;
+  font-weight: 600;
+}
+.main .container .headerContainer aside .purchase .buy h3 {
+  font-weight: 600;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+  font-size: clamp(26px, 2rem, 2.5vw);
+  font-size: 36px;
+}
+.main .container .headerContainer aside .purchase .buy h3 span {
+  font-weight: 200;
+  font-size: clamp(16px, 1.2rem, 2.1vw);
+}
+.main .container .headerContainer aside .purchase .buy .ownerActive {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.main .container .headerContainer aside .purchase .buy .ownerActive .ownerActiveUpdate {
+  height: 52px;
+  border-radius: 12px;
+  width: 100%;
+  background: #000;
+  border: 2px solid #000;
+  color: white;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: clamp(16px, 1.2rem, 2.1vw);
+  transition: all 500ms ease-in-out;
+}
+.main .container .headerContainer aside .purchase .buy .ownerActive .ownerActiveUpdate:hover {
+  transform: translate(2px, -3px);
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+}
+.main .container .headerContainer aside .purchase .buy .ownerActive .ownerActiveCancel {
+  height: 52px;
+  border-radius: 12px;
+  width: 100%;
+  background: #e73434;
+  border: 2px solid #b3b3b3;
+  color: #fff;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: clamp(16px, 1.2rem, 2.1vw);
+  transition: all 500ms ease-in-out;
+}
+.main .container .headerContainer aside .purchase .buy .ownerActive .ownerActiveCancel:hover {
+  transform: translate(2px, -3px);
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+}
+.main .container .headerContainer aside .purchase .buy .buyButton {
+  height: 52px;
+  border-radius: 12px;
+  width: 100%;
+  background: #000;
+  border: 2px solid #000;
+  color: white;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: clamp(16px, 1.2rem, 2.1vw);
+  transition: all 500ms ease-in-out;
+}
+.main .container .headerContainer aside .purchase .buy .buyButton:hover {
+  transform: translate(2px, -3px);
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+}
+@media (min-width: 950px) {
+  .main .container .headerContainer {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+  .main .container .headerContainer .imageContainer {
+    flex: 1;
+  }
+}
+@media (min-width: 950px) and (min-width: 1150px) {
+  .main .container .headerContainer .imageContainer {
+    height: 350px;
+  }
+}
+@media (min-width: 950px) {
+  .main .container .headerContainer aside {
+    flex: 2;
+  }
+}
+.main .container .bodyContainer .openOffers .box {
+  width: 100%;
+  border-radius: 20px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 4px;
+  box-shadow: rgba(25, 19, 38, 0.1) 0px 2px 12px -8px, rgba(25, 19, 38, 0.05) 0px 1px 1px;
+  color: rgb(1, 20, 42);
+  overflow: hidden;
+  position: relative;
+  margin: 20px 0;
+}
+.main .container .bodyContainer .openOffers .box .head {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 8fr 1fr;
+  border-bottom: 1px solid rgb(231, 227, 235);
+  height: 72px;
+  padding-left: 24px;
+  padding-right: 24px;
+  text-align: center;
+}
+.main .container .bodyContainer .openOffers .box .body {
+  -webkit-animation: 300ms cubic-bezier(0.25, 1, 0.35, 1) 0s 1 normal forwards running;
+          animation: 300ms cubic-bezier(0.25, 1, 0.35, 1) 0s 1 normal forwards running;
+}
+.main .container .bodyContainer .openOffers .box .body div {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.main .container .bodyContainer .openOffers .box .body div .offerHead {
+  font-size: clamp(16px, 1.2rem, 2.1vw);
+  font-weight: 600;
+  color: rgb(1, 20, 42);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 0;
+  margin-bottom: 20px;
+}
+.main .container .bodyContainer .openOffers .box .body div .offerHead h4 {
+  flex: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
+  padding: 0 2px;
+}
+.main .container .bodyContainer .openOffers .box .body div .offerBody {
+  font-size: clamp(16px, 1.2rem, 2.1vw);
+  font-weight: 200;
+  display: flex;
+  padding: 0;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  color: rgb(1, 20, 42);
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+.main .container .bodyContainer .openOffers .box .body div .offerBody .offersContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 0;
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+  transition: all 500ms ease-in-out;
+}
+.main .container .bodyContainer .openOffers .box .body div .offerBody .offersContainer:hover {
+  transform: translateY(-2px);
+}
+.main .container .bodyContainer .openOffers .box .body div .offerBody .offersContainer .function {
+  padding: 0;
+}
+.main .container .bodyContainer .openOffers .box .body div .offerBody p {
+  flex: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
+  padding: 0 2px;
+}
+.main .container .bodyContainer .nftMetadata .box {
+  width: 100%;
+  border-radius: 20px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 4px;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+  color: rgb(1, 20, 42);
+  overflow: hidden;
+  position: relative;
+  margin: 20px 0;
+}
+.main .container .bodyContainer .nftMetadata .box .head {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 8fr 1fr;
+  border-bottom: 1px solid rgb(231, 227, 235);
+  height: 72px;
+  padding-left: 24px;
+  padding-right: 24px;
+  text-align: center;
+}
+.main .container .bodyContainer .nftMetadata .box .body {
+  -webkit-animation: 300ms linear 0s 1 normal forwards running;
+          animation: 300ms linear 0s 1 normal forwards running;
+}
+.main .container .bodyContainer .nftMetadata .box .body div {
+  padding: 24px;
+}
+.main .container .bodyContainer .nftMetadata .box .body div div {
+  color: rgb(102, 114, 127);
+  font-weight: 400;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  font-size: 14px;
+}
+@media (min-width: 750px) {
+  .main .container .bodyContainer {
+    display: flex;
+    gap: 20px;
+  }
+  .main .container .bodyContainer .openOffers {
+    flex: 1;
+    order: 2;
+  }
+  .main .container .bodyContainer .nftMetadata {
+    flex: 1;
+  }
+}
+.main .container .footerContainer .events {
+  width: 100%;
+  border-radius: 20px;
+  background-color: white;
+  color: #000;
+  position: relative;
+  overflow-x: auto;
+  border-radius: 4px;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+}
+.main .container .footerContainer .events .event {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 72px;
+}
+.main .container .footerContainer .events .eventTable {
+  overflow-x: auto;
+  width: 100%;
+  display: block;
+}
+.main .container .footerContainer .moreItems {
+  width: 100%;
+  margin: 20px auto;
+}
+.main .container .footerContainer .moreItems h2 {
+  padding: 0 10px;
+  text-align: center;
+}
+.main .container .footerContainer .moreItems .SliderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.table {
+  border-spacing: 1;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.table * {
+  position: relative;
+}
+
+.table td,
+.table th {
+  padding-left: 8px;
+  display: block;
+}
+
+.table thead tr {
+  height: 60px;
+  background: #ffed86;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.table tbody tr {
+  height: 48px;
+  border-bottom: 1px solid #e3f1d5;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.table tbody tr:last-child {
+  border: 0;
+}
+
+.table td,
+.table th {
+  text-align: center;
+  display: block;
+  flex: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.table td.l,
+.table th.l {
+  text-align: center;
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  flex: 1;
+}
+
+.table td.c,
+.table th.c {
+  text-align: center;
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.table td.r,
+.table th.r {
+  text-align: center;
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  flex: 1;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: relative;
+}
+
+.cards::-webkit-scrollbar {
+  display: none;
+}
+
+@media (hover) {
+  .cards::-webkit-scrollbar {
+    height: 5px;
+    display: block;
+  }
+  .cards::-webkit-scrollbar-track {
+    background-color: #5e0684;
+    border-radius: 5px;
+  }
+  .cards::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #2fc0db;
+  }
+  .cards::-webkit-scrollbar-thumb:hover {
+    background-color: #2fc0db;
+  }
+}
+.cards .imageContainer {
+  flex: 0 0 auto;
+  width: 235px;
+  height: 250px;
+  position: relative;
+  margin: 2% 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  transition: transform 500ms;
+}
+
+.cards div:hover {
+  transform: scale(1.05);
+}
+
+.description {
+  z-index: 5555;
+  position: absolute;
+  bottom: 0;
+  margin-top: 20px;
+  display: flex;
+  padding: 2%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.44);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  -webkit-backdrop-filter: blur(6.2px);
+          backdrop-filter: blur(6.2px);
+  color: #fff;
+  width: 100%;
+}
+
+.description h3,
+.description p {
+  margin: 0;
+}
+
+.verified {
+  font-size: 18px;
+}
+
+.createListingModal,
+.updateListingModal {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 95px 24px;
+  height: 100vh;
+  inset: 0px;
+  overflow: auto;
+  display: flex;
+  transform: translate3d(0px, 0px, 0px);
+  will-change: opacity;
+  color: black;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+  perspective: 1000px;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 2222;
+}
+.createListingModal .closeModal,
+.updateListingModal .closeModal {
+  display: flex;
+  position: fixed;
+  color: white;
+  top: 32px;
+  right: 24px;
+  background-color: black;
+  transform: none;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  font-size: 30px;
+  justify-content: center;
+  border-radius: 99999px;
+  cursor: pointer;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  will-change: transform;
+  transition: transform 0.2s ease 0s;
+}
+.createListingModal .closeModal:hover,
+.updateListingModal .closeModal:hover {
+  transform: scale(1.1);
+}
+.createListingModal .actualModal,
+.updateListingModal .actualModal {
+  opacity: 1;
+  transform: none;
+  outline: none;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 350px;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+}
+.createListingModal .actualModal .internalModal,
+.updateListingModal .actualModal .internalModal {
+  padding: 50px;
+  position: relative;
+}
+.createListingModal .actualModal .internalModal input,
+.updateListingModal .actualModal .internalModal input {
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-align: center;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+  width: 100%;
+}
+.createListingModal .actualModal .internalModal .input,
+.updateListingModal .actualModal .internalModal .input {
+  border: solid 1.5px #9e9e9e;
+  border-radius: 1rem;
+  background: none;
+  padding: 1rem;
+  font-size: 1rem;
+  color: #000;
+  transition: border 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.createListingModal .actualModal .internalModal div,
+.updateListingModal .actualModal .internalModal div {
+  border-radius: 8px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 4px;
+  background: #000;
+  border: 2px solid #000;
+  color: white;
+  margin: 0 auto;
+  cursor: pointer;
+  font-size: clamp(16px, 1.2rem, 2.1vw);
+  transition: all 500ms ease-in-out;
+}
+.createListingModal .actualModal .internalModal div:hover,
+.updateListingModal .actualModal .internalModal div:hover {
+  background-color: #fff;
+  color: #000;
+  font-weight: 600;
+  transform: scale(1.1);
+}
+
+.loadingModal {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 95px 24px;
+  height: 100vh;
+  inset: 0px;
+  overflow: auto;
+  display: flex;
+  transform: translate3d(0px, 0px, 0px);
+  will-change: opacity;
+  color: black;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+  perspective: 1000px;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 2222;
+}
+.loadingModal h1 {
+  padding-top: 30px;
+  color: #2fc0db;
+  color: #fff;
+}/*# sourceMappingURL=nftId.module.css.map */
