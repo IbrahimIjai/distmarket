@@ -3,7 +3,7 @@ import profiles from "../../profiles";
 import Image from "next/image";
 import { Contract, utils, ethers, BigNumber } from "ethers";
 import { nftABI, marketplaceABI } from "../../constants/ABIs";
-export default function profile({ data, coll }) {
+export default function Profile({ data, coll }) {
   console.log(data, coll);
   // return (
   //   <main className={styles.main}>

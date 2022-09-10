@@ -9,7 +9,7 @@ export default function Collections() {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.headerImage}>
-          <Image src={banner} objectFit="cover" layout="fill" />
+          <Image src={banner} objectFit="cover" layout="fill" alt="2818" />
         </div>
         <div className={styles.headerContent}>
           <h1 className={styles.headerHeader}>mART Collections</h1>
@@ -22,12 +22,17 @@ export default function Collections() {
       <div className={styles.collections}>
         {SupportedCollections.map((collection, i) => (
           <div className={styles.collection} key={i}>
-            <Link href={`/collection/${collection.collectionAddress}`} passHref>
+            <Link
+              href={`/collection/${collection.collectionAddress}`}
+              passHref
+              prefetch={false}
+            >
               <a>
                 <div>
                   <Image
                     src="/5951.png"
                     layout="fill"
+                    alt="2818"
                     objectFit="cover"
                     className={styles.image}
                   />
@@ -38,6 +43,7 @@ export default function Collections() {
                           <Image
                             src="/5951.png"
                             layout="fill"
+                            alt="2818"
                             objectFit="cover"
                           />
                         </div>

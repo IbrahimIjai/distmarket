@@ -10,13 +10,21 @@ export default function Footer() {
           </h2>
           <ul>
             <li>
-              <a href="https://twitter.com/Distant_Finance" target="_blank">
+              <a
+                rel="noopener noreferrer"
+                href="https://twitter.com/Distant_Finance"
+                target="_blank"
+              >
                 {" "}
                 Twitter{" "}
               </a>
             </li>
             <li>
-              <a href="https://t.me/Distant_Finance" target="_blank">
+              <a
+                rel="noopener noreferrer"
+                href="https://t.me/Distant_Finance"
+                target="_blank"
+              >
                 {" "}
                 Telegram{" "}
               </a>
@@ -25,7 +33,11 @@ export default function Footer() {
               <a href="#"> Discord </a>
             </li>
             <li>
-              <a href="https://medium.com/@Distant_Finance" target="_blank">
+              <a
+                rel="noopener noreferrer"
+                href="https://medium.com/@Distant_Finance"
+                target="_blank"
+              >
                 {" "}
                 Medium{" "}
               </a>
@@ -41,7 +53,11 @@ export default function Footer() {
               <a href="#"> Protocol Code </a>
             </li>
             <li>
-              <a href="https://docs.distant.finance" target="_blank">
+              <a
+                rel="noopener noreferrer"
+                href="https://docs.distant.finance"
+                target="_blank"
+              >
                 {" "}
                 Documentation{" "}
               </a>
@@ -68,13 +84,21 @@ export default function Footer() {
           </h2>
           <ul>
             <li>
-              <a href="./FAQ/faq.html" target="_blank">
+              <a
+                rel="noopener noreferrer"
+                href="./FAQ/faq.html"
+                target="_blank"
+              >
                 {" "}
                 FAQ section{" "}
               </a>
             </li>
             <li>
-              <a href="mailto:contact@distant.finance" target="_blank">
+              <a
+                rel="noopener noreferrer"
+                href="mailto:contact@distant.finance"
+                target="_blank"
+              >
                 {" "}
                 Contact us{" "}
               </a>

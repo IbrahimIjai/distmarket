@@ -125,10 +125,20 @@ export default function Home({ nftId, listings }) {
         <>
           <div className={styles.banner}>
             <div className={styles.bannerImage}>
-              <Image src="/2818.png" objectFit="cover" layout="fill" />
+              <Image
+                src="/2818.png"
+                objectFit="cover"
+                layout="fill"
+                alt="2818"
+              />
               <div className={styles.bannerContent}>
                 <div className={styles.bannerContentImage}>
-                  <Image src="/2818.png" objectFit="cover" layout="fill" />
+                  <Image
+                    src="/2818.png"
+                    objectFit="cover"
+                    layout="fill"
+                    alt="2818"
+                  />
                 </div>
                 <div className={styles.bannerContentDetails}>
                   <h1>Lomen NFT</h1>
@@ -187,7 +197,7 @@ export default function Home({ nftId, listings }) {
                   <Link
                     href={`https://scan-testnet.kcc.network/address/${collection}`}
                   >
-                    <a target="_blank">
+                    <a target="_blank" rel="noopener noreferrer">
                       <li>
                         <BsGlobe />
                       </li>
@@ -218,12 +228,14 @@ export default function Home({ nftId, listings }) {
                   <Link
                     key={nft.tokenId}
                     href={`/collection/${collection}/${nft.tokenId}`}
+                    prefetch={false}
                   >
                     <a className={styles.nft}>
                       <div className={styles.nft}>
                         <div className={styles.nftImage}>
                           <Image
                             src={nft.image}
+                            alt={nft.image}
                             layout="fill"
                             objectFit="cover"
                           />

@@ -332,7 +332,12 @@ export default function NftId({
       <div className={styles.container}>
         <div className={styles.headerContainer}>
           <div className={styles.imageContainer}>
-            <Image src={ipfsData[0]} layout="fill" objectFit="cover" />
+            <Image
+              src={ipfsData[0]}
+              alt={ipfsData[0]}
+              layout="fill"
+              objectFit="cover"
+            />
           </div>
           <aside>
             {" "}
@@ -349,7 +354,7 @@ export default function NftId({
               <div className={styles.openContentOwner}>
                 <em>
                   Owned by{" "}
-                  <Link href={`/profile/${ipfsData[5]}`}>
+                  <Link href={`/profile/${ipfsData[5]}`} prefetch={false}>
                     <a>
                       {" "}
                       <span>{`${ipfsData[5].slice(0, 5)}...${ipfsData[5].slice(
@@ -615,7 +620,7 @@ export default function NftId({
                       <h4>Offerer</h4>
                     </div>
                     {offer.map((offers) => (
-                      <div className={styles.offerBody}>
+                      <div className={styles.offerBody} key={offers.address}>
                         <p>${offers.value}</p>
                         <p>
                           {deadAddress === nftSaleInfo[0]
@@ -807,9 +812,10 @@ export default function NftId({
             <div className={styles.SliderContainer}>
               <div className={styles.cards}>
                 {moreListings.map((listing) => (
-                  <div className={styles.imageContainer}>
+                  <div className={styles.imageContainer} key={listing.tokenId}>
                     <Image
                       src="/lomen.jpeg"
+                      alt="lomen"
                       layout="fill"
                       objectFit="cover"
                       style={{ padding: "0 20px" }}
@@ -984,18 +990,8 @@ export async function getServerSideProps({ params, res }) {
   const gg = threeListings[0];
   const numValue = gg.map((listing) => listing.toNumber());
   const num1Value = gg.map((listing) => listing.toNumber().toString());
-  const tokenURI = num1Value.forEach(
-    async (num) => await instance.tokenURI(num)
-  );
-  console.log(
-    tokenURI,
-    numValue,
-    typeof numValue[0],
-    typeof num1Value[0],
-    numValue[0],
-    threeListings[0],
-    "Show new value"
-  );
+  const tokenURI = num1Value.map(async (num) => await instance.tokenURI(num));
+  console.log(tokenURI, numValue, "Show new value");
   const tokenDetails = await instance.tokenURI(nftID);
   const owner = await instance.ownerOf(nftID);
   const ipfsLink = tokenDetails.replace(

@@ -4,7 +4,7 @@ import { Contract, utils } from "ethers";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-export default function test() {
+export default function Test() {
   const { active, account, library, chainId, connector, activate, deactivate } =
     useWeb3React();
   const nftContract = "0xCDF30c588CCe8eDAd78C4d3183fA360cdD6EA22F";

@@ -2,7 +2,7 @@ import { useWeb3React } from "@web3-react/core";
 import { Contract, utils } from "ethers";
 import { useEffect, useState } from "react";
 import { marketplaceABI, nftABI, tokenABI } from "../constants/ABIs";
-export default function about() {
+export default function About() {
   const { active, account, library, chainId, connector, activate, deactivate } =
     useWeb3React();
   const contractAddr = "0xdf57e3d669c120faa0e91462fadc8d27bb03e97a";
