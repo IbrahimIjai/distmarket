@@ -96,8 +96,7 @@ export async function getServerSideProps({ params }) {
       gata.push(obj);
       profileData.push(obj);
     }
-
-    console.log(gata, "Server");
+    console.log(profileData, "Server");
     return gata;
   });
   console.log("Server 2", getData, profileData);

@@ -1,6 +1,5 @@
 import styles from "../../styles/nft.module.css";
 import { useWeb3React } from "@web3-react/core";
-import Loader from "../../components/Loader";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -112,10 +111,10 @@ export default function Home({ nftId, listings }) {
     };
   });
   const [listedNFTs, setListedNFTs] = useState([]);
-  const [view, setView] = useState(true);
-  setTimeout(() => {
-    setView(false);
-  }, 3000);
+  const [view, setView] = useState(false);
+  // setTimeout(() => {
+  //   setView(false);
+  // }, 3000);
 
   return (
     <>
