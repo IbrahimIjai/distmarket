@@ -32,7 +32,7 @@ export default function Collections() {
                   <Image
                     src="/5951.png"
                     layout="fill"
-                    alt="2818"
+                    alt="2818.jpeg"
                     objectFit="cover"
                     className={styles.image}
                   />
