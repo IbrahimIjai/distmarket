@@ -3,8 +3,8 @@ import profiles from "../../profiles";
 import Image from "next/image";
 import { Contract, utils, ethers, BigNumber } from "ethers";
 import { nftABI, marketplaceABI } from "../../constants/ABIs";
-export default function profile({ data, coll, profileData }) {
-  console.log(data, coll, profileData);
+export default function profile({ data, coll }) {
+  console.log(data, coll);
   // return (
   //   <main className={styles.main}>
   //     <div className={styles.container}>
@@ -58,34 +58,53 @@ export async function getServerSideProps({ params }) {
   const contract = new Contract(marketContract, marketplaceABI, provider);
   const collections = await contract.supportedCollections();
   const profileData = [];
-  console.log(collections);
-  const getData = async () => {
-    collections.map(async (collection) => {
-      const instance = new Contract(collection, nftABI, provider);
-      const balance = await instance.balanceOf(profile);
-      let profileBalance = balance.toNumber();
-      console.log(collection, profileBalance, profile);
-      const tokenIds = [];
-      for (let i = 0; i < profileBalance; i++) {
+  const getData = await collections.map(async (collection) => {
+    const gata = [];
+    const instance = new Contract(collection, nftABI, provider);
+    const balance = await instance.balanceOf(profile);
+    let profileBalance = balance.toNumber();
+    const tokenIds = [];
+    const name = [];
+    const images = [];
+    for (let i = 0; i < profileBalance; i++) {
+      if (profileBalance > 0) {
         const tokenId = await instance.tokenOfOwnerByIndex(profile, i);
         let NumTokenId = tokenId.toNumber();
         let StrTokenId = String(NumTokenId);
+        const uri = await instance.tokenURI(StrTokenId);
+        const url = uri.replace(
+          "ipfs://",
+          "https://ipfsfiles.distant.finance/ipfs/"
+        );
+        const ipfsFile = await fetch(url).then((r) => r.json());
+        const imageUri = ipfsFile.image.replace(
+          "ipfs://",
+          "https://ipfsfiles.distant.finance/ipfs/"
+        );
+        name.push(ipfsFile.name);
+        images.push(imageUri);
         tokenIds.push(StrTokenId);
       }
-      const obj = {
-        collection: collection,
-        tokenArray: tokenIds,
-      };
+    }
+    const obj = {
+      collection: collection,
+      tokenArray: tokenIds,
+      image: images,
+      name: name,
+    };
+    if (obj.name.length > 0) {
+      gata.push(obj);
       profileData.push(obj);
-      console.log(profileData, "Server");
-    });
-  };
-  await getData();
+    }
+
+    console.log(gata, "Server");
+    return gata;
+  });
+  console.log("Server 2", getData, profileData);
   return {
     props: {
-      data: JSON.parse(JSON.stringify(profileData)),
+      data: JSON.parse(JSON.stringify(getData)),
       coll: JSON.parse(JSON.stringify(collections)),
-      profileData: profileData,
     },
   };
 }

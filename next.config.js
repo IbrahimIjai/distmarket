@@ -10,6 +10,7 @@ const nextConfig = {
       "gateway.pinata.cloud",
       "distant.mypinata.cloud",
     ],
+    formats: ["image/avif", "image/webp"],
   },
 };
 

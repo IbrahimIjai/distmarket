@@ -6,13 +6,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Contract, utils, ethers, BigNumber } from "ethers";
 import { marketplaceABI, nftABI } from "../../constants/ABIs";
-import {
-  BsThreeDots,
-  BsGlobe,
-  BsDiscord,
-  BsTwitter,
-  BsTelegram,
-} from "react-icons/bs";
+import { BsThreeDots, BsGlobe, BsTwitter, BsTelegram } from "react-icons/bs";
 import Link from "next/link";
 
 export default function Home({ nftId, listings }) {
@@ -32,9 +26,9 @@ export default function Home({ nftId, listings }) {
         const v = BigNumber.from(p.toString());
         return utils.formatEther(v);
       });
-      const lowestValue = value.reduce((acc, cur) =>
-        Number(acc) < Number(cur) ? acc : cur
-      );
+      const lowestValue =
+        value.length > 0 &&
+        value.reduce((acc, cur) => (Number(acc) < Number(cur) ? acc : cur));
       const provider = library;
       const allOffers = await itemId.map(async (item) => {
         const contract = new Contract(marketContract, marketplaceABI, provider);
@@ -60,9 +54,11 @@ export default function Home({ nftId, listings }) {
           Number(cur) > Number(prev) ? Number(cur) : Number(prev)
         )
       );
-      const highestOffer = bestOffers.reduce((acc, cur) =>
-        Number(acc) > Number(cur) ? Number(acc) : Number(cur)
-      );
+      const highestOffer =
+        bestOffers.length > 0 &&
+        bestOffers.reduce((acc, cur) =>
+          Number(acc) > Number(cur) ? Number(acc) : Number(cur)
+        );
       const imageLinks = await itemId.map(async (item) => {
         const contract = new Contract(collection, nftABI, provider);
         const x = await contract.tokenURI(item.toString());
@@ -197,13 +193,6 @@ export default function Home({ nftId, listings }) {
                       </li>
                     </a>
                   </Link>
-                  <Link href="https://www.google.com">
-                    <a target="_blank">
-                      <li>
-                        <BsDiscord />
-                      </li>
-                    </a>
-                  </Link>
                   <Link href="https://twitter.com/Distant_Finance">
                     <a target="_blank">
                       <li>
@@ -259,7 +248,11 @@ export default function Home({ nftId, listings }) {
   );
 }
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, res }) {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=43200, stale-while-revalidate=60"
+  );
   const v = params.collection;
   const { collection } = params;
   const Tkcc = "https://rpc-testnet.kcc.network";

@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
 import ContentLoader from "react-content-loader";
 
 const Loader = () => (

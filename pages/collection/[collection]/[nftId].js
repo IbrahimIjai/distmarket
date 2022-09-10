@@ -10,12 +10,11 @@ import { marketplaceABI, nftABI, tokenABI } from "../../../constants/ABIs";
 import { useWeb3React } from "@web3-react/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { transform } from "framer-motion";
 export default function NftId({
   threeListings,
   offerInfo,
   nftSaleInfo,
-  allEvents,
+  // allEvents,
   ipfsData,
 }) {
   // Loader helper variable
@@ -24,7 +23,7 @@ export default function NftId({
     margin: "0 auto",
     borderColor: "red",
   };
-  console.log("allOffers only", offerInfo);
+  console.log("Extra Listings1 only", threeListings);
   let highestOfferInitiator = "";
   // Contracts and constant addresses
   const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
@@ -72,23 +71,17 @@ export default function NftId({
     const values = offerValue.map((val) => Number(utils.formatEther(val)));
     const saleValueString = utils.formatEther(salePrice);
     const saleValue = Number(saleValueString);
-
-    console.log(values);
     values.map((val) => {
-      console.log("1", val);
       if (val > saleValue) {
         priceDifference.push((val / saleValue) * 100 - 100);
-        console.log("2", val);
       } else if (val < saleValue) {
         priceDifference.push(-Math.abs((saleValue / val) * 100 - 100));
-        console.log("3", val);
       } else {
         priceDifference.push(val - saleValue);
       }
     });
   };
   offerInfo && percentageDifference();
-  console.log(priceDifference[1].toPrecision(4), offerer);
   const offer = [];
   for (let i = 0; i < offerer.length; i++) {
     let object = {
@@ -105,16 +98,15 @@ export default function NftId({
     bestOffers.reduce((acc, cur) =>
       Number(acc) > Number(cur) ? Number(acc) : Number(cur)
     );
-  console.log(offer, typeof highestOffer);
   // Events function
-  let allevent = allEvents.map((event) => {
-    if (event.length > 0) {
-      return event;
-    }
-  });
-  allevent = allevent.filter(Boolean);
-  const eventsArray = [];
-  allevent.map((e) => e.map((event) => eventsArray.push(event)));
+  // let allevent = allEvents.map((event) => {
+  //   if (event.length > 0) {
+  //     return event;
+  //   }
+  // });
+  // allevent = allevent.filter(Boolean);
+  // const eventsArray = [];
+  // allevent.map((e) => e.map((event) => eventsArray.push(event)));
 
   //Contract functions
   const { account, library, active } = useWeb3React();
@@ -177,7 +169,6 @@ export default function NftId({
     const tx = await contract.buyNFT(collection, nftId, salePrice);
     setLoading(true);
     await tx.wait();
-    console.log(tx.hash);
     tx.hash && setLoading(false);
     // router.push(`/collection/${collection}`);
   };
@@ -278,7 +269,6 @@ export default function NftId({
     tx.hash && setLoading(false);
   };
   const acceptOffer1 = async (offerVal, initiator) => {
-    console.log(initiator, offerVal, highestOfferInitiator);
     const signer = library.getSigner();
     const instance = new Contract(tokenContract, tokenABI, signer);
     const balance = await instance.balanceOf(highestOfferInitiator);
@@ -312,7 +302,6 @@ export default function NftId({
     tx.hash && setLoading(false);
   };
   const acceptOffer2 = async (offerVal, initiator) => {
-    console.log(initiator, offerVal);
     const signer = library.getSigner();
     const instance = new Contract(tokenContract, tokenABI, signer);
     const balance = await instance.balanceOf(initiator);
@@ -360,10 +349,15 @@ export default function NftId({
               <div className={styles.openContentOwner}>
                 <em>
                   Owned by{" "}
-                  <span>{`${ipfsData[5].slice(0, 5)}...${ipfsData[5].slice(
-                    38,
-                    42
-                  )}`}</span>
+                  <Link href={`/profile/${ipfsData[5]}`}>
+                    <a>
+                      {" "}
+                      <span>{`${ipfsData[5].slice(0, 5)}...${ipfsData[5].slice(
+                        38,
+                        42
+                      )}`}</span>
+                    </a>
+                  </Link>
                 </em>
               </div>
             </div>
@@ -428,7 +422,7 @@ export default function NftId({
                       Update Listing
                     </div>
                     {updateListingModal && (
-                      <div className={styles.updateListingModal}>
+                      <div className={styles.createListingModal}>
                         <div
                           onClick={() => setUpdateListingModal(false)}
                           className={styles.closeModal}
@@ -560,7 +554,7 @@ export default function NftId({
                       : ""}
                   </button>
                   {createOfferModal && (
-                    <div className={styles.updateListingModal}>
+                    <div className={styles.createListingModal}>
                       <div
                         onClick={() => setCreateOfferModal(false)}
                         className={styles.closeModal}
@@ -677,7 +671,6 @@ export default function NftId({
                           }}
                           className={styles.offersContainer}
                         >
-                          {console.log(offers.address)}
                           <div className={styles.function}>
                             {account === offers.address ? (
                               "Update"
@@ -700,7 +693,7 @@ export default function NftId({
             </div>
           </div>
           {updateOfferModal && (
-            <div className={styles.updateListingModal}>
+            <div className={styles.createListingModal}>
               <div
                 onClick={() => setUpdateOfferModal(false)}
                 className={styles.closeModal}
@@ -768,7 +761,7 @@ export default function NftId({
           </div>
         </div>
         <div className={styles.footerContainer}>
-          <div className={styles.events}>
+          {/* <div className={styles.events}>
             <div className={styles.event}>
               <h3>Latest activities</h3>
               <button onClick={() => setEvents((event) => !event)}>
@@ -808,7 +801,7 @@ export default function NftId({
                 </table>
               </div>
             )}
-          </div>
+          </div> */}
           <div className={styles.moreItems}>
             <h2>More Items from the {ipfsData[4]}</h2>
             <div className={styles.SliderContainer}>
@@ -841,7 +834,11 @@ export default function NftId({
     </main>
   );
 }
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, res }) {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=43200, stale-while-revalidate=60"
+  );
   const nftID = params.nftId;
   const collection = params.collection;
   const Tkcc = "https://rpc-testnet.kcc.network";
@@ -851,139 +848,154 @@ export async function getServerSideProps({ params }) {
   const nftSaleInfo = await contract.sellNFT(collection, nftID);
   const offerInfo = await contract.availableOffers(collection, nftID);
   const threeListings = await contract.availableListings(collection);
-  const listingEvents = await contract.queryFilter("ItemListed");
-  const listings = [];
-  listingEvents.map((listing) => {
-    for (let i = 0; i < listingEvents.length; i++) {
-      if (listing.args[1] == nftID) {
-        let object = {
-          args: listing.args,
-          txnHash: listing.transactionHash,
-          addr: listing.address,
-          events: listing.event,
-        };
-        listings.push(object);
-      }
-    }
-  });
-  const delistEvents = await contract.queryFilter("ItemDelisted");
-  const deListings = [];
-  delistEvents.map((listing) => {
-    for (let i = 0; i < delistEvents.length; i++) {
-      if (listing.args[1] == nftID) {
-        let object = {
-          args: listing.args,
-          txnHash: listing.transactionHash,
-          addr: listing.address,
-          events: listing.event,
-        };
-        deListings.push(object);
-      }
-    }
-  });
-  const updateListings = [];
-  const updateListing = await contract.queryFilter("ItemUpdated");
-  updateListing.map((listing) => {
-    for (let i = 0; i < updateListing.length; i++) {
-      if (listing.args[1] == nftID) {
-        let object = {
-          args: listing.args,
-          txnHash: listing.transactionHash,
-          addr: listing.address,
-          events: listing.event,
-        };
-        updateListings.push(object);
-      }
-    }
-  });
-  const soldListings = [];
-  const soldListing = await contract.queryFilter("ItemSold");
-  soldListing.map((listing) => {
-    for (let i = 0; i < soldListing.length; i++) {
-      if (listing.args[1] == nftID) {
-        let object = {
-          args: listing.args,
-          txnHash: listing.transactionHash,
-          addr: listing.address,
-          events: listing.event,
-        };
-        soldListings.push(object);
-      }
-    }
-  });
-  const offerCreation = await contract.queryFilter("OfferCreated");
-  const offers = [];
-  offerCreation.map((listing) => {
-    for (let i = 0; i < offerCreation.length; i++) {
-      if (listing.args[1] == nftID) {
-        let object = {
-          args: listing.args,
-          txnHash: listing.transactionHash,
-          addr: listing.address,
-          events: listing.event,
-        };
-        offers.push(object);
-      }
-    }
-  });
-  const delistOffer = await contract.queryFilter("OfferCancelled");
-  const offerDeleted = [];
-  delistOffer.map((listing) => {
-    for (let i = 0; i < delistOffer.length; i++) {
-      if (listing.args[1] == nftID) {
-        let object = {
-          args: listing.args,
-          txnHash: listing.transactionHash,
-          addr: listing.address,
-          events: listing.event,
-        };
-        offerDeleted.push(object);
-      }
-    }
-  });
-  const updateOffer = [];
-  const offerUpdate = await contract.queryFilter("OfferUpdated");
-  offerUpdate.map((listing) => {
-    for (let i = 0; i < offerUpdate.length; i++) {
-      if (listing.args[1] == nftID) {
-        let object = {
-          args: listing.args,
-          txnHash: listing.transactionHash,
-          addr: listing.address,
-          events: listing.event,
-        };
-        updateOffer.push(object);
-      }
-    }
-  });
-  const acceptOffer = [];
-  const acceptedOffers = await contract.queryFilter("OfferAccepted");
-  acceptedOffers.map((listing) => {
-    for (let i = 0; i < acceptedOffers.length; i++) {
-      if (listing.args[1] == nftID) {
-        let object = {
-          args: listing.args,
-          txnHash: listing.transactionHash,
-          addr: listing.address,
-          events: listing.event,
-        };
-        acceptOffer.push(object);
-      }
-    }
-  });
-  const allEvents = [];
-  allEvents.push(
-    listings,
-    deListings,
-    updateListings,
-    soldListings,
-    offers,
-    offerDeleted,
-    offerUpdate,
-    updateOffer,
-    acceptOffer
-  );
+  // const listingEvents = await contract.queryFilter("ItemListed");
+  // const listings = [];
+  // listingEvents.map((listing) => {
+  //   for (let i = 0; i < listingEvents.length; i++) {
+  //     if (listing.args[1] == nftID) {
+  //       let object = {
+  //         args: listing.args,
+  //         txnHash: listing.transactionHash,
+  //         addr: listing.address,
+  //         events: listing.event,
+  //       };
+  //       listings.push(object);
+  //     }
+  //   }
+  // });
+  // const delistEvents = await contract.queryFilter("ItemDelisted");
+  // const deListings = [];
+  // delistEvents.map((listing) => {
+  //   for (let i = 0; i < delistEvents.length; i++) {
+  //     if (listing.args[1] == nftID) {
+  //       let object = {
+  //         args: listing.args,
+  //         txnHash: listing.transactionHash,
+  //         addr: listing.address,
+  //         events: listing.event,
+  //       };
+  //       deListings.push(object);
+  //     }
+  //   }
+  // });
+  // const updateListings = [];
+  // const updateListing = await contract.queryFilter("ItemUpdated");
+  // updateListing.map((listing) => {
+  //   for (let i = 0; i < updateListing.length; i++) {
+  //     if (listing.args[1] == nftID) {
+  //       let object = {
+  //         args: listing.args,
+  //         txnHash: listing.transactionHash,
+  //         addr: listing.address,
+  //         events: listing.event,
+  //       };
+  //       updateListings.push(object);
+  //     }
+  //   }
+  // });
+  // const soldListings = [];
+  // const soldListing = await contract.queryFilter("ItemSold");
+  // soldListing.map((listing) => {
+  //   for (let i = 0; i < soldListing.length; i++) {
+  //     if (listing.args[1] == nftID) {
+  //       let object = {
+  //         args: listing.args,
+  //         txnHash: listing.transactionHash,
+  //         addr: listing.address,
+  //         events: listing.event,
+  //       };
+  //       soldListings.push(object);
+  //     }
+  //   }
+  // });
+  // const offerCreation = await contract.queryFilter("OfferCreated");
+  // const offers = [];
+  // offerCreation.map((listing) => {
+  //   for (let i = 0; i < offerCreation.length; i++) {
+  //     if (listing.args[1] == nftID) {
+  //       let object = {
+  //         args: listing.args,
+  //         txnHash: listing.transactionHash,
+  //         addr: listing.address,
+  //         events: listing.event,
+  //       };
+  //       offers.push(object);
+  //     }
+  //   }
+  // });
+  // const delistOffer = await contract.queryFilter("OfferCancelled");
+  // const offerDeleted = [];
+  // delistOffer.map((listing) => {
+  //   for (let i = 0; i < delistOffer.length; i++) {
+  //     if (listing.args[1] == nftID) {
+  //       let object = {
+  //         args: listing.args,
+  //         txnHash: listing.transactionHash,
+  //         addr: listing.address,
+  //         events: listing.event,
+  //       };
+  //       offerDeleted.push(object);
+  //     }
+  //   }
+  // });
+  // const updateOffer = [];
+  // const offerUpdate = await contract.queryFilter("OfferUpdated");
+  // offerUpdate.map((listing) => {
+  //   for (let i = 0; i < offerUpdate.length; i++) {
+  //     if (listing.args[1] == nftID) {
+  //       let object = {
+  //         args: listing.args,
+  //         txnHash: listing.transactionHash,
+  //         addr: listing.address,
+  //         events: listing.event,
+  //       };
+  //       updateOffer.push(object);
+  //     }
+  //   }
+  // });
+  // const acceptOffer = [];
+  // const acceptedOffers = await contract.queryFilter("OfferAccepted");
+  // acceptedOffers.map((listing) => {
+  //   for (let i = 0; i < acceptedOffers.length; i++) {
+  //     if (listing.args[1] == nftID) {
+  //       let object = {
+  //         args: listing.args,
+  //         txnHash: listing.transactionHash,
+  //         addr: listing.address,
+  //         events: listing.event,
+  //       };
+  //       acceptOffer.push(object);
+  //     }
+  //   }
+  // });
+  // const allEvents = [];
+  // allEvents.push(
+  //   listings,
+  //   deListings,
+  //   updateListings,
+  //   soldListings,
+  //   offers,
+  //   offerDeleted,
+  //   offerUpdate,
+  //   updateOffer,
+  //   acceptOffer
+  // );
   const instance = new Contract(collection, nftABI, provider);
+  const gg = threeListings[0];
+  const numValue = gg.map((listing) => listing.toNumber());
+  const num1Value = gg.map((listing) => listing.toNumber().toString());
+  const tokenURI = num1Value.forEach(
+    async (num) => await instance.tokenURI(num)
+  );
+  console.log(
+    tokenURI,
+    numValue,
+    typeof numValue[0],
+    typeof num1Value[0],
+    numValue[0],
+    threeListings[0],
+    "Show new value"
+  );
   const tokenDetails = await instance.tokenURI(nftID);
   const owner = await instance.ownerOf(nftID);
   const ipfsLink = tokenDetails.replace(
@@ -1010,7 +1022,7 @@ export async function getServerSideProps({ params }) {
   return {
     props: {
       ipfsData: ipfsData,
-      allEvents: JSON.parse(JSON.stringify(allEvents)),
+      // allEvents: JSON.parse(JSON.stringify(allEvents)),
       nftSaleInfo: JSON.parse(JSON.stringify(nftSaleInfo)),
       offerInfo: JSON.parse(JSON.stringify(offerInfo[1])),
       threeListings: JSON.parse(JSON.stringify(threeListings)),
