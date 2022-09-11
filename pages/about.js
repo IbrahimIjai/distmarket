@@ -5,7 +5,7 @@ import { marketplaceABI, nftABI, tokenABI } from "../constants/ABIs";
 export default function About() {
   const { active, account, library, chainId, connector, activate, deactivate } =
     useWeb3React();
-  const contractAddr = "0xdf57e3d669c120faa0e91462fadc8d27bb03e97a";
+  const contractAddr = "0xDf57E3d669c120fAA0E91462fadc8D27Bb03e97a";
   const collection = "0xF4c131f7fd6Db2394E82F4123bB4778e19F10043";
   const token = "0x22e91201c6C942827b47191e57C72830338E21b5";
 

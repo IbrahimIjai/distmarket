@@ -1,16 +1,13 @@
 .main {
-  background-image: url(/bg.png);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
   min-height: 100vh;
   padding: 0 7vw;
   background-color: #f0f0f0;
   color: #000;
 }
 .main .container {
-  padding-top: min(60px, 11%);
+  padding-top: min(30px, 5%);
   position: relative;
+  padding-bottom: min(30px, 5%);
 }
 .main .container .user {
   display: block;
@@ -62,4 +59,16 @@
 .main .container .ownedItems .nft .content .details {
   position: absolute;
   bottom: 0;
+}
+
+.image {
+  position: relative;
+  height: 300px;
+  width: 300px;
+}
+
+.ima {
+  position: relative;
+  height: 300px;
+  width: 300px;
 }/*# sourceMappingURL=profile.module.css.map */

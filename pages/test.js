@@ -2,14 +2,13 @@ import { useWeb3React } from "@web3-react/core";
 import { nftABI, marketplaceABI, tokenABI } from "../constants/ABIs";
 import { Contract, utils } from "ethers";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 
 export default function Test() {
   const { active, account, library, chainId, connector, activate, deactivate } =
     useWeb3React();
   const nftContract = "0xCDF30c588CCe8eDAd78C4d3183fA360cdD6EA22F";
   const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
-  const tokenContract = "0x22e91201c6C942827b47191e57C72830338E21b5";
+  const tokenContract = "0x6f16918FCEd422ADAE63859788FE72e3Ca126315";
   const [name, setName] = useState();
   const [response, setResponse] = useState();
   const provider = library;
@@ -20,21 +19,15 @@ export default function Test() {
       marketplaceABI,
       provider
     );
-    const updateListings = [];
-    const updateListing = await contractInstance.queryFilter("ItemUpdated");
-    const listingsForId = updateListing.map((listing) => {
-      for (let i = 0; i < delistEvents.length; i++) {
-        if (listing.args[1] == 1) {
-          let object = {
-            args: listing.args,
-            txnHash: listing.transactionHash,
-            addr: listing.address,
-            events: listing.event,
-          };
-          updateListings.push(object);
-        }
-      }
-    });
+    const listingExists = await contractInstance.availableOffers(
+      nftContract,
+      "3"
+    );
+    const listingExists1 = await contractInstance.availableOffers(
+      tokenContract,
+      "4"
+    );
+    console.log(listingExists, listingExists1);
   };
   let d = "0xB249765ed8cEAf332c9C15705eF00c77725f3B19";
   const coll = async () => {};

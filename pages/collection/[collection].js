@@ -9,10 +9,19 @@ import { BsThreeDots, BsGlobe, BsTwitter, BsTelegram } from "react-icons/bs";
 import Link from "next/link";
 
 export default function Home({ nftId, listings }) {
-  console.log("Hello Friend");
   const router = useRouter();
   const { collection } = router.query;
-  const { library } = useWeb3React();
+  const { library, active } = useWeb3React();
+  const [runEffect, setRunEffect] = useState(false);
+  setTimeout(() => {
+    setRunEffect((val) => !val);
+  }, 300);
+  if (active) {
+    setTimeout(() => {
+      setRunEffect((val) => !val);
+    }, 2000);
+  }
+  const provider = library;
   const [visibility, setVisibility] = useState(false);
   useEffect(() => {
     const main = async () => {
@@ -28,7 +37,6 @@ export default function Home({ nftId, listings }) {
       const lowestValue =
         value.length > 0 &&
         value.reduce((acc, cur) => (Number(acc) < Number(cur) ? acc : cur));
-      const provider = library;
       const allOffers = await itemId.map(async (item) => {
         const contract = new Contract(marketContract, marketplaceABI, provider);
         const x = await contract.availableOffers(collection, item.toString());
@@ -37,7 +45,6 @@ export default function Home({ nftId, listings }) {
           const hexValue = v._hex;
           return parseInt(hexValue, 16);
         });
-
         const offerValues = offers.map((offer) => {
           const v = BigNumber.from(offer.toString());
           return utils.formatEther(v);
@@ -48,10 +55,12 @@ export default function Home({ nftId, listings }) {
       for (let i = 0; i < allOffers.length; i++) {
         offers.push(await allOffers[i]);
       }
-      const bestOffers = offers.map((offer) =>
-        offer.reduce((cur, prev) =>
-          Number(cur) > Number(prev) ? Number(cur) : Number(prev)
-        )
+      const bestOffers = offers.map(
+        (offer) =>
+          Array.isArray(offer) &&
+          offer.reduce((cur, prev) =>
+            Number(cur) > Number(prev) ? Number(cur) : Number(prev)
+          )
       );
       const highestOffer =
         bestOffers.length > 0 &&
@@ -94,7 +103,7 @@ export default function Home({ nftId, listings }) {
       setListedNFTs(arr);
     };
     main();
-  }, []);
+  }, [runEffect]);
   const [linkShow, setLinkShow] = useState(false);
   const [stats, setStats] = useState({});
   const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
@@ -119,7 +128,7 @@ export default function Home({ nftId, listings }) {
   return (
     <>
       {view ? (
-        <Loader />
+        <h1>Welcome</h1>
       ) : (
         <>
           <div className={styles.banner}>
@@ -264,13 +273,12 @@ export async function getServerSideProps({ params, res }) {
     "Cache-Control",
     "public, s-maxage=43200, stale-while-revalidate=60"
   );
-  const v = params.collection;
-  const { collection } = params;
+  const collection = params.collection;
   const Tkcc = "https://rpc-testnet.kcc.network";
   const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
   const provider = new ethers.providers.JsonRpcProvider(Tkcc);
   const contract = new Contract(marketContract, marketplaceABI, provider);
-  const results = await contract.availableListings(v);
+  const results = await contract.availableListings(collection);
   const nftId = results[0];
   const listingInfo = results[1];
   return {

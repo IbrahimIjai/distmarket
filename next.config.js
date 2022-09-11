@@ -9,6 +9,7 @@ const nextConfig = {
       "vignette.wikia.nocookie.net",
       "gateway.pinata.cloud",
       "distant.mypinata.cloud",
+      "ipfsfiles.distant.finance",
     ],
     formats: ["image/avif", "image/webp"],
   },

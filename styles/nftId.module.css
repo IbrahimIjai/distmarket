@@ -356,27 +356,6 @@
     flex: 1;
   }
 }
-.main .container .footerContainer .events {
-  width: 100%;
-  border-radius: 20px;
-  background-color: white;
-  color: #000;
-  position: relative;
-  overflow-x: auto;
-  border-radius: 4px;
-  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
-}
-.main .container .footerContainer .events .event {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 72px;
-}
-.main .container .footerContainer .events .eventTable {
-  overflow-x: auto;
-  width: 100%;
-  display: block;
-}
 .main .container .footerContainer .moreItems {
   width: 100%;
   margin: 20px auto;
@@ -390,88 +369,6 @@
   justify-content: center;
   align-items: center;
   padding: 20px 0;
-}
-
-.table {
-  border-spacing: 1;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 6px;
-  overflow: hidden;
-  max-width: 800px;
-  width: 100%;
-  margin: 0 auto;
-  position: relative;
-}
-
-.table * {
-  position: relative;
-}
-
-.table td,
-.table th {
-  padding-left: 8px;
-  display: block;
-}
-
-.table thead tr {
-  height: 60px;
-  background: #ffed86;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.table tbody tr {
-  height: 48px;
-  border-bottom: 1px solid #e3f1d5;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.table tbody tr:last-child {
-  border: 0;
-}
-
-.table td,
-.table th {
-  text-align: center;
-  display: block;
-  flex: 1;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.table td.l,
-.table th.l {
-  text-align: center;
-  display: block;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  flex: 1;
-}
-
-.table td.c,
-.table th.c {
-  text-align: center;
-  display: block;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.table td.r,
-.table th.r {
-  text-align: center;
-  display: block;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  flex: 1;
 }
 
 .cards {

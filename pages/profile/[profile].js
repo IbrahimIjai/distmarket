@@ -1,74 +1,77 @@
 import styles from "../../styles/profile.module.css";
-import profiles from "../../profiles";
 import Image from "next/image";
 import { Contract, utils, ethers, BigNumber } from "ethers";
+import { useWeb3React } from "@web3-react/core";
 import { nftABI, marketplaceABI } from "../../constants/ABIs";
-export default function Profile({ data, coll }) {
-  console.log(data, coll);
-  // return (
-  //   <main className={styles.main}>
-  //     <div className={styles.container}>
-  //       <div className={styles.user}>
-  //         <h1>0xdb9b...d70</h1>
-  //         <p>
-  //           NFTs owned: <span>{profiles.length}</span>
-  //         </p>
-  //       </div>
-  //       <div className={styles.ownedItems}>
-  //         {profiles.map((nft, i) => {
-  //           return (
-  //             <div className={styles.nft} key={i}>
-  //               <div>
-  //                 {" "}
-  //                 <Image
-  //                   src={nft.image}
-  //                   layout="fill"
-  //                   objectFit="cover"
-  //                   className={styles.image}
-  //                 />{" "}
-  //                 <div className={styles.content}>
-  //                   <div className={styles.onSale}>
-  //                     {nft.bestOffer > 0
-  //                       ? "Offer Available"
-  //                       : nft.price > 0
-  //                       ? "on Sale"
-  //                       : ""}
-  //                   </div>
-  //                   <div className={styles.details}>
-  //                     <h2 className={styles.name}>{nft.collection}</h2>
-  //                     <p className={styles.id}>
-  //                       #{i + Math.floor(Math.random() * 10000)}
-  //                     </p>
-  //                   </div>
-  //                 </div>
-  //               </div>
-  //             </div>
-  //           );
-  //         })}
-  //       </div>
-  //     </div>
-  //   </main>
-  // );
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+export default function Profile({ allData }) {
+  const router = useRouter();
+  const { profile } = router.query;
+  return (
+    <main className={styles.main}>
+      <div className={styles.container}>
+        <div className={styles.user}>
+          <h1>{`${profile.slice(0, 5)}...${profile.slice(38, 42)}`}</h1>
+          <p>
+            NFTs owned: <span>{allData.length}</span>
+          </p>
+        </div>
+        <div className={styles.ownedItems}>
+          {allData.map((nft, i) => {
+            return (
+              <div className={styles.nft} key={i}>
+                <Link href={`/collection/${nft.collection}/${nft.tokenId}`}>
+                  <a>
+                    <div>
+                      {" "}
+                      <Image
+                        src={nft.image ? nft.image : "/2818"}
+                        alt={nft.image}
+                        layout="fill"
+                        objectFit="cover"
+                        className={styles.image}
+                      />{" "}
+                      <div className={styles.content}>
+                        <div className={styles.onSale}>
+                          {nft.offerTrue
+                            ? "Offer Available"
+                            : nft.listingTrue
+                            ? "on Sale"
+                            : ""}
+                        </div>
+                        <div className={styles.details}>
+                          <h2 className={styles.name}>{nft.name}</h2>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </main>
+  );
 }
 export async function getServerSideProps({ params }) {
   const Tkcc = "https://rpc-testnet.kcc.network";
-  const { profile } = params;
+  const profile = params.profile;
   const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
+  const deadAddress = "0x0000000000000000000000000000000000000000";
   const provider = new ethers.providers.JsonRpcProvider(Tkcc);
   const contract = new Contract(marketContract, marketplaceABI, provider);
   const collections = await contract.supportedCollections();
-  const profileData = [];
-  const getData = await collections.map(async (collection) => {
-    const gata = [];
-    const instance = new Contract(collection, nftABI, provider);
+  const allData = [];
+  for (let i = 0; i < collections.length; i++) {
+    const instance = new Contract(collections[i], nftABI, provider);
     const balance = await instance.balanceOf(profile);
     let profileBalance = balance.toNumber();
-    const tokenIds = [];
-    const name = [];
-    const images = [];
-    for (let i = 0; i < profileBalance; i++) {
+    for (let j = 0; j < profileBalance; j++) {
       if (profileBalance > 0) {
-        const tokenId = await instance.tokenOfOwnerByIndex(profile, i);
+        const tokenId = await instance.tokenOfOwnerByIndex(profile, j);
         let NumTokenId = tokenId.toNumber();
         let StrTokenId = String(NumTokenId);
         const uri = await instance.tokenURI(StrTokenId);
@@ -81,29 +84,31 @@ export async function getServerSideProps({ params }) {
           "ipfs://",
           "https://ipfsfiles.distant.finance/ipfs/"
         );
-        name.push(ipfsFile.name);
-        images.push(imageUri);
-        tokenIds.push(StrTokenId);
+        const listingExists = await contract.sellNFT(
+          collections[i],
+          StrTokenId
+        );
+        const offersExists = await contract.availableOffers(
+          collections[i],
+          StrTokenId
+        );
+        const listingTrue = listingExists[0] === deadAddress ? true : false;
+        const offerTrue = offersExists[0].length > 0 ? true : false;
+        const obj = {
+          name: ipfsFile.name,
+          image: imageUri,
+          tokenId: StrTokenId,
+          listingTrue: listingTrue,
+          offerTrue: offerTrue,
+          collection: collections[i],
+        };
+        allData.push(obj);
       }
     }
-    const obj = {
-      collection: collection,
-      tokenArray: tokenIds,
-      image: images,
-      name: name,
-    };
-    if (obj.name.length > 0) {
-      gata.push(obj);
-      profileData.push(obj);
-    }
-    console.log(profileData, "Server");
-    return gata;
-  });
-  console.log("Server 2", getData, profileData);
+  }
   return {
     props: {
-      data: JSON.parse(JSON.stringify(getData)),
-      coll: JSON.parse(JSON.stringify(collections)),
+      allData: allData,
     },
   };
 }

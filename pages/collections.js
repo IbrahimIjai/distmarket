@@ -2,9 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/collections.module.css";
 import banner from "../Frontpage/img/banner.jpg";
+import { Contract, utils, ethers } from "ethers";
 import SupportedCollections from "../SupportedCollections";
+import { marketplaceABI, nftABI } from "../constants/ABIs";
 
-export default function Collections() {
+export default function Collections({ coll }) {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -69,4 +71,17 @@ export default function Collections() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  const Tkcc = "https://rpc-testnet.kcc.network";
+  const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
+  const provider = new ethers.providers.JsonRpcProvider(Tkcc);
+  const contract = new Contract(marketContract, marketplaceABI, provider);
+  const collections = await contract.supportedCollections();
+  return {
+    props: {
+      coll: JSON.parse(JSON.stringify(collections)),
+    },
+  };
 }

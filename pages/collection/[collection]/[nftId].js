@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "../../../styles/nftId.module.css";
-import { CgFileDocument } from "react-icons/cg";
+import { CgFileDocument, CgDanger } from "react-icons/cg";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { IoIosArrowDown, IoIosCloseCircleOutline } from "react-icons/io";
 import { useState, useEffect } from "react";
@@ -14,8 +14,9 @@ export default function NftId({
   threeListings,
   offerInfo,
   nftSaleInfo,
-  // allEvents,
   ipfsData,
+  collectionInfo,
+  extraListings,
 }) {
   // Loader helper variable
   const override = {
@@ -23,8 +24,8 @@ export default function NftId({
     margin: "0 auto",
     borderColor: "red",
   };
-  console.log("Extra Listings1 only", threeListings);
   let highestOfferInitiator = "";
+  console.log(extraListings);
   // Contracts and constant addresses
   const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
   const tokenContract = "0x67f6a7BbE0da067A747C6b2bEdF8aBBF7D6f60dc";
@@ -33,7 +34,6 @@ export default function NftId({
   const [state, setState] = useState(false);
   const [attr, setAttr] = useState(false);
   const [desc, setDesc] = useState(false);
-  const [events, setEvents] = useState(false);
   // Props from getServerSideProps function. Destructuring and assignments
   // More listings from same collection
   const [tokenId, details] = [...threeListings];
@@ -98,15 +98,6 @@ export default function NftId({
     bestOffers.reduce((acc, cur) =>
       Number(acc) > Number(cur) ? Number(acc) : Number(cur)
     );
-  // Events function
-  // let allevent = allEvents.map((event) => {
-  //   if (event.length > 0) {
-  //     return event;
-  //   }
-  // });
-  // allevent = allevent.filter(Boolean);
-  // const eventsArray = [];
-  // allevent.map((e) => e.map((event) => eventsArray.push(event)));
 
   //Contract functions
   const { account, library, active } = useWeb3React();
@@ -170,7 +161,7 @@ export default function NftId({
     setLoading(true);
     await tx.wait();
     tx.hash && setLoading(false);
-    // router.push(`/collection/${collection}`);
+    router.replace(router.asPath);
   };
   const sellNft = async () => {
     const val = utils.parseEther(listingValue);
@@ -186,7 +177,7 @@ export default function NftId({
     await tx.wait();
     tx.hash && setLoading(false);
     setCreateListing(false);
-    // router.push(`/collection/${collection}`);
+    router.replace(router.asPath);
   };
   const cancelListing = async () => {
     const signer = await library.getSigner();
@@ -195,6 +186,7 @@ export default function NftId({
     setLoading(true);
     await tx.wait();
     tx.hash && setLoading(false);
+    router.replace(router.asPath);
   };
   const updateListing = async () => {
     const val = utils.parseEther(updateListingValue);
@@ -205,6 +197,7 @@ export default function NftId({
     await tx.wait();
     tx.hash && setLoading(false);
     setUpdateListingModal(false);
+    router.replace(router.asPath);
   };
   const makeOffer = async () => {
     const signer = await library.getSigner();
@@ -232,6 +225,7 @@ export default function NftId({
     await tx.wait();
     tx.hash && setLoading(false);
     setCreateOfferModal(false);
+    router.replace(router.asPath);
   };
   const updateOffer = async () => {
     const signer = await library.getSigner();
@@ -259,6 +253,7 @@ export default function NftId({
     await tx.wait();
     tx.hash && setLoading(false);
     setCreateOfferModal(false);
+    router.replace(router.asPath);
   };
   const cancelOffer = async () => {
     const signer = await library.getSigner();
@@ -267,6 +262,7 @@ export default function NftId({
     setLoading(true);
     await tx.wait();
     tx.hash && setLoading(false);
+    router.replace(router.asPath);
   };
   const acceptOffer1 = async (offerVal, initiator) => {
     const signer = library.getSigner();
@@ -300,6 +296,7 @@ export default function NftId({
     setLoading(true);
     await tx.wait();
     tx.hash && setLoading(false);
+    router.replace(router.asPath);
   };
   const acceptOffer2 = async (offerVal, initiator) => {
     const signer = library.getSigner();
@@ -326,6 +323,7 @@ export default function NftId({
     setLoading(true);
     await tx.wait();
     tx.hash && setLoading(false);
+    router.replace(router.asPath);
   };
   return (
     <main className={styles.main}>
@@ -346,7 +344,11 @@ export default function NftId({
                 <h1>
                   {ipfsData[4]}{" "}
                   <span className={styles.verified}>
-                    <MdOutlineVerifiedUser />
+                    {collectionInfo === 0 ? (
+                      <MdOutlineVerifiedUser />
+                    ) : (
+                      <CgDanger />
+                    )}
                   </span>
                 </h1>
                 <h2>{ipfsData[2]}</h2>
@@ -481,7 +483,7 @@ export default function NftId({
                   </div>
                 )}
               </div>
-              {offer.length > 0 && (
+              {deadAddress !== nftSaleInfo[0] && (
                 <div className={styles.offers}>
                   {" "}
                   <p>
@@ -619,8 +621,8 @@ export default function NftId({
                       <h4>Floor</h4>
                       <h4>Offerer</h4>
                     </div>
-                    {offer.map((offers) => (
-                      <div className={styles.offerBody} key={offers.address}>
+                    {offer.map((offers, i) => (
+                      <div className={styles.offerBody} key={i}>
                         <p>${offers.value}</p>
                         <p>
                           {deadAddress === nftSaleInfo[0]
@@ -766,69 +768,24 @@ export default function NftId({
           </div>
         </div>
         <div className={styles.footerContainer}>
-          {/* <div className={styles.events}>
-            <div className={styles.event}>
-              <h3>Latest activities</h3>
-              <button onClick={() => setEvents((event) => !event)}>
-                <IoIosArrowDown />
-              </button>
-            </div>
-
-            {events && (
-              <div className={styles.eventTable}>
-                <table className={styles.table}>
-                  <thead className={styles.thead}>
-                    <tr>
-                      <th>Event</th>
-                      <th>Price</th>
-                      <th>From</th>
-                      <th>To</th>
-                      <th>When</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {eventsArray.map((event) => (
-                      <tr>
-                        <td>{event.events}</td>
-                        <td>
-                          {utils.formatEther(
-                            parseInt(event.args[2].hex, 16).toString()
-                          )}
-                        </td>
-                        <td>{event.args[0]}</td>
-                        <td>
-                          {event.addr === marketContract ? "mART" : event.addr}
-                        </td>
-                        <td>{event.txnHash}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div> */}
           <div className={styles.moreItems}>
             <h2>More Items from the {ipfsData[4]}</h2>
             <div className={styles.SliderContainer}>
               <div className={styles.cards}>
-                {moreListings.map((listing) => (
-                  <div className={styles.imageContainer} key={listing.tokenId}>
+                {extraListings.map((listing, i) => (
+                  <div className={styles.imageContainer} key={i}>
                     <Image
-                      src="/lomen.jpeg"
-                      alt="lomen"
+                      src={listing.image}
+                      alt={listing.image}
                       layout="fill"
                       objectFit="cover"
                       style={{ padding: "0 20px" }}
                     />
                     <div className={styles.description}>
-                      <h3>{parseInt(listing.tokenId.hex, 16)}</h3>
+                      <h3>{listing.name}</h3>
                       <p>
-                        Price tag: <span>${listing.price}</span>
+                        Price tag: <span>${listing.value}</span>
                       </p>
-                      <em>{`${listing.address.slice(
-                        0,
-                        5
-                      )}...${listing.address.slice(38, 42)}`}</em>
                     </div>
                   </div>
                 ))}
@@ -854,144 +811,34 @@ export async function getServerSideProps({ params, res }) {
   const nftSaleInfo = await contract.sellNFT(collection, nftID);
   const offerInfo = await contract.availableOffers(collection, nftID);
   const threeListings = await contract.availableListings(collection);
-  // const listingEvents = await contract.queryFilter("ItemListed");
-  // const listings = [];
-  // listingEvents.map((listing) => {
-  //   for (let i = 0; i < listingEvents.length; i++) {
-  //     if (listing.args[1] == nftID) {
-  //       let object = {
-  //         args: listing.args,
-  //         txnHash: listing.transactionHash,
-  //         addr: listing.address,
-  //         events: listing.event,
-  //       };
-  //       listings.push(object);
-  //     }
-  //   }
-  // });
-  // const delistEvents = await contract.queryFilter("ItemDelisted");
-  // const deListings = [];
-  // delistEvents.map((listing) => {
-  //   for (let i = 0; i < delistEvents.length; i++) {
-  //     if (listing.args[1] == nftID) {
-  //       let object = {
-  //         args: listing.args,
-  //         txnHash: listing.transactionHash,
-  //         addr: listing.address,
-  //         events: listing.event,
-  //       };
-  //       deListings.push(object);
-  //     }
-  //   }
-  // });
-  // const updateListings = [];
-  // const updateListing = await contract.queryFilter("ItemUpdated");
-  // updateListing.map((listing) => {
-  //   for (let i = 0; i < updateListing.length; i++) {
-  //     if (listing.args[1] == nftID) {
-  //       let object = {
-  //         args: listing.args,
-  //         txnHash: listing.transactionHash,
-  //         addr: listing.address,
-  //         events: listing.event,
-  //       };
-  //       updateListings.push(object);
-  //     }
-  //   }
-  // });
-  // const soldListings = [];
-  // const soldListing = await contract.queryFilter("ItemSold");
-  // soldListing.map((listing) => {
-  //   for (let i = 0; i < soldListing.length; i++) {
-  //     if (listing.args[1] == nftID) {
-  //       let object = {
-  //         args: listing.args,
-  //         txnHash: listing.transactionHash,
-  //         addr: listing.address,
-  //         events: listing.event,
-  //       };
-  //       soldListings.push(object);
-  //     }
-  //   }
-  // });
-  // const offerCreation = await contract.queryFilter("OfferCreated");
-  // const offers = [];
-  // offerCreation.map((listing) => {
-  //   for (let i = 0; i < offerCreation.length; i++) {
-  //     if (listing.args[1] == nftID) {
-  //       let object = {
-  //         args: listing.args,
-  //         txnHash: listing.transactionHash,
-  //         addr: listing.address,
-  //         events: listing.event,
-  //       };
-  //       offers.push(object);
-  //     }
-  //   }
-  // });
-  // const delistOffer = await contract.queryFilter("OfferCancelled");
-  // const offerDeleted = [];
-  // delistOffer.map((listing) => {
-  //   for (let i = 0; i < delistOffer.length; i++) {
-  //     if (listing.args[1] == nftID) {
-  //       let object = {
-  //         args: listing.args,
-  //         txnHash: listing.transactionHash,
-  //         addr: listing.address,
-  //         events: listing.event,
-  //       };
-  //       offerDeleted.push(object);
-  //     }
-  //   }
-  // });
-  // const updateOffer = [];
-  // const offerUpdate = await contract.queryFilter("OfferUpdated");
-  // offerUpdate.map((listing) => {
-  //   for (let i = 0; i < offerUpdate.length; i++) {
-  //     if (listing.args[1] == nftID) {
-  //       let object = {
-  //         args: listing.args,
-  //         txnHash: listing.transactionHash,
-  //         addr: listing.address,
-  //         events: listing.event,
-  //       };
-  //       updateOffer.push(object);
-  //     }
-  //   }
-  // });
-  // const acceptOffer = [];
-  // const acceptedOffers = await contract.queryFilter("OfferAccepted");
-  // acceptedOffers.map((listing) => {
-  //   for (let i = 0; i < acceptedOffers.length; i++) {
-  //     if (listing.args[1] == nftID) {
-  //       let object = {
-  //         args: listing.args,
-  //         txnHash: listing.transactionHash,
-  //         addr: listing.address,
-  //         events: listing.event,
-  //       };
-  //       acceptOffer.push(object);
-  //     }
-  //   }
-  // });
-  // const allEvents = [];
-  // allEvents.push(
-  //   listings,
-  //   deListings,
-  //   updateListings,
-  //   soldListings,
-  //   offers,
-  //   offerDeleted,
-  //   offerUpdate,
-  //   updateOffer,
-  //   acceptOffer
-  // );
+  const collectionInfo = await contract.collection(collection);
   const instance = new Contract(collection, nftABI, provider);
+  const extraListings = [];
   const gg = threeListings[0];
   const numValue = gg.map((listing) => listing.toNumber());
-  const num1Value = gg.map((listing) => listing.toNumber().toString());
-  const tokenURI = num1Value.map(async (num) => await instance.tokenURI(num));
-  console.log(tokenURI, numValue, "Show new value");
+  console.log(typeof nftID);
+  const hexValues = threeListings[1].map((hex) => parseInt(hex[1]._hex, 16));
+  for (let i = 0; i < numValue.length; i++) {
+    if (numValue[i] !== Number(nftID)) {
+      const tokenDetails = await instance.tokenURI(numValue[i]);
+      const ipfsLink = tokenDetails.replace(
+        "ipfs://",
+        "https://distant.mypinata.cloud/ipfs/"
+      );
+      const { image, name } = await fetch(ipfsLink).then((r) => r.json());
+      const imageUrl = image.replace(
+        "ipfs://",
+        "https://distant.mypinata.cloud/ipfs/"
+      );
+      const obj = {
+        image: imageUrl,
+        name: name,
+        value: utils.formatEther(hexValues[i].toString()),
+      };
+      extraListings.push(obj);
+    }
+  }
+  console.log(numValue, threeListings[1], "Show new value");
   const tokenDetails = await instance.tokenURI(nftID);
   const owner = await instance.ownerOf(nftID);
   const ipfsLink = tokenDetails.replace(
@@ -1018,10 +865,11 @@ export async function getServerSideProps({ params, res }) {
   return {
     props: {
       ipfsData: ipfsData,
-      // allEvents: JSON.parse(JSON.stringify(allEvents)),
       nftSaleInfo: JSON.parse(JSON.stringify(nftSaleInfo)),
       offerInfo: JSON.parse(JSON.stringify(offerInfo[1])),
       threeListings: JSON.parse(JSON.stringify(threeListings)),
+      collectionInfo: JSON.parse(JSON.stringify(collectionInfo[2])),
+      extraListings: JSON.parse(JSON.stringify(extraListings)),
     },
   };
 }

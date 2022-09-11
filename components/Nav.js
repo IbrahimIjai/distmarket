@@ -7,7 +7,7 @@ import { HiOutlineMenuAlt4 } from "react-icons/hi";
 import { CgClose } from "react-icons/cg";
 
 export default function Navbar() {
-  const { active } = useWeb3React();
+  const { active, account } = useWeb3React();
   const [hamburger, setHamburger] = useState(false);
   let hamRef = useRef();
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function Navbar() {
                     </li>
                   </a>
                 </Link>
-                <Link href="/profile">
+                <Link href={`/profile/${account}`}>
                   <a>
                     <li
                       onClick={(e) => {
@@ -85,7 +85,7 @@ export default function Navbar() {
         </div>
         {active && (
           <div className={styles.profile}>
-            <Link href="/profile">
+            <Link href={`/profile/${account}`}>
               <a>Profile</a>
             </Link>
           </div>

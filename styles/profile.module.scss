@@ -1,15 +1,16 @@
 .main {
-  background-image: url(/bg.png);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  // background-image: url(/bg.png);
+  // background-position: center;
+  // background-repeat: no-repeat;
+  // background-size: cover;
   min-height: 100vh;
   padding: 0 7vw;
   background-color: #f0f0f0;
   color: #000;
   .container {
-    padding-top: min(60px, 11%);
+    padding-top: min(30px, 5%);
     position: relative;
+    padding-bottom: min(30px, 5%);
     .user {
       display: block;
       margin: 20px auto;
@@ -64,4 +65,14 @@
       }
     }
   }
+}
+.image {
+  position: relative;
+  height: 300px;
+  width: 300px;
+}
+.ima {
+  position: relative;
+  height: 300px;
+  width: 300px;
 }
