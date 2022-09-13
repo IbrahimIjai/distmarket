@@ -789,9 +789,12 @@ export default function NftId({
               <div className={styles.SliderContainer}>
                 <div className={styles.cards}>
                   {extraListings.map((listing, i) => (
-                    <Link href={`/collection/${collection}/${listing.tokenId}`}>
+                    <Link
+                      href={`/collection/${collection}/${listing.tokenId}`}
+                      key={i}
+                    >
                       <a>
-                        <div className={styles.imageContainer} key={i}>
+                        <div className={styles.imageContainer}>
                           <Image
                             src={listing.image}
                             alt={listing.image}
