@@ -26,8 +26,8 @@
   position: absolute;
   border-radius: 50%;
   z-index: -1;
-  background-color: #673ab7;
-  background-color: rgb(211, 195, 195);
+  background-color: #5e0684;
+  color: #fff;
   transition: 1s ease;
 }
 
@@ -49,7 +49,7 @@
 
 .button:hover {
   color: rgb(10, 25, 30);
-  color: black;
+  color: #2fc0db;
   background-color: #2fc0db;
 }
 

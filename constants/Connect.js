@@ -8,16 +8,19 @@ export default function Connect() {
     useWeb3React();
 
   async function inChain() {
-    if (!library) {
+    if (!window.ethereum) {
+      alert(
+        "Metamask is not installed on your Browser. Install via https://metamask.io/download"
+      );
       return false;
     }
-    if (library.provider.chainId === "0x141") {
+    if (chainId === "0x142") {
       return true;
     }
     try {
-      await library.provider.request({
+      await window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x141" }],
+        params: [{ chainId: "0x142" }],
       });
       return true;
     } catch (switchError) {
@@ -26,15 +29,19 @@ export default function Connect() {
         switchError.data?.originalError?.code === 4902
       ) {
         try {
-          await library.provider.request({
+          await window.ethereum.request({
             method: "wallet_addEthereumChain",
             params: [
               {
-                chainId: "0x141",
-                chainName: "KCC Mainnet",
-                nativeCurrency: "KCS",
-                rpcUrls: "https://rpc-mainnet.kcc.network",
-                blockExplorerUrls: "https://kccscan.io",
+                chainId: "0x142",
+                chainName: "KCC Testnet",
+                rpcUrls: ["https://rpc-testnet.kcc.network"],
+                nativeCurrency: {
+                  name: "Test KCS",
+                  symbol: "TKCS",
+                  decimals: 18,
+                },
+                blockExplorerUrls: ["https://scan-testnet.kcc.network"],
               },
             ],
           });
@@ -119,11 +126,10 @@ export default function Connect() {
             </div>
             <div className={styles.modalMenu}>
               <div className={styles.modalInternal}>
-                <h1>Connect wallet</h1>
+                <h1>Connect Wallet</h1>
                 <div className={styles.wallets}>
                   <p>
-                    connect wallet here, make sure you have kcc network
-                    installed
+                    Select an option to connect your wallet to the Marketplace
                   </p>
                   <div className={styles.walletLists}>
                     <div className={styles.walletList} onClick={connect}>
@@ -151,7 +157,7 @@ export default function Connect() {
                         height={40}
                         alt="imagelogo"
                       />
-                      <span>Wallet Connect</span>
+                      <span>WalletConnect</span>
                     </div>
                     <div className={styles.walletList} onClick={connect}>
                       <Image

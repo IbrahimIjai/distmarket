@@ -26,6 +26,12 @@
   font-weight: 700;
   font-size: clamp(1.3rem, 2rem, 2.2vw);
 }
+.logo {
+  font-weight: bold;
+}
+.collections {
+  font-weight: normal;
+}
 
 .ham {
   z-index: 999;

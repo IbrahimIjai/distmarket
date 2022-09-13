@@ -20,7 +20,7 @@
 }
 .main aside .center {
   text-transform: capitalize;
-  font-size: clamp(1.2rem, 2rem, 2vw);
+  font-size: clamp(1.6rem, 2.3rem, 2.5vw);
   text-align: center;
   font-weight: 900;
   letter-spacing: 0.1vw;
@@ -40,7 +40,7 @@
   max-width: 80vw;
   text-align: center;
   margin-bottom: 40px;
-  font-size: clamp(1.1rem, 1.4rem, 2.4vw);
+  font-size: clamp(1.25rem, 1.45rem, 2.5vw);
   letter-spacing: 0.4px;
   line-height: 1.25;
   word-spacing: 0.2vw;
@@ -53,6 +53,9 @@
 .main .heroImage {
   display: none;
 }
+.main .heroImage .tab {
+  display: none;
+}
 @media (min-width: 500px) {
   .main {
     background-image: url("../img/desktop-black.png");
@@ -62,6 +65,7 @@
     grid-row-gap: 20px;
     justify-items: stretch;
     align-items: stretch;
+    padding: 0 1vw 0 7vw;
   }
   .main aside {
     align-items: flex-start;
@@ -75,7 +79,7 @@
   }
   .main .heroImage {
     display: block;
-    padding: 13vw 0 3vw 0;
+    padding: 1vw 0 3vw 0;
   }
   .main .heroImage .tab {
     position: relative;
@@ -85,8 +89,8 @@
     align-items: center;
   }
   .main .heroImage .tab .image {
-    width: 80%;
-    height: 45%;
+    width: 85%;
+    height: 49%;
     position: absolute;
     border-radius: 10px;
     overflow: hidden;
@@ -139,7 +143,7 @@
   .main .heroImage {
     position: relative;
     display: flex;
-    padding: 3vw 0;
+    padding: 0;
   }
   .main .heroImage .tab {
     position: relative;
@@ -202,7 +206,13 @@
 }
 @media (min-width: 750px) and (min-width: 1160px) {
   .main .heroImage {
-    padding: 3vw 5vw;
+    padding: 1vw 0;
+  }
+}
+@media screen and (min-width: 1024px) {
+  .main {
+    background-image: url("../img/desktop-black.png");
+    padding: 0 2vw 0 7vw;
   }
 }
 

@@ -11,6 +11,7 @@ const Mint1 = () => {
         <div className={styles.create}>
           <div className={styles.imageContainer}>
             <Image src={iconDark} layout="fill" objectFit="contain" />{" "}
+            {/* height={50} width={50}  */}
             <h2 style={{ margin: "10px" }}>Create</h2>
           </div>
           <div className={styles.textContent}>

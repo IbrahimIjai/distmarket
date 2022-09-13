@@ -153,9 +153,9 @@
 .mint1 .content .discover .imageContainer {
   position: absolute;
   display: flex;
-  width: 30%;
+  width: 20%;
   top: -20%;
-  height: 30rem;
+  height: 20rem;
   right: 0;
   left: 0;
   margin: auto;

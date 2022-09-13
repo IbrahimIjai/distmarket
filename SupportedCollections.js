@@ -26,14 +26,14 @@ export default [
   {
     collectionName: "Our Wives Collection",
     collectionAddress: "0x6f16918FCEd422ADAE63859788FE72e3Ca126315",
-    collectionTicker: "wive",
-    collectionSupply: 6,
+    collectionTicker: "Wife",
+    collectionSupply: 7,
   },
   {
     collectionName: "Goldbars flowers Collection",
     collectionAddress: "0x2B9E5Cc171372141E591fdEC2cfFA2332D863c77",
-    collectionTicker: "Rogue",
-    collectionSupply: 13,
+    collectionTicker: "Gold",
+    collectionSupply: 15,
   },
   {
     collectionName: "Princess Joshbellz Collection",

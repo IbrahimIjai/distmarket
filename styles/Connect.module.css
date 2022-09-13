@@ -83,6 +83,9 @@
   gap: 32px;
   margin-bottom: 32px;
 }
+.container .modal .modalMenu .modalInternal .wallets p {
+  text-align: center;
+}
 .container .modal .modalMenu .modalInternal .wallets .walletLists {
   display: grid;
   gap: 12px;
@@ -102,6 +105,10 @@
   border-radius: 12px;
   cursor: pointer;
   will-change: transform;
+  transition: all 500ms;
+}
+.container .modal .modalMenu .modalInternal .wallets .walletLists .walletList:hover {
+  transform: scale(1.05);
 }
 .container .board {
   background-color: rgba(0, 0, 0, 0.7);

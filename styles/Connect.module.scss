@@ -78,6 +78,9 @@
           display: grid;
           gap: 32px;
           margin-bottom: 32px;
+          p {
+            text-align: center;
+          }
           .walletLists {
             display: grid;
             gap: 12px;
@@ -94,6 +97,10 @@
               border-radius: 12px;
               cursor: pointer;
               will-change: transform;
+              transition: all 500ms;
+              &:hover {
+                transform: scale(1.05);
+              }
             }
           }
         }
@@ -135,22 +142,6 @@
       will-change: transform;
     }
     .smallBoard {
-      //   opacity: 1;
-      //   transform: none;
-      //   outline: none;
-      //   border-radius: 24px;
-      //   width: 290px;
-      //   align-content: center;
-      //   height: 200px;
-      //   align-items: center;
-      //   justify-content: center;
-      //   display: flex;
-      //   flex-direction: column;
-      //   background-color: white;
-      //   align-items: center;
-      //   justify-content: center;
-      //   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
-
       opacity: 1;
       transform: none;
       outline: none;

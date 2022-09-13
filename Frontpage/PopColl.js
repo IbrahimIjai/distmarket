@@ -134,7 +134,7 @@ const PopularCollection = (props) => {
               <Image src={nft} alt="" layout="fill" objectFit="cover" />
             </div>
             <div className={styles.tabtext}>
-              <p
+              <h2
                 className={styles.collectionName}
                 style={{ color: props.state ? "black" : "white" }}
               >
@@ -142,7 +142,7 @@ const PopularCollection = (props) => {
                 <span style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
                   <MdOutlineGppGood />
                 </span>
-              </p>
+              </h2>
               <p
                 className={styles.collectionDescription}
                 style={{ color: props.state ? "black" : "white" }}
@@ -177,7 +177,7 @@ const PopularCollection = (props) => {
               <Image src={nft1} alt="" layout="fill" objectFit="cover" />
             </div>
             <div className={styles.tabtext}>
-              <p
+              <h2
                 className={styles.collectionName}
                 style={{ color: props.state ? "black" : "white" }}
               >
@@ -185,7 +185,7 @@ const PopularCollection = (props) => {
                 <span style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
                   <MdOutlineGppGood />
                 </span>
-              </p>
+              </h2>
               <p
                 className={styles.collectionDescription}
                 style={{ color: props.state ? "black" : "white" }}
@@ -220,7 +220,7 @@ const PopularCollection = (props) => {
               <Image src={nft} alt="" layout="fill" objectFit="cover" />
             </div>
             <div className={styles.tabtext}>
-              <p
+              <h2
                 className={styles.collectionName}
                 style={{ color: props.state ? "black" : "white" }}
               >
@@ -228,7 +228,7 @@ const PopularCollection = (props) => {
                 <span style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
                   <MdOutlineGppGood />
                 </span>
-              </p>
+              </h2>
               <p
                 className={styles.collectionDescription}
                 style={{ color: props.state ? "black" : "white" }}
@@ -263,7 +263,7 @@ const PopularCollection = (props) => {
               <Image src={lomen} alt="" layout="fill" objectFit="cover" />
             </div>
             <div className={styles.tabtext}>
-              <p
+              <h2
                 className={styles.collectionName}
                 style={{ color: props.state ? "black" : "white" }}
               >
@@ -271,7 +271,7 @@ const PopularCollection = (props) => {
                 <span style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
                   <MdOutlineGppGood />
                 </span>
-              </p>
+              </h2>
               <p
                 className={styles.collectionDescription}
                 style={{ color: props.state ? "black" : "white" }}

@@ -8,6 +8,7 @@ const injected = new InjectedConnector({
 const walletconnect = new WalletConnectConnector({
   rpc: {
     321: "https://rpc-mainnet.kcc.network",
+    322: "https://rpc-testnet.kcc.network",
   },
   bridge: "https://bridge.walletconnect.org",
   qrcode: true,
