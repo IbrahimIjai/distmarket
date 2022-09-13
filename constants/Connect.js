@@ -7,49 +7,6 @@ export default function Connect() {
   const { active, account, library, chainId, activate, deactivate, connector } =
     useWeb3React();
 
-  const connect = async () => {
-    try {
-      await inChain();
-      await activate(connectors.injected);
-      window.localStorage.setItem("isWalletConnected", true);
-      setConnectModal(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const connectWC = async () => {
-    try {
-      await activate(connectors.walletConnect);
-      window.localStorage.setItem("isWalletConnected", true);
-      setConnectModal(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const disconnect = async () => {
-    try {
-      deactivate(connectors.injected);
-      window.localStorage.setItem("isWalletConnected", false);
-      setDisconnectModal(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    const connectWalletOnPageLoad = async () => {
-      if (localStorage?.getItem("isWalletConnected") === "true") {
-        try {
-          await activate(connectors.injected);
-        } catch (ex) {
-          console.log(ex);
-        }
-      }
-    };
-    connectWalletOnPageLoad();
-  }, []);
-
   async function inChain() {
     if (!library) {
       return false;
@@ -90,6 +47,49 @@ export default function Connect() {
     }
     return false;
   }
+
+  const connect = async () => {
+    try {
+      await activate(connectors.injected);
+      await inChain();
+      window.localStorage.setItem("isWalletConnected", true);
+      setConnectModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const connectWC = async () => {
+    try {
+      await activate(connectors.walletConnect);
+      window.localStorage.setItem("isWalletConnected", true);
+      setConnectModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const disconnect = async () => {
+    try {
+      deactivate(connectors.injected);
+      window.localStorage.setItem("isWalletConnected", false);
+      setDisconnectModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const connectWalletOnPageLoad = async () => {
+      if (localStorage?.getItem("isWalletConnected") === "true") {
+        try {
+          await activate(connectors.injected);
+        } catch (ex) {
+          console.log(ex);
+        }
+      }
+    };
+    connectWalletOnPageLoad();
+  }, []);
 
   const [connectModal, setConnectModal] = useState(false);
   const [disconnectModal, setDisconnectModal] = useState(false);

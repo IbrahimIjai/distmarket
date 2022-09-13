@@ -25,7 +25,7 @@ export default function NftId({
     borderColor: "red",
   };
   let highestOfferInitiator = "";
-  console.log(extraListings);
+  const [verificationDisplay, setVerificationDisplay] = useState(false);
   // Contracts and constant addresses
   const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
   const tokenContract = "0x67f6a7BbE0da067A747C6b2bEdF8aBBF7D6f60dc";
@@ -342,12 +342,27 @@ export default function NftId({
             <div className={styles.openContent}>
               <div className={styles.openContentDetails}>
                 <h1>
-                  {ipfsData[4]}{" "}
-                  <span className={styles.verified}>
+                  <Link href={`/collection/${collection}`}>
+                    <a>{ipfsData[4]} </a>
+                  </Link>
+                  <span
+                    className={styles.verified}
+                    onMouseOver={() => setVerificationDisplay(true)}
+                    onMouseOut={() => setVerificationDisplay(false)}
+                  >
                     {collectionInfo === 0 ? (
                       <MdOutlineVerifiedUser />
                     ) : (
                       <CgDanger />
+                    )}{" "}
+                    {verificationDisplay ? (
+                      collectionInfo === 0 ? (
+                        <span>Collection Verified</span>
+                      ) : (
+                        <span>Unverified!</span>
+                      )
+                    ) : (
+                      ""
                     )}
                   </span>
                 </h1>
@@ -768,30 +783,36 @@ export default function NftId({
           </div>
         </div>
         <div className={styles.footerContainer}>
-          <div className={styles.moreItems}>
-            <h2>More Items from the {ipfsData[4]}</h2>
-            <div className={styles.SliderContainer}>
-              <div className={styles.cards}>
-                {extraListings.map((listing, i) => (
-                  <div className={styles.imageContainer} key={i}>
-                    <Image
-                      src={listing.image}
-                      alt={listing.image}
-                      layout="fill"
-                      objectFit="cover"
-                      style={{ padding: "0 20px" }}
-                    />
-                    <div className={styles.description}>
-                      <h3>{listing.name}</h3>
-                      <p>
-                        Price tag: <span>${listing.value}</span>
-                      </p>
-                    </div>
-                  </div>
-                ))}
+          {extraListings.length > 0 && (
+            <div className={styles.moreItems}>
+              <h2>More Items from the {ipfsData[4]}</h2>
+              <div className={styles.SliderContainer}>
+                <div className={styles.cards}>
+                  {extraListings.map((listing, i) => (
+                    <Link href={`/collection/${collection}/${listing.tokenId}`}>
+                      <a>
+                        <div className={styles.imageContainer} key={i}>
+                          <Image
+                            src={listing.image}
+                            alt={listing.image}
+                            layout="fill"
+                            objectFit="cover"
+                            style={{ padding: "0 20px" }}
+                          />
+                          <div className={styles.description}>
+                            <h3>{listing.name}</h3>
+                            <p>
+                              Sale Price: <span>${listing.value}</span>
+                            </p>
+                          </div>
+                        </div>
+                      </a>
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </main>
@@ -816,7 +837,6 @@ export async function getServerSideProps({ params, res }) {
   const extraListings = [];
   const gg = threeListings[0];
   const numValue = gg.map((listing) => listing.toNumber());
-  console.log(typeof nftID);
   const hexValues = threeListings[1].map((hex) => parseInt(hex[1]._hex, 16));
   for (let i = 0; i < numValue.length; i++) {
     if (numValue[i] !== Number(nftID)) {
@@ -834,11 +854,11 @@ export async function getServerSideProps({ params, res }) {
         image: imageUrl,
         name: name,
         value: utils.formatEther(hexValues[i].toString()),
+        tokenId: numValue[i],
       };
       extraListings.push(obj);
     }
   }
-  console.log(numValue, threeListings[1], "Show new value");
   const tokenDetails = await instance.tokenURI(nftID);
   const owner = await instance.ownerOf(nftID);
   const ipfsLink = tokenDetails.replace(

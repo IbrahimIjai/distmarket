@@ -13,13 +13,14 @@ export default function Home({ nftId, listings }) {
   const { collection } = router.query;
   const { library, active } = useWeb3React();
   const [runEffect, setRunEffect] = useState(false);
-  setTimeout(() => {
-    setRunEffect((val) => !val);
+  const init = setTimeout(() => {
+    setRunEffect(true);
   }, 300);
   if (active) {
     setTimeout(() => {
-      setRunEffect((val) => !val);
+      setRunEffect(false);
     }, 2000);
+    clearTimeout(init);
   }
   const provider = library;
   const [visibility, setVisibility] = useState(false);
@@ -55,18 +56,20 @@ export default function Home({ nftId, listings }) {
       for (let i = 0; i < allOffers.length; i++) {
         offers.push(await allOffers[i]);
       }
-      const bestOffers = offers.map(
-        (offer) =>
-          Array.isArray(offer) &&
-          offer.reduce((cur, prev) =>
+      const bestOffers = offers.map((offer) => {
+        if (offer.length > 1) {
+          return offer.reduce((cur, prev) =>
             Number(cur) > Number(prev) ? Number(cur) : Number(prev)
-          )
-      );
+          );
+        }
+        return offer;
+      });
       const highestOffer =
         bestOffers.length > 0 &&
         bestOffers.reduce((acc, cur) =>
           Number(acc) > Number(cur) ? Number(acc) : Number(cur)
         );
+      const names = [];
       const imageLinks = await itemId.map(async (item) => {
         const contract = new Contract(collection, nftABI, provider);
         const x = await contract.tokenURI(item.toString());
@@ -79,6 +82,8 @@ export default function Home({ nftId, listings }) {
           "ipfs://",
           "https://distant.mypinata.cloud/ipfs/"
         );
+        const n = d.name;
+        names.push(n);
         const supply = await contract.totalSupply();
         const totalSupply = parseInt(supply._hex, 16);
         setStats({
@@ -97,6 +102,7 @@ export default function Home({ nftId, listings }) {
           price: value[i],
           image: await imageLinks[i],
           bestOffer: bestOffers[i],
+          name: names[i],
         };
         arr.push(object);
       }
@@ -174,23 +180,25 @@ export default function Home({ nftId, listings }) {
           <div className={styles.description}>
             <div className={styles.stats}>
               <div>
-                <h3>{stats.supply}</h3>
+                <h3>{stats.supply ? `${stats.supply}` : ""}</h3>
                 <p>Items</p>
               </div>
               <div>
-                <h3>{stats.listed}</h3>
+                <h3>{stats.listed ? `${stats.listed}` : ""}</h3>
                 <p>Listed</p>
               </div>
               <div>
-                <h3>-</h3>
+                <h3>{stats.listed ? `-` : ""}</h3>
                 <p>Trade Volume</p>
               </div>
               <div>
-                <h3>${stats.floor}</h3>
+                <h3>{stats.floor ? `$${stats.floor}` : ""}</h3>
                 <p>Floor Price</p>
               </div>
               <div>
-                <h3>${stats.highestOffer}</h3>
+                <h3>
+                  {stats.highestOffer > 0 ? `$${stats.highestOffer}` : "-"}
+                </h3>
                 <p>Best Offer</p>
               </div>
             </div>
@@ -243,13 +251,13 @@ export default function Home({ nftId, listings }) {
                         <div className={styles.nftImage}>
                           <Image
                             src={nft.image}
-                            alt={nft.image}
+                            alt={nft.tokenId}
                             layout="fill"
                             objectFit="cover"
                           />
                         </div>
                         <div className={styles.content}>
-                          <h2>#{nft.tokenId}</h2>
+                          <h2>{nft.name}</h2>
                           <p>
                             <span>Price</span> ${nft.price}
                           </p>
@@ -274,8 +282,8 @@ export async function getServerSideProps({ params, res }) {
     "public, s-maxage=43200, stale-while-revalidate=60"
   );
   const collection = params.collection;
-  const Tkcc = "https://rpc-testnet.kcc.network";
   const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
+  const Tkcc = "https://rpc-testnet.kcc.network";
   const provider = new ethers.providers.JsonRpcProvider(Tkcc);
   const contract = new Contract(marketContract, marketplaceABI, provider);
   const results = await contract.availableListings(collection);

@@ -441,6 +441,10 @@
 .verified {
   font-size: 18px;
 }
+.verified span {
+  font-weight: 300;
+  font-size: 15px;
+}
 
 .createListingModal {
   background-color: rgba(0, 0, 0, 0.7);

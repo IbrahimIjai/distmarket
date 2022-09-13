@@ -28,7 +28,7 @@ export default function Profile({ allData }) {
                       {" "}
                       <Image
                         src={nft.image ? nft.image : "/2818"}
-                        alt={nft.image}
+                        alt={nft.name}
                         layout="fill"
                         objectFit="cover"
                         className={styles.image}
@@ -56,6 +56,7 @@ export default function Profile({ allData }) {
     </main>
   );
 }
+
 export async function getServerSideProps({ params }) {
   const Tkcc = "https://rpc-testnet.kcc.network";
   const profile = params.profile;
