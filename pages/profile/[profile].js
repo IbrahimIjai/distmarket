@@ -5,10 +5,64 @@ import { useWeb3React } from "@web3-react/core";
 import { nftABI, marketplaceABI } from "../../constants/ABIs";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-export default function Profile({ allData }) {
-  const router = useRouter();
-  const { profile } = router.query;
+export default function Profile({ profile }) {
+  const Tkcc = "https://rpc-testnet.kcc.network";
+  const provider = new ethers.providers.JsonRpcProvider(Tkcc);
+  const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
+  const deadAddress = "0x0000000000000000000000000000000000000000";
+  const [allData, setAllData] = useState([]);
+  const data = [];
+  useEffect(() => {
+    const main = async () => {
+      const contract = new Contract(marketContract, marketplaceABI, provider);
+      const collections = await contract.supportedCollections();
+      const allData = [];
+      let addr = "0xEAe38e8d41aeCC027e1b68c31f7039Ae95651D4D";
+      for (let i = 0; i < collections.length; i++) {
+        const instance = new Contract(collections[i], nftABI, provider);
+        const balance = await instance.balanceOf(addr);
+        let profileBalance = balance.toNumber();
+        for (let j = 0; j < profileBalance; j++) {
+          if (profileBalance > 0) {
+            const tokenId = await instance.tokenOfOwnerByIndex(addr, j);
+            let NumTokenId = tokenId.toNumber();
+            let StrTokenId = String(NumTokenId);
+            const uri = await instance.tokenURI(StrTokenId);
+            const url = uri.replace(
+              "ipfs://",
+              "https://ipfsfiles.distant.finance/ipfs/"
+            );
+            const ipfsFile = await fetch(url).then((r) => r.json());
+            const imageUri = ipfsFile.image.replace(
+              "ipfs://",
+              "https://ipfsfiles.distant.finance/ipfs/"
+            );
+            const listingExists = await contract.sellNFT(
+              collections[i],
+              StrTokenId
+            );
+            const offersExists = await contract.availableOffers(
+              collections[i],
+              StrTokenId
+            );
+            const listingTrue = listingExists[0] === deadAddress ? true : false;
+            const offerTrue = offersExists[0].length > 0 ? true : false;
+            const obj = {
+              name: ipfsFile.name,
+              image: imageUri,
+              tokenId: StrTokenId,
+              listingTrue: listingTrue,
+              offerTrue: offerTrue,
+              collection: collections[i],
+            };
+            allData.push(obj);
+          }
+        }
+      }
+      setAllData(allData);
+    };
+    main();
+  }, []);
   return (
     <main className={styles.main}>
       <div className={styles.container}>
@@ -58,58 +112,65 @@ export default function Profile({ allData }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const Tkcc = "https://rpc-testnet.kcc.network";
   const profile = params.profile;
-  const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
-  const deadAddress = "0x0000000000000000000000000000000000000000";
-  const provider = new ethers.providers.JsonRpcProvider(Tkcc);
-  const contract = new Contract(marketContract, marketplaceABI, provider);
-  const collections = await contract.supportedCollections();
-  const allData = [];
-  for (let i = 0; i < collections.length; i++) {
-    const instance = new Contract(collections[i], nftABI, provider);
-    const balance = await instance.balanceOf(profile);
-    let profileBalance = balance.toNumber();
-    for (let j = 0; j < profileBalance; j++) {
-      if (profileBalance > 0) {
-        const tokenId = await instance.tokenOfOwnerByIndex(profile, j);
-        let NumTokenId = tokenId.toNumber();
-        let StrTokenId = String(NumTokenId);
-        const uri = await instance.tokenURI(StrTokenId);
-        const url = uri.replace(
-          "ipfs://",
-          "https://ipfsfiles.distant.finance/ipfs/"
-        );
-        const ipfsFile = await fetch(url).then((r) => r.json());
-        const imageUri = ipfsFile.image.replace(
-          "ipfs://",
-          "https://ipfsfiles.distant.finance/ipfs/"
-        );
-        const listingExists = await contract.sellNFT(
-          collections[i],
-          StrTokenId
-        );
-        const offersExists = await contract.availableOffers(
-          collections[i],
-          StrTokenId
-        );
-        const listingTrue = listingExists[0] === deadAddress ? true : false;
-        const offerTrue = offersExists[0].length > 0 ? true : false;
-        const obj = {
-          name: ipfsFile.name,
-          image: imageUri,
-          tokenId: StrTokenId,
-          listingTrue: listingTrue,
-          offerTrue: offerTrue,
-          collection: collections[i],
-        };
-        allData.push(obj);
-      }
-    }
-  }
   return {
-    props: {
-      allData: allData,
-    },
+    props: { profile: profile },
   };
 }
+
+// export async function getServerSideProps({ params }) {
+//   const Tkcc = "https://rpc-testnet.kcc.network";
+//   const profile = params.profile;
+//   const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
+//   const deadAddress = "0x0000000000000000000000000000000000000000";
+//   const provider = new ethers.providers.JsonRpcProvider(Tkcc);
+//   const contract = new Contract(marketContract, marketplaceABI, provider);
+//   const collections = await contract.supportedCollections();
+//   const allData = [];
+//   for (let i = 0; i < collections.length; i++) {
+//     const instance = new Contract(collections[i], nftABI, provider);
+//     const balance = await instance.balanceOf(profile);
+//     let profileBalance = balance.toNumber();
+//     for (let j = 0; j < profileBalance; j++) {
+//       if (profileBalance > 0) {
+//         const tokenId = await instance.tokenOfOwnerByIndex(profile, j);
+//         let NumTokenId = tokenId.toNumber();
+//         let StrTokenId = String(NumTokenId);
+//         const uri = await instance.tokenURI(StrTokenId);
+//         const url = uri.replace(
+//           "ipfs://",
+//           "https://ipfsfiles.distant.finance/ipfs/"
+//         );
+//         const ipfsFile = await fetch(url).then((r) => r.json());
+//         const imageUri = ipfsFile.image.replace(
+//           "ipfs://",
+//           "https://ipfsfiles.distant.finance/ipfs/"
+//         );
+//         const listingExists = await contract.sellNFT(
+//           collections[i],
+//           StrTokenId
+//         );
+//         const offersExists = await contract.availableOffers(
+//           collections[i],
+//           StrTokenId
+//         );
+//         const listingTrue = listingExists[0] === deadAddress ? true : false;
+//         const offerTrue = offersExists[0].length > 0 ? true : false;
+//         const obj = {
+//           name: ipfsFile.name,
+//           image: imageUri,
+//           tokenId: StrTokenId,
+//           listingTrue: listingTrue,
+//           offerTrue: offerTrue,
+//           collection: collections[i],
+//         };
+//         allData.push(obj);
+//       }
+//     }
+//   }
+//   return {
+//     props: {
+//       allData: allData,
+//     },
+//   };
+// }
