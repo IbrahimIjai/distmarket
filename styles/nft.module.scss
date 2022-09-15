@@ -127,3 +127,13 @@
     }
   }
 }
+.notActive {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 500;
+  color: gray;
+}

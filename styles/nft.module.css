@@ -127,4 +127,15 @@
   align-items: flex-start;
   justify-content: start;
   padding: 10px 20px;
+}
+
+.notActive {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 500;
+  color: gray;
 }/*# sourceMappingURL=nft.module.css.map */

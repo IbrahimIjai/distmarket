@@ -17,14 +17,13 @@ export default function Profile({ profile }) {
       const contract = new Contract(marketContract, marketplaceABI, provider);
       const collections = await contract.supportedCollections();
       const allData = [];
-      let addr = "0xEAe38e8d41aeCC027e1b68c31f7039Ae95651D4D";
       for (let i = 0; i < collections.length; i++) {
         const instance = new Contract(collections[i], nftABI, provider);
-        const balance = await instance.balanceOf(addr);
+        const balance = await instance.balanceOf(profile);
         let profileBalance = balance.toNumber();
         for (let j = 0; j < profileBalance; j++) {
           if (profileBalance > 0) {
-            const tokenId = await instance.tokenOfOwnerByIndex(addr, j);
+            const tokenId = await instance.tokenOfOwnerByIndex(profile, j);
             let NumTokenId = tokenId.toNumber();
             let StrTokenId = String(NumTokenId);
             const uri = await instance.tokenURI(StrTokenId);
@@ -69,7 +68,8 @@ export default function Profile({ profile }) {
         <div className={styles.user}>
           <h1>{`${profile.slice(0, 5)}...${profile.slice(38, 42)}`}</h1>
           <p>
-            NFTs owned: <span>{allData.length}</span>
+            NFTs owned:{" "}
+            <span>{allData.length == 0 ? "Loading..." : allData.length}</span>
           </p>
         </div>
         <div className={styles.ownedItems}>

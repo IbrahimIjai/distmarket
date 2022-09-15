@@ -133,8 +133,8 @@ export default function Home({ nftId, listings }) {
 
   return (
     <>
-      {view ? (
-        <h1>Welcome</h1>
+      {!active ? (
+        <h1 className={styles.notActive}>Please Connect Wallet first</h1>
       ) : (
         <>
           <div className={styles.banner}>
