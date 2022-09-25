@@ -1,44 +1,44 @@
 export default [
   {
     collectionName: "Eyeballz",
-    collectionAddress: "0xCDF30c588CCe8eDAd78C4d3183fA360cdD6EA22F",
+    collectionAddress: "0x02f0A9f1e8C1B58107D1c8740d49Ad2999A45c67",
     collectionTicker: "Eyeballz",
     collectionSupply: 10,
   },
   {
     collectionName: "Crazy Arts",
-    collectionAddress: "0x03b13E35D7bbb335953D354D54d6F33C2f0d4eaC",
+    collectionAddress: "0xBE3bbf00ce1b8F27CA21821B15CBe39d816416B0",
     collectionTicker: "CRZY",
     collectionSupply: 10,
   },
   {
     collectionName: "Crazy Arts 2nd Edition",
-    collectionAddress: "0x6d1077D771e92715732FFdEBb7676706Fc171236",
+    collectionAddress: "0x81D028A07Fd843C549b9C634cb9E99419c42a0Ee",
     collectionTicker: "CRZY2",
     collectionSupply: 10,
   },
   {
     collectionName: "Rogue Collection",
-    collectionAddress: "0x90Ef6f553412a7fF2fA46D091a217c9aDCa66524",
+    collectionAddress: "0x87E87c33384f599498CB24D66135f797ED57DbEF",
     collectionTicker: "Rogue",
     collectionSupply: 10,
   },
   {
     collectionName: "Our Wives Collection",
-    collectionAddress: "0x6f16918FCEd422ADAE63859788FE72e3Ca126315",
+    collectionAddress: "0x86c3ff27FF45CfACdF660B92D962EBF4267319C8",
     collectionTicker: "Wife",
-    collectionSupply: 7,
+    collectionSupply: 200,
   },
-  {
-    collectionName: "Goldbars flowers Collection",
-    collectionAddress: "0x2B9E5Cc171372141E591fdEC2cfFA2332D863c77",
-    collectionTicker: "Gold",
-    collectionSupply: 15,
-  },
-  {
-    collectionName: "Princess Joshbellz Collection",
-    collectionAddress: "0xd01D6200c5c23e566925f812b209556783c04308",
-    collectionTicker: "JoshBellz",
-    collectionSupply: 8,
-  },
+  // {
+  //   collectionName: "Goldbars flowers Collection",
+  //   collectionAddress: "0x2B9E5Cc171372141E591fdEC2cfFA2332D863c77",
+  //   collectionTicker: "Gold",
+  //   collectionSupply: 15,
+  // },
+  // {
+  //   collectionName: "Princess Joshbellz Collection",
+  //   collectionAddress: "0xd01D6200c5c23e566925f812b209556783c04308",
+  //   collectionTicker: "JoshBellz",
+  //   collectionSupply: 8,
+  // },
 ];

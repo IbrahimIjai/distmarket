@@ -2,14 +2,13 @@ import styles from "../../styles/profile.module.css";
 import Image from "next/image";
 import { Contract, utils, ethers, BigNumber } from "ethers";
 import { useWeb3React } from "@web3-react/core";
-import { nftABI, marketplaceABI } from "../../constants/ABIs";
+import { nftABI, marketplaceABI, contracts } from "../../constants/ABIs";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 export default function Profile({ profile }) {
-  const Tkcc = "https://rpc-testnet.kcc.network";
-  const provider = new ethers.providers.JsonRpcProvider(Tkcc);
-  const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
-  const deadAddress = "0x0000000000000000000000000000000000000000";
+  const provider = new ethers.providers.JsonRpcProvider(contracts.mumbai);
+  const marketContract = contracts.marketplace;
+  const deadAddress = contracts.deadAddress;
   const [allData, setAllData] = useState([]);
   const data = [];
   useEffect(() => {
@@ -44,7 +43,7 @@ export default function Profile({ profile }) {
               collections[i],
               StrTokenId
             );
-            const listingTrue = listingExists[0] === deadAddress ? true : false;
+            const listingTrue = listingExists[0] === deadAddress ? false : true;
             const offerTrue = offersExists[0].length > 0 ? true : false;
             const obj = {
               name: ipfsFile.name,
@@ -55,10 +54,10 @@ export default function Profile({ profile }) {
               collection: collections[i],
             };
             allData.push(obj);
+            setAllData(allData);
           }
         }
       }
-      setAllData(allData);
     };
     main();
   }, []);
@@ -73,7 +72,7 @@ export default function Profile({ profile }) {
           </p>
         </div>
         <div className={styles.ownedItems}>
-          {allData.map((nft, i) => {
+          {allData?.map((nft, i) => {
             return (
               <div className={styles.nft} key={i}>
                 <Link href={`/collection/${nft.collection}/${nft.tokenId}`}>

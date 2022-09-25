@@ -635,30 +635,6 @@ const marketplaceABI = [
         name: "_collection",
         type: "address",
       },
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "allCreators",
-    outputs: [
-      {
-        internalType: "address[]",
-        name: "creators",
-        type: "address[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_collection",
-        type: "address",
-      },
     ],
     name: "availableListings",
     outputs: [
@@ -1777,4 +1753,13 @@ const tokenABI = [
   },
 ];
 
-export { marketplaceABI, nftABI, tokenABI };
+const contracts = {
+  marketplace: "0xa9EBa0cc148FC3Ab7E9863Cdb6907cEcBD8B1dAD",
+  token: "0xf75150d730ce97c1551e97df39c0a049024e4c25",
+  defaultProfile: "0xeae38e8d41aecc027e1b68c31f7039ae95651d4d",
+  mumbai: "https://matic-mumbai.chainstacklabs.com",
+  deadAddress: "0x0000000000000000000000000000000000000000",
+  queryUrl: "https://api.thegraph.com/subgraphs/name/steffqing/721-clone",
+};
+
+export { marketplaceABI, nftABI, tokenABI, contracts };

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Contract, utils, ethers, BigNumber } from "ethers";
-import { marketplaceABI, nftABI } from "../../constants/ABIs";
+import { marketplaceABI, nftABI, contracts } from "../../constants/ABIs";
 import { BsThreeDots, BsGlobe, BsTwitter, BsTelegram } from "react-icons/bs";
 import Link from "next/link";
 
@@ -112,7 +112,7 @@ export default function Home({ nftId, listings }) {
   }, [runEffect]);
   const [linkShow, setLinkShow] = useState(false);
   const [stats, setStats] = useState({});
-  const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
+  const marketContract = contracts.marketplace;
   let menuRef = useRef();
   useEffect(() => {
     let handler = (e) => {
@@ -282,9 +282,8 @@ export async function getServerSideProps({ params, res }) {
     "public, s-maxage=43200, stale-while-revalidate=60"
   );
   const collection = params.collection;
-  const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
-  const Tkcc = "https://rpc-testnet.kcc.network";
-  const provider = new ethers.providers.JsonRpcProvider(Tkcc);
+  const marketContract = contracts.marketplace;
+  const provider = new ethers.providers.JsonRpcProvider(contracts.mumbai);
   const contract = new Contract(marketContract, marketplaceABI, provider);
   const results = await contract.availableListings(collection);
   const nftId = results[0];

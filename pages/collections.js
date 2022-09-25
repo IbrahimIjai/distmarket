@@ -2,9 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/collections.module.css";
 import banner from "../Frontpage/img/banner.jpg";
-import { Contract, utils, ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 import SupportedCollections from "../SupportedCollections";
-import { marketplaceABI, nftABI } from "../constants/ABIs";
+import { marketplaceABI, contracts } from "../constants/ABIs";
 
 export default function Collections({ coll }) {
   return (
@@ -74,9 +74,8 @@ export default function Collections({ coll }) {
 }
 
 export async function getServerSideProps() {
-  const Tkcc = "https://rpc-testnet.kcc.network";
-  const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
-  const provider = new ethers.providers.JsonRpcProvider(Tkcc);
+  const marketContract = contracts.marketplace;
+  const provider = new ethers.providers.JsonRpcProvider(contracts.mumbai);
   const contract = new Contract(marketContract, marketplaceABI, provider);
   const collections = await contract.supportedCollections();
   return {

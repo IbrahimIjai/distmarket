@@ -6,7 +6,12 @@ import { IoIosArrowDown, IoIosCloseCircleOutline } from "react-icons/io";
 import { useState, useEffect } from "react";
 import HashLoader from "react-spinners/HashLoader";
 import { Contract, ethers, BigNumber, utils } from "ethers";
-import { marketplaceABI, nftABI, tokenABI } from "../../../constants/ABIs";
+import {
+  marketplaceABI,
+  nftABI,
+  tokenABI,
+  contracts,
+} from "../../../constants/ABIs";
 import { useWeb3React } from "@web3-react/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -27,9 +32,9 @@ export default function NftId({
   let highestOfferInitiator = "";
   const [verificationDisplay, setVerificationDisplay] = useState(false);
   // Contracts and constant addresses
-  const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
-  const tokenContract = "0x67f6a7BbE0da067A747C6b2bEdF8aBBF7D6f60dc";
-  const deadAddress = "0x0000000000000000000000000000000000000000";
+  const marketContract = contracts.marketplace;
+  const tokenContract = contracts.token;
+  const deadAddress = contracts.deadAddress;
   // Constant States
   const [state, setState] = useState(false);
   const [attr, setAttr] = useState(false);
@@ -828,9 +833,8 @@ export async function getServerSideProps({ params, res }) {
   );
   const nftID = params.nftId;
   const collection = params.collection;
-  const Tkcc = "https://rpc-testnet.kcc.network";
-  const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
-  const provider = new ethers.providers.JsonRpcProvider(Tkcc);
+  const marketContract = contracts.marketplace;
+  const provider = new ethers.providers.JsonRpcProvider(contracts.mumbai);
   const contract = new Contract(marketContract, marketplaceABI, provider);
   const nftSaleInfo = await contract.sellNFT(collection, nftID);
   const offerInfo = await contract.availableOffers(collection, nftID);
