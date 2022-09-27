@@ -1,46 +1,35 @@
-import { useWeb3React } from "@web3-react/core";
-import { nftABI, marketplaceABI, tokenABI, contracts } from "../constants/ABIs";
-import { Contract, utils } from "ethers";
-import { createClient } from "urql";
-import { useEffect, useState } from "react";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
-const query = `
-query {
-  collection(id: "0x81d028a07fd843c549b9c634cb9e99419c42a0ee"){
-    id
-    name
-    topSale
-    totalSales
-    totalVolume
-  }
-}
-`;
-const client = createClient({
-  url: contracts.queryUrl,
-});
+const APIURL = "https://api.thegraph.com/subgraphs/name/steffqing/721-clone";
 
 export default function Test() {
-  const fetchData = async () => {
-    const res = await client.query(query).toPromise();
-    console.log("Response: ", res.data.collection);
-  };
-  useEffect(() => {
-    fetchData();
-  });
-  const { active, account, library } = useWeb3React();
-  const marketContract = contracts.marketplace;
-  const tokenContract = contracts.token;
-  const [name, setName] = useState();
-  const [response, setResponse] = useState();
-  const profile = contracts.defaultProfile;
-  const provider = library;
+  const addressQuery = `
+  query addressQuery($address: ID){
+    account(id: $address){
+      id 
+      tokens{
+        identifier
+        tokenURI
+      }
+    }
+  }
+  `;
 
-  return (
-    <div>
-      <div style={{ cursor: "pointer", marginTop: "30px" }}></div>
-      <h1 style={{ cursor: "pointer", marginTop: "30px" }} onClick={fetchData}>
-        fetchData
-      </h1>
-    </div>
-  );
+  const client = new ApolloClient({
+    uri: APIURL,
+    cache: new InMemoryCache(),
+  });
+  const data = "0xeae38e8d41aecc027e1b68c31f7039ae95651d4d";
+  client
+    .query({
+      query: gql(addressQuery),
+      variables: {
+        address: data,
+      },
+    })
+    .then((data) => console.log("Subgraph data: ", data))
+    .catch((err) => {
+      console.log("Error fetching data: ", err);
+    });
+  return <div>Content</div>;
 }

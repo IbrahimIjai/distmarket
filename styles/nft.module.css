@@ -138,4 +138,30 @@
   font-size: 20px;
   font-weight: 500;
   color: gray;
+}
+
+.loadingModal {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 95px 24px;
+  height: 100vh;
+  inset: 0px;
+  overflow: auto;
+  display: flex;
+  transform: translate3d(0px, 0px, 0px);
+  will-change: opacity;
+  color: black;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+  perspective: 1000px;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 2222;
+}
+.loadingModal h1 {
+  padding-top: 30px;
+  color: #2fc0db;
+  color: #fff;
 }/*# sourceMappingURL=nft.module.css.map */

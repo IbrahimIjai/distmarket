@@ -1,7 +1,11 @@
 import Image from "next/image";
 import styles from "../../../styles/nftId.module.css";
 import { CgFileDocument, CgDanger } from "react-icons/cg";
-import { MdOutlineVerifiedUser } from "react-icons/md";
+import {
+  MdOutlineVerifiedUser,
+  MdKeyboardArrowDown,
+  MdKeyboardArrowUp,
+} from "react-icons/md";
 import { IoIosArrowDown, IoIosCloseCircleOutline } from "react-icons/io";
 import { useState, useEffect } from "react";
 import HashLoader from "react-spinners/HashLoader";
@@ -346,7 +350,7 @@ export default function NftId({
             {" "}
             <div className={styles.openContent}>
               <div className={styles.openContentDetails}>
-                <h1>
+                <p>
                   <Link href={`/collection/${collection}`}>
                     <a>{ipfsData[4]} </a>
                   </Link>
@@ -370,7 +374,7 @@ export default function NftId({
                       ""
                     )}
                   </span>
-                </h1>
+                </p>
                 <h2>{ipfsData[2]}</h2>
               </div>
               <div className={styles.openContentOwner}>
@@ -628,9 +632,12 @@ export default function NftId({
                 <span>
                   <CgFileDocument />
                 </span>{" "}
-                Offers made
-                <button onClick={() => setState((state) => !state)}>
-                  <IoIosArrowDown />
+                <h2>Offers made</h2>
+                <button
+                  className={styles.buttonToggle}
+                  onClick={() => setState((state) => !state)}
+                >
+                  {state ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
                 </button>
               </div>
               <div className={styles.body}>
@@ -749,8 +756,11 @@ export default function NftId({
                   <CgFileDocument />
                 </span>{" "}
                 <h2>Attributes</h2>
-                <button onClick={() => setAttr((state) => !state)}>
-                  <IoIosArrowDown />
+                <button
+                  className={styles.buttonToggle}
+                  onClick={() => setAttr((state) => !state)}
+                >
+                  {attr ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
                 </button>
               </div>
               <div className={styles.body}>
@@ -758,9 +768,9 @@ export default function NftId({
                   <div>
                     <div>
                       {ipfsData[3].map((data, i) => (
-                        <h2 key={i}>
-                          {data.trait_type}: <span>{data.value}</span>
-                        </h2>
+                        <aside key={i}>
+                          <h2>{data.trait_type}</h2> <p>{data.value}</p>
+                        </aside>
                       ))}
                     </div>
                   </div>
@@ -773,8 +783,11 @@ export default function NftId({
                   <CgFileDocument />
                 </span>{" "}
                 <h2>Description</h2>
-                <button onClick={() => setDesc((state) => !state)}>
-                  <IoIosArrowDown />
+                <button
+                  className={styles.buttonToggle}
+                  onClick={() => setDesc((state) => !state)}
+                >
+                  {desc ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
                 </button>
               </div>
               <div className={styles.body}>

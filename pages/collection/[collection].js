@@ -7,8 +7,23 @@ import { Contract, utils, ethers, BigNumber } from "ethers";
 import { marketplaceABI, nftABI, contracts } from "../../constants/ABIs";
 import { BsThreeDots, BsGlobe, BsTwitter, BsTelegram } from "react-icons/bs";
 import Link from "next/link";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
-export default function Home({ nftId, listings }) {
+const APIURL = "https://api.thegraph.com/subgraphs/name/steffqing/721-clone";
+const collectionDataQuery = `
+  query collectionDataQuery($address: ID){
+    collection(id: $address){
+      name
+      totalSupply
+      totalVolume
+      tokens{
+        tokenURI
+      }
+    }
+  }
+`;
+
+export default function Home({ nftId, listings, obj }) {
   const router = useRouter();
   const { collection } = router.query;
   const { library, active } = useWeb3React();
@@ -22,6 +37,7 @@ export default function Home({ nftId, listings }) {
     }, 2000);
     clearTimeout(init);
   }
+
   const provider = library;
   const [visibility, setVisibility] = useState(false);
   useEffect(() => {
@@ -89,7 +105,6 @@ export default function Home({ nftId, listings }) {
         setStats({
           highestOffer: highestOffer,
           floor: lowestValue,
-          supply: totalSupply,
           listed: itemId.length,
         });
         return i;
@@ -109,15 +124,19 @@ export default function Home({ nftId, listings }) {
       setListedNFTs(arr);
     };
     main();
-  }, [runEffect]);
+  }, []);
   const [linkShow, setLinkShow] = useState(false);
   const [stats, setStats] = useState({});
   const marketContract = contracts.marketplace;
   let menuRef = useRef();
   useEffect(() => {
     let handler = (e) => {
-      if (!menuRef.current.contains(e.target)) {
-        setLinkShow(false);
+      try {
+        if (!menuRef.current.contains(e.target)) {
+          setLinkShow(false);
+        }
+      } catch (error) {
+        console.log(error);
       }
     };
     document.addEventListener("mousedown", handler);
@@ -126,11 +145,6 @@ export default function Home({ nftId, listings }) {
     };
   });
   const [listedNFTs, setListedNFTs] = useState([]);
-  const [view, setView] = useState(false);
-  // setTimeout(() => {
-  //   setView(false);
-  // }, 3000);
-
   return (
     <>
       {!active ? (
@@ -148,22 +162,20 @@ export default function Home({ nftId, listings }) {
               <div className={styles.bannerContent}>
                 <div className={styles.bannerContentImage}>
                   <Image
-                    src="/2818.png"
+                    src={obj.smallImage}
                     objectFit="cover"
                     layout="fill"
-                    alt="2818"
+                    alt={obj.description}
                   />
                 </div>
                 <div className={styles.bannerContentDetails}>
-                  <h1>Lomen NFT</h1>
+                  <h1>{obj.name}</h1>
                   <p>
-                    The AceLands Collection is a collection of 5000 unique
-                    AceLands NFTs on the KCC Network.{" "}
+                    {obj.description.substr(0, 100)}
+                    {!visibility && "..."}
                     {visibility && (
                       <span>
-                        The collection is available in 5 volumes - with each
-                        volume significantly different from the other in terms
-                        of utilities.
+                        {obj.description.substr(100, obj.description.length)}
                       </span>
                     )}
                   </p>
@@ -180,19 +192,19 @@ export default function Home({ nftId, listings }) {
           <div className={styles.description}>
             <div className={styles.stats}>
               <div>
-                <h3>{stats.supply ? `${stats.supply}` : ""}</h3>
+                <h3>{obj.totalSupply ? `${obj.totalSupply}` : "-"}</h3>
                 <p>Items</p>
               </div>
               <div>
-                <h3>{stats.listed ? `${stats.listed}` : ""}</h3>
+                <h3>{stats.listed ? `${stats.listed}` : "-"}</h3>
                 <p>Listed</p>
               </div>
               <div>
-                <h3>{stats.listed ? `-` : ""}</h3>
+                <h3>{obj.tradeVolume ? `${obj.tradeVolume}` : "-"}</h3>
                 <p>Trade Volume</p>
               </div>
               <div>
-                <h3>{stats.floor ? `$${stats.floor}` : ""}</h3>
+                <h3>{stats.floor ? `$${stats.floor}` : "-"}</h3>
                 <p>Floor Price</p>
               </div>
               <div>
@@ -239,35 +251,39 @@ export default function Home({ nftId, listings }) {
           </div>
           <div className={styles.nfts}>
             <div className={styles.nftFlex}>
-              {listedNFTs.map((nft) => {
-                return (
-                  <Link
-                    key={nft.tokenId}
-                    href={`/collection/${collection}/${nft.tokenId}`}
-                    prefetch={false}
-                  >
-                    <a className={styles.nft}>
-                      <div className={styles.nft}>
-                        <div className={styles.nftImage}>
-                          <Image
-                            src={nft.image}
-                            alt={nft.tokenId}
-                            layout="fill"
-                            objectFit="cover"
-                          />
+              {listedNFTs.length < 1 ? (
+                <h1 style={{ textAlign: "center" }}>Loading...</h1>
+              ) : (
+                listedNFTs.map((nft) => {
+                  return (
+                    <Link
+                      key={nft.tokenId}
+                      href={`/collection/${collection}/${nft.tokenId}`}
+                      prefetch={false}
+                    >
+                      <a className={styles.nft}>
+                        <div className={styles.nft}>
+                          <div className={styles.nftImage}>
+                            <Image
+                              src={nft.image}
+                              alt={nft.tokenId}
+                              layout="fill"
+                              objectFit="cover"
+                            />
+                          </div>
+                          <div className={styles.content}>
+                            <h2>{nft.name}</h2>
+                            <p>
+                              <span>Price</span> ${nft.price}
+                            </p>
+                            <p>Best Offer ${nft.bestOffer}</p>
+                          </div>
                         </div>
-                        <div className={styles.content}>
-                          <h2>{nft.name}</h2>
-                          <p>
-                            <span>Price</span> ${nft.price}
-                          </p>
-                          <p>Best Offer ${nft.bestOffer}</p>
-                        </div>
-                      </div>
-                    </a>
-                  </Link>
-                );
-              })}
+                      </a>
+                    </Link>
+                  );
+                })
+              )}
             </div>
           </div>{" "}
         </>
@@ -281,17 +297,52 @@ export async function getServerSideProps({ params, res }) {
     "Cache-Control",
     "public, s-maxage=43200, stale-while-revalidate=60"
   );
+  let objectData = {};
   const collection = params.collection;
   const marketContract = contracts.marketplace;
   const provider = new ethers.providers.JsonRpcProvider(contracts.mumbai);
   const contract = new Contract(marketContract, marketplaceABI, provider);
+  const client = new ApolloClient({
+    uri: APIURL,
+    cache: new InMemoryCache(),
+  });
+  client
+    .query({
+      query: gql(collectionDataQuery),
+      variables: {
+        address: collection.toLowerCase(),
+      },
+    })
+    .then((data) => {
+      let content = data.data.collection;
+      objectData = content;
+    })
+    .catch((err) => console.log("Error fetching data: ", err));
   const results = await contract.availableListings(collection);
   const nftId = results[0];
   const listingInfo = results[1];
+  const { totalSupply, tokens, totalVolume, name } = objectData;
+  const url = tokens[1].tokenURI.replace(
+    "ipfs://",
+    "https://distant.mypinata.cloud/ipfs/"
+  );
+  const image_attributes = await fetch(url).then((res) => res.json());
+  const imageUrl = image_attributes.image.replace(
+    "ipfs://",
+    "https://distant.mypinata.cloud/ipfs/"
+  );
+  const obj = {
+    totalSupply: totalSupply,
+    tradeVolume: totalVolume,
+    smallImage: imageUrl,
+    description: image_attributes.description,
+    name: name,
+  };
   return {
     props: {
       nftId: JSON.parse(JSON.stringify(nftId)),
       listings: JSON.parse(JSON.stringify(listingInfo)),
+      obj: obj,
     },
   };
 }

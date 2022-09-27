@@ -4,68 +4,102 @@ import { Contract, utils, ethers, BigNumber } from "ethers";
 import { useWeb3React } from "@web3-react/core";
 import { nftABI, marketplaceABI, contracts } from "../../constants/ABIs";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+
+const APIURL = "https://api.thegraph.com/subgraphs/name/steffqing/721-clone";
+
 export default function Profile({ profile }) {
+  const router = useRouter();
+  const [runEffect, setRunEffect] = useState(0);
+  const init = setTimeout(() => {
+    setRunEffect(1);
+  }, 500);
+  if (router.isReady) {
+    setTimeout(() => {
+      setRunEffect(2);
+    }, 2000);
+    clearTimeout(init);
+  }
   const provider = new ethers.providers.JsonRpcProvider(contracts.mumbai);
   const marketContract = contracts.marketplace;
   const deadAddress = contracts.deadAddress;
   const [allData, setAllData] = useState([]);
-  const data = [];
+  const [graphData, setGraphData] = useState([]);
+  const addressQuery = `
+    query addressQuery($address: ID){
+    account(id: $address){
+      id
+      tokens{
+        identifier
+        tokenURI
+        collection{
+          id
+        }
+      }
+    }
+  }
+  `;
   useEffect(() => {
     const main = async () => {
-      const contract = new Contract(marketContract, marketplaceABI, provider);
-      const collections = await contract.supportedCollections();
-      const allData = [];
-      for (let i = 0; i < collections.length; i++) {
-        const instance = new Contract(collections[i], nftABI, provider);
-        const balance = await instance.balanceOf(profile);
-        let profileBalance = balance.toNumber();
-        for (let j = 0; j < profileBalance; j++) {
-          if (profileBalance > 0) {
-            const tokenId = await instance.tokenOfOwnerByIndex(profile, j);
-            let NumTokenId = tokenId.toNumber();
-            let StrTokenId = String(NumTokenId);
-            const uri = await instance.tokenURI(StrTokenId);
-            const url = uri.replace(
-              "ipfs://",
-              "https://ipfsfiles.distant.finance/ipfs/"
-            );
-            const ipfsFile = await fetch(url).then((r) => r.json());
-            const imageUri = ipfsFile.image.replace(
-              "ipfs://",
-              "https://ipfsfiles.distant.finance/ipfs/"
-            );
-            const listingExists = await contract.sellNFT(
-              collections[i],
-              StrTokenId
-            );
-            const offersExists = await contract.availableOffers(
-              collections[i],
-              StrTokenId
-            );
-            const listingTrue = listingExists[0] === deadAddress ? false : true;
-            const offerTrue = offersExists[0].length > 0 ? true : false;
-            const obj = {
-              name: ipfsFile.name,
-              image: imageUri,
-              tokenId: StrTokenId,
-              listingTrue: listingTrue,
-              offerTrue: offerTrue,
-              collection: collections[i],
-            };
-            allData.push(obj);
-            setAllData(allData);
-          }
-        }
+      // const contract = new Contract(marketContract, marketplaceABI, provider);
+      const array = [];
+      const client = new ApolloClient({
+        uri: APIURL,
+        cache: new InMemoryCache(),
+      });
+      client
+        .query({
+          query: gql(addressQuery),
+          variables: {
+            address: profile.toLowerCase(),
+          },
+        })
+        .then((data) => setGraphData(data.data.account.tokens))
+        .catch((err) => console.log("Error fetching data: ", err));
+      for (let i = 0; i < graphData.length; i++) {
+        const url = graphData[i].tokenURI.replace(
+          "ipfs://",
+          "https://ipfsfiles.distant.finance/ipfs/"
+        );
+        const content = await fetch(url);
+        const link = await content.json();
+        const image = link.image.replace(
+          "ipfs://",
+          "https://ipfsfiles.distant.finance/ipfs/"
+        );
+        // const listingExists = await contract.sellNFT(
+        //   graphData[i].collection.id,
+        //   graphData[i].identifier
+        // );
+        // const offersExists = await contract.availableOffers(
+        //   graphData[i].collection.id,
+        //   graphData[i].identifier
+        // );
+        // const listingTrue = listingExists[0] === deadAddress ? false : true;
+        // const offerTrue = offersExists[0].length > 0 ? true : false;
+        const obj = {
+          name: link.name,
+          image: image,
+          tokenId: graphData[i].identifier,
+          collection: graphData[i].collection.id,
+          // listingTrue: listingTrue,
+          // offerTrue: offerTrue,
+        };
+        array.push(obj);
+        setAllData(array);
       }
     };
     main();
-  }, []);
+  }, [runEffect]);
   return (
     <main className={styles.main}>
       <div className={styles.container}>
         <div className={styles.user}>
-          <h1>{`${profile.slice(0, 5)}...${profile.slice(38, 42)}`}</h1>
+          {profile && (
+            <h1>{`${profile.slice(0, 5)}...${profile.slice(38, 42)}`}</h1>
+          )}
           <p>
             NFTs owned:{" "}
             <span>{allData.length == 0 ? "Loading..." : allData.length}</span>
@@ -112,64 +146,8 @@ export default function Profile({ profile }) {
 
 export async function getServerSideProps({ params }) {
   const profile = params.profile;
+  console.log(profile);
   return {
     props: { profile: profile },
   };
 }
-
-// export async function getServerSideProps({ params }) {
-//   const Tkcc = "https://rpc-testnet.kcc.network";
-//   const profile = params.profile;
-//   const marketContract = "0x9c05dd334787dE014f2Fa5744381Eb20699236FF";
-//   const deadAddress = "0x0000000000000000000000000000000000000000";
-//   const provider = new ethers.providers.JsonRpcProvider(Tkcc);
-//   const contract = new Contract(marketContract, marketplaceABI, provider);
-//   const collections = await contract.supportedCollections();
-//   const allData = [];
-//   for (let i = 0; i < collections.length; i++) {
-//     const instance = new Contract(collections[i], nftABI, provider);
-//     const balance = await instance.balanceOf(profile);
-//     let profileBalance = balance.toNumber();
-//     for (let j = 0; j < profileBalance; j++) {
-//       if (profileBalance > 0) {
-//         const tokenId = await instance.tokenOfOwnerByIndex(profile, j);
-//         let NumTokenId = tokenId.toNumber();
-//         let StrTokenId = String(NumTokenId);
-//         const uri = await instance.tokenURI(StrTokenId);
-//         const url = uri.replace(
-//           "ipfs://",
-//           "https://ipfsfiles.distant.finance/ipfs/"
-//         );
-//         const ipfsFile = await fetch(url).then((r) => r.json());
-//         const imageUri = ipfsFile.image.replace(
-//           "ipfs://",
-//           "https://ipfsfiles.distant.finance/ipfs/"
-//         );
-//         const listingExists = await contract.sellNFT(
-//           collections[i],
-//           StrTokenId
-//         );
-//         const offersExists = await contract.availableOffers(
-//           collections[i],
-//           StrTokenId
-//         );
-//         const listingTrue = listingExists[0] === deadAddress ? true : false;
-//         const offerTrue = offersExists[0].length > 0 ? true : false;
-//         const obj = {
-//           name: ipfsFile.name,
-//           image: imageUri,
-//           tokenId: StrTokenId,
-//           listingTrue: listingTrue,
-//           offerTrue: offerTrue,
-//           collection: collections[i],
-//         };
-//         allData.push(obj);
-//       }
-//     }
-//   }
-//   return {
-//     props: {
-//       allData: allData,
-//     },
-//   };
-// }
