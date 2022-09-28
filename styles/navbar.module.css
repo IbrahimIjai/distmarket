@@ -53,9 +53,15 @@
   color: black;
   font-weight: 400;
   border-radius: 5px;
+  border: 1px solid rgb(212, 209, 209);
   padding: 7px 18px;
   font-size: 1.1rem;
-  background: linear-gradient(139deg, #2fc0db 0%, #673ab7 100%);
+}
+
+.connectBtn:hover {
+  border: 1px solid transparent;
+  border-image: linear-gradient(139deg, #2fc0db 0%, #673ab7 100%);
+  border-image-slice: 1;
 }
 
 .mobileFallback {
@@ -130,7 +136,9 @@
   .nav .connect {
     display: flex;
     flex: 1;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
+    color: white;
+    font-size: 21px;
   }
 }

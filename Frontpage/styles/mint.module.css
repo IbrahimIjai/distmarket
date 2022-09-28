@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;700&display=swap");
 .main {
   padding: 0 7vw;
   min-height: 50vh;
@@ -112,84 +113,59 @@
 
 .mint1 {
   padding: 0 7vw;
-  margin: 15% 0 0 0;
 }
-@media (min-width: 460px) {
-  .mint1 {
-    margin: 5% 0 0 0;
+.mint1 .cards {
+  display: flex;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+@media (max-width: 800px) {
+  .mint1 .cards {
+    flex-wrap: wrap;
   }
 }
-.mint1 .content {
-  margin: 10% 0;
-  display: flex;
-  flex-direction: column;
-  gap: -50px;
+.mint1 .card {
+  border-top: 1px solid rgba(255, 255, 255, 0.2666666667);
+  border-left: 1px solid rgba(255, 255, 255, 0.2666666667);
+  border-right: 1px solid rgba(0, 0, 0, 0.5333333333);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5333333333);
+  border-radius: 16px;
+  padding: 20px;
+  background: #232121;
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  box-shadow: 0px 0px 5px 0px rgba(255, 255, 255, 0.4078431373);
+  width: max(330px, 50%);
+  margin: 10px;
+  font-family: "Lato", sans-serif;
+  transition: all 200ms ease-in-out;
 }
 @media (hover) and (pointer: fine) {
-  .mint1 .content .create:hover {
-    transform: translateY(-18%);
+  .mint1 .card:hover {
+    transform: translateY(-1%);
   }
 }
-@media (hover) and (pointer: fine) and (min-width: 800px) {
-  .mint1 .content .create:hover {
-    transform: translateY(0);
-  }
+.mint1 .card__title {
+  color: #2fc0db;
+  overflow: hidden;
 }
-.mint1 .content .create,
-.mint1 .content .discover {
-  padding: 3% 10%;
-  margin: 5% 0 10px 0;
-  border-radius: 10px;
-  height: 100%;
-  position: relative;
-  transition: border 400ms;
-}
-.mint1 .content .create:hover,
-.mint1 .content .discover:hover {
-  border: 1px solid #2fc0db;
-  box-shadow: 4.5px 2.4px 3.6px rgba(255, 255, 255, 0.024), -12.5px 12.5px 10px rgba(255, 255, 255, 0.035), -30.1px 30.1px 24.1px rgba(255, 255, 255, 0.046), 100px 52px 80px rgba(255, 255, 255, 0.07);
-}
-.mint1 .content .create .imageContainer,
-.mint1 .content .discover .imageContainer {
-  position: absolute;
-  display: flex;
-  width: 20%;
-  top: -20%;
-  height: 20rem;
-  right: 0;
-  left: 0;
-  margin: auto;
-  z-index: 30;
-  align-items: center;
-  justify-content: center;
-  height: 30%;
-  max-height: 40%;
-}
-.mint1 .content .create .imageContainer h2,
-.mint1 .content .discover .imageContainer h2 {
-  position: absolute;
-  bottom: -40px;
-}
-.mint1 .content .create .textContent,
-.mint1 .content .discover .textContent {
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
-  padding: 20% 0;
+.mint1 .card__title h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 2rem;
   text-align: center;
+  font-weight: 700;
 }
-@media (min-width: 800px) {
-  .mint1 .content .create .textContent,
-.mint1 .content .discover .textContent {
-    padding: 15% 0;
-  }
+.mint1 .card__body {
+  color: rgba(255, 255, 255, 0.9333333333);
+  overflow-y: hidden;
 }
-@media (min-width: 800px) {
-  .mint1 .content {
-    flex-direction: row;
-  }
-  .mint1 .content .create .imageContainer h2,
-.mint1 .content .discover .imageContainer h2 {
-    bottom: -50px;
-  }
+.mint1 .card__body p {
+  margin: 0;
+  padding: 16px 0px;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.6rem;
 }/*# sourceMappingURL=mint.module.css.map */

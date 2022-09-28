@@ -1,16 +1,16 @@
 .main {
   background-image: url(../img/mobile-black.png);
-  height: min(100vh, 800px);
+  height: max(100vh, 600px);
   background-color: black;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   color: white;
-  padding: 0 7vw;
+  gap: 15px;
+  padding: 2.5vh 7vw;
 }
 .main aside {
   display: flex;
@@ -51,13 +51,118 @@
   }
 }
 .main .heroImage {
+  position: relative;
+  display: flex;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  margin: 15px 0;
+  width: 280px;
+}
+.main .heroImage .slider {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  justify-content: center;
+}
+.main .heroImage .slider .slides {
+  display: flex;
+  flex-direction: row;
+  overflow-y: auto;
+  -ms-scroll-snap-type: y mandatory;
+      scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  text-align: center;
+  overflow: hidden;
+  height: 280px;
+}
+.main .heroImage .slider .slides::-webkit-scrollbar {
   display: none;
 }
-.main .heroImage .tab {
-  display: none;
+.main .heroImage .slider .slides div {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  width: 280px;
+  height: 280px;
+  margin-right: 25px;
+  border-radius: 10px;
+  background: #eee;
+  transform-origin: center center;
+  transform: scale(1);
+  transition: transform 3s;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
-@media (min-width: 500px) {
+.main .heroImage .slider .slides div .all {
+  position: relative;
+  left: 0;
+  order: 1;
+  width: 280px;
+  height: 280px;
+  display: flex;
+  align-items: center;
+}
+.main .heroImage .slider .slides div .all .image {
+  width: 280px;
+  height: 280px;
+  position: absolute;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 0.4px solid #2fc0db;
+}
+.main .heroImage .slider .slides div .all .image div {
+  position: absolute;
+  bottom: 0;
+  padding: 5% 7%;
+  margin: 0;
+  background: rgba(0, 0, 0, 0.44);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  -webkit-backdrop-filter: blur(8.5px);
+          backdrop-filter: blur(8.5px);
+  width: 100%;
+  height: 100px;
+}
+.main .heroImage .slider .slides div .all .image div h3 {
+  margin: 5px 0;
+}
+.main .heroImage .slider .slides div .all .image div p {
+  margin: 2px;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.main .heroImage .slider .slides div .all .image div p span {
+  text-align: right;
+  font-size: 11px;
+}
+.main .heroImage .slider .links {
+  display: flex;
+  flex-direction: row;
+  max-height: 300px;
+  justify-content: center;
+}
+.main .heroImage .slider .links a {
+  display: inline-flex;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 45%;
+  background: #2fc0db;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 0.3rem;
+}
+.main .heroImage .slider .links a:focus {
+  background: #000;
+}
+@media (min-width: 750px) {
   .main {
+    justify-content: center;
+    background-image: url("../img/desktop-black.png");
     background-image: url("../img/desktop-black.png");
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -78,107 +183,68 @@
     margin: 10px 0 30px 0;
   }
   .main .heroImage {
-    display: block;
-    padding: 1vw 0 3vw 0;
-  }
-  .main .heroImage .tab {
-    position: relative;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .main .heroImage .tab .image {
-    width: 85%;
-    height: 49%;
-    position: absolute;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 0.4px solid #2fc0db;
-  }
-  .main .heroImage .tab .image div {
-    position: absolute;
-    bottom: 0;
-    padding: 5% 7%;
-    margin: 0;
-    background: rgba(0, 0, 0, 0.44);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    -webkit-backdrop-filter: blur(8.5px);
-            backdrop-filter: blur(8.5px);
-    width: 100%;
-  }
-  .main .heroImage .tab .image div h3 {
-    margin: 5px 0;
-  }
-  .main .heroImage .tab .image div p {
-    margin: 2px;
-    font-size: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .main .heroImage .tab .image div p span {
-    text-align: right;
-    font-size: 11px;
-  }
-  .main .heroImage .tab .image:nth-child(1) {
-    border-radius: 10px;
-    overflow: hidden;
-    z-index: 3;
-    top: 0;
-  }
-  .main .heroImage .tab .image:nth-child(2) {
-    border-radius: 10px;
-    overflow: hidden;
-    bottom: 0;
-  }
-  .main .heroImage .all {
-    display: none;
-  }
-}
-@media (min-width: 750px) {
-  .main {
-    background-image: url("../img/desktop-black.png");
-  }
-  .main .heroImage {
     position: relative;
     display: flex;
     padding: 0;
-  }
-  .main .heroImage .tab {
-    position: relative;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    width: 50%;
-    align-items: flex-end;
-    order: 2;
-  }
-  .main .heroImage .tab .image {
-    width: 100%;
-  }
-  .main .heroImage .all {
-    display: block;
-    position: relative;
     justify-content: center;
-    left: 0;
-    order: 1;
-    width: 50%;
-    height: 100%;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+  }
+  .main .heroImage .slider {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .main .heroImage .slider .slides {
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    -ms-scroll-snap-type: y mandatory;
+        scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    text-align: center;
+    overflow: hidden;
+    height: 280px;
+  }
+  .main .heroImage .slider .slides::-webkit-scrollbar {
+    display: none;
+  }
+  .main .heroImage .slider .slides div {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    width: 280px;
+    height: 280px;
+    margin-right: 25px;
+    border-radius: 10px;
+    background: #eee;
+    transform-origin: center center;
+    transform: scale(1);
+    transition: transform 3s;
+    position: relative;
+    display: flex;
     align-items: center;
   }
-  .main .heroImage .all .image {
-    width: 110%;
-    height: 50%;
+  .main .heroImage .slider .slides div .all {
+    position: relative;
+    left: 0;
+    order: 1;
+    width: 280px;
+    height: 280px;
+    display: flex;
+    align-items: center;
+  }
+  .main .heroImage .slider .slides div .all .image {
+    width: 280px;
+    height: 280px;
     position: absolute;
     border-radius: 10px;
     overflow: hidden;
     border: 0.4px solid #2fc0db;
   }
-  .main .heroImage .all .image div {
+  .main .heroImage .slider .slides div .all .image div {
     position: absolute;
     bottom: 0;
     padding: 5% 7%;
@@ -188,20 +254,42 @@
     -webkit-backdrop-filter: blur(8.5px);
             backdrop-filter: blur(8.5px);
     width: 100%;
+    height: 100px;
   }
-  .main .heroImage .all .image div h3 {
+  .main .heroImage .slider .slides div .all .image div h3 {
     margin: 5px 0;
   }
-  .main .heroImage .all .image div p {
+  .main .heroImage .slider .slides div .all .image div p {
     margin: 2px;
     font-size: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  .main .heroImage .all .image div p span {
+  .main .heroImage .slider .slides div .all .image div p span {
     text-align: right;
     font-size: 11px;
+  }
+  .main .heroImage .slider .links {
+    display: flex;
+    flex-direction: column;
+    max-height: 300px;
+    justify-content: center;
+  }
+  .main .heroImage .slider .links a {
+    display: inline-flex;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 45%;
+    background: #2fc0db;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0.3rem;
+  }
+  .main .heroImage .slider .links a:focus {
+    background: #000;
   }
 }
 @media (min-width: 750px) and (min-width: 1160px) {
@@ -229,4 +317,7 @@
   .heroImage .all {
     display: none !important;
   }
+}
+.slider > a {
+  display: block;
 }/*# sourceMappingURL=Hero.module.css.map */

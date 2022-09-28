@@ -1,4 +1,5 @@
 $darkModeColor: #2fc0db;
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;700&display=swap");
 
 .main {
   padding: 0 7vw;
@@ -107,80 +108,56 @@ $darkModeColor: #2fc0db;
 }
 .mint1 {
   padding: 0 7vw;
-  margin: 15% 0 0 0;
-  // color: white;
-  @media (min-width: 460px) {
-    margin: 5% 0 0 0;
-  }
-  .content {
-    margin: 10% 0;
+  .cards {
     display: flex;
-    flex-direction: column;
-    gap: -50px;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    @media (max-width: 800px) {
+      flex-wrap: wrap;
+    }
+  }
+  .card {
+    border-top: 1px solid #ffffff44;
+    border-left: 1px solid #ffffff44;
+    border-right: 1px solid #00000088;
+    border-bottom: 1px solid #00000088;
+    border-radius: 16px;
+    padding: 20px;
+    background: #232121;
+    backdrop-filter: blur(8px);
+    box-shadow: 0px 0px 5px 0px #ffffff68;
+    width: max(330px, 50%);
+    margin: 10px;
+    font-family: "Lato", sans-serif;
+    transition: all 200ms ease-in-out;
     @media (hover) and (pointer: fine) {
-      .create {
-        &:hover {
-          transform: translateY(-18%);
-          @media (min-width: 800px) {
-            transform: translateY(0);
-          }
-        }
+      &:hover {
+        transform: translateY(-1%);
+      }
+    }
+    &__title {
+      color: $darkModeColor;
+      overflow: hidden;
+      h1 {
+        margin: 0;
+        padding: 0;
+        font-size: 2rem;
+        text-align: center;
+        font-weight: 700;
       }
     }
 
-    .create,
-    .discover {
-      padding: 3% 10%;
-      margin: 5% 0 10px 0;
-      border-radius: 10px;
-      height: 100%;
-      position: relative;
-      transition: border 400ms;
-      &:hover {
-        border: 1px solid $darkModeColor;
-        box-shadow: 4.5px 2.4px 3.6px rgba(255, 255, 255, 0.024),
-          -12.5px 12.5px 10px rgba(255, 255, 255, 0.035),
-          -30.1px 30.1px 24.1px rgba(255, 255, 255, 0.046),
-          100px 52px 80px rgba(255, 255, 255, 0.07);
-      }
-      .imageContainer {
-        position: absolute;
-        display: flex;
-        width: 20%;
-        top: -20%;
-        height: 20rem;
-        right: 0;
-        left: 0;
-        margin: auto;
-        z-index: 30;
-        align-items: center;
-        justify-content: center;
-        height: 30%;
-        max-height: 40%;
-        h2 {
-          position: absolute;
-          bottom: -40px;
-          // color: $darkModeColor;
-        }
-      }
-      .textContent {
-        height: fit-content;
-        padding: 20% 0;
-        text-align: center;
-        @media (min-width: 800px) {
-          padding: 15% 0;
-        }
-      }
-    }
-    @media (min-width: 800px) {
-      flex-direction: row;
-      .create,
-      .discover {
-        .imageContainer {
-          h2 {
-            bottom: -50px;
-          }
-        }
+    &__body {
+      color: #ffffffee;
+      overflow-y: hidden;
+      p {
+        margin: 0;
+        padding: 16px 0px;
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 1.6rem;
       }
     }
   }

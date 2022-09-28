@@ -20,7 +20,11 @@ const Hero = () => {
               </div>
             </h1>{" "}
           </div>
-          <p>A Community-centered marketplace for your non-fungibles</p>
+          <p>
+            {" "}
+            Discover a community-centric platform offering limitless connections
+            for NFT creators and collectors.{" "}
+          </p>
           <Link href="/collections">
             <a>
               <Button props={"Explore"} />
@@ -28,35 +32,92 @@ const Hero = () => {
           </Link>
         </aside>
         <div className={styles.heroImage}>
-          <div className={styles.tab}>
-            <div className={styles.image}>
-              <Image src={cb1} layout="fill" objectFit="cover" />
-              <div>
-                <h3>Booze-o-phile</h3>
-                <p>
-                  Mojito Cattles<span>Price: $0.76</span>
-                </p>
+          <div className={styles.slider}>
+            <div className={styles.slides}>
+              <div id="slide-1">
+                {" "}
+                <div className={styles.all}>
+                  <div className={styles.image}>
+                    <Image src={cb3} layout="fill" objectFit="cover" />
+                    <div>
+                      <h3>Booze-o-phile</h3>
+                      <p>
+                        Mojito Cattles <span>Price: $0.76</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="slide-2">
+                {" "}
+                <div className={styles.all}>
+                  <div className={styles.image}>
+                    <Image src={cb3} layout="fill" objectFit="cover" />
+                    <div>
+                      <h3>Booze-o-phile</h3>
+                      <p>
+                        Mojito Cattles <span>Price: $0.76</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="slide-3">
+                <div className={styles.all}>
+                  <div className={styles.image}>
+                    <Image src={cb2} layout="fill" objectFit="cover" />
+                    <div>
+                      <h3>Booze-o-phile</h3>
+                      <p>
+                        Mojito Cattles <span>Price: $0.76</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="slide-4">
+                <div className={styles.all}>
+                  <div className={styles.image}>
+                    <Image src={cb3} layout="fill" objectFit="cover" />
+                    <div>
+                      <h3>Booze-o-phile</h3>
+                      <p>
+                        Mojito Cattles <span>Price: $0.76</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="slide-5">
+                <div className={styles.all}>
+                  <div className={styles.image}>
+                    <Image src={cb1} layout="fill" objectFit="cover" />
+                    <div>
+                      <h3>Booze-o-phile</h3>
+                      <p>
+                        Mojito Cattles <span>Price: $0.76</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className={styles.image}>
-              <Image src={cb2} layout="fill" objectFit="cover" />
-              <div>
-                <h3>Booze-o-phile</h3>
-                <p>
-                  Mojito Cattles <span>Price: $0.76</span>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className={styles.all}>
-            <div className={styles.image}>
-              <Image src={cb3} layout="fill" objectFit="cover" />
-              <div>
-                <h3>Booze-o-phile</h3>
-                <p>
-                  Mojito Cattles <span>Price: $0.76</span>
-                </p>
-              </div>
+            <div className={styles.links}>
+              <Link href="#slide-1" scroll={false}>
+                <a></a>
+              </Link>
+              <Link href="#slide-2" scroll={false}>
+                <a></a>
+              </Link>
+              <Link href="#slide-3" scroll={false}>
+                <a></a>
+              </Link>
+              <Link href="#slide-4" scroll={false}>
+                <a></a>
+              </Link>
+              <Link href="#slide-5" scroll={false}>
+                <a></a>
+              </Link>
             </div>
           </div>
         </div>

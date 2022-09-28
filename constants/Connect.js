@@ -1,11 +1,29 @@
 import { useWeb3React } from "@web3-react/core";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { connectors } from "./connectors";
+import { BsBoxArrowUpRight } from "react-icons/bs";
+import { IoIosCloseCircleOutline } from "react-icons/io";
+import { utils } from "ethers";
 import Image from "next/image";
 import styles from "../styles/Connect.module.css";
 export default function Connect() {
-  const { active, account, library, chainId, activate, deactivate, connector } =
+  const { active, account, chainId, library, activate, deactivate } =
     useWeb3React();
+
+  const provider = library;
+  const [balanceOfAccount, setBal] = useState(null);
+  const bal = async () => {
+    const balance = await provider.getBalance(account);
+    const userBalance = utils.formatEther(balance);
+    const bal = userBalance.toString();
+    const kcs = bal.substring(0, 4);
+    setBal(kcs);
+  };
+  console.log(balanceOfAccount);
+  if (active) {
+    bal();
+  }
 
   async function inChain() {
     if (!window.ethereum) {
@@ -121,7 +139,7 @@ export default function Connect() {
                 className={styles.closeModal}
                 onClick={() => setConnectModal(false)}
               >
-                X
+                <IoIosCloseCircleOutline />
               </div>
             </div>
             <div className={styles.modalMenu}>
@@ -182,12 +200,19 @@ export default function Connect() {
               className={styles.closeModal}
               onClick={() => setDisconnectModal(false)}
             >
-              X
+              <IoIosCloseCircleOutline />
             </div>
             <div className={styles.smallBoard}>
-              <p>{`${account.slice(0, 5)}...${account.slice(39, 42)}`}</p>
-              <p>KCS balance: 20</p>
-              <p>WKCS balance: 35</p>
+              <Link href={`https://scan.kcc.io/address/${account}`}>
+                <a>
+                  <p>
+                    {`${account.slice(0, 5)}...${account.slice(39, 42)}`}{" "}
+                    <BsBoxArrowUpRight />
+                  </p>
+                </a>
+              </Link>
+              <p>KCS balance: {balanceOfAccount}</p>
+              {/* <p>WKCS balance: 35</p> */}
               <button onClick={disconnect}>Disconnect</button>
             </div>
           </div>

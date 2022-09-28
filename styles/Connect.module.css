@@ -4,7 +4,7 @@
   color: white;
   font-weight: 400;
   border-radius: 5rem;
-  font-size: 1.1rem;
+  font-size: 15px;
 }
 .container .disconnect {
   display: block;
@@ -12,7 +12,7 @@
   color: white;
   font-weight: 400;
   border-radius: 5rem;
-  font-size: 1.1rem;
+  font-size: 15px;
 }
 .container .modal {
   background-color: rgba(0, 0, 0, 0.7);
@@ -33,6 +33,7 @@
   justify-content: center;
   position: fixed;
   z-index: 2222;
+  cursor: default;
 }
 .container .modal .closeModal {
   display: flex;
@@ -45,11 +46,16 @@
   width: 50px;
   height: 50px;
   align-items: center;
+  font-size: 30px;
   justify-content: center;
   border-radius: 99999px;
   cursor: pointer;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
   will-change: transform;
+  transition: transform 0.2s ease 0s;
+}
+.container .modal .closeModal:hover {
+  transform: scale(1.1);
 }
 .container .modal .modalMenu {
   opacity: 1;
@@ -129,6 +135,7 @@
   justify-content: center;
   position: fixed;
   z-index: 2222;
+  cursor: default;
 }
 .container .board .closeModal {
   display: flex;
@@ -141,11 +148,16 @@
   width: 50px;
   height: 50px;
   align-items: center;
+  font-size: 30px;
   justify-content: center;
   border-radius: 99999px;
   cursor: pointer;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
   will-change: transform;
+  transition: transform 0.2s ease 0s;
+}
+.container .board .closeModal:hover {
+  transform: scale(1.1);
 }
 .container .board .smallBoard {
   opacity: 1;
@@ -167,4 +179,16 @@
 }
 .container .board .smallBoard p {
   margin: 20px;
+}
+.container .board .smallBoard button {
+  border: none;
+  color: black;
+  background: transparent;
+  font-size: 22px;
+  margin-top: 5px;
+  cursor: pointer;
+  transition: all 120ms ease-in-out;
+}
+.container .board .smallBoard button:hover {
+  transform: scale(1.05);
 }/*# sourceMappingURL=Connect.module.css.map */

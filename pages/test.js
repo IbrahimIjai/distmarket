@@ -1,35 +1,12 @@
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-
-const APIURL = "https://api.thegraph.com/subgraphs/name/steffqing/721-clone";
-
+import { ethers, utils } from "ethers";
+import { contracts } from "../constants/ABIs";
+import { useWeb3React } from "@web3-react/core";
 export default function Test() {
-  const addressQuery = `
-  query addressQuery($address: ID){
-    account(id: $address){
-      id 
-      tokens{
-        identifier
-        tokenURI
-      }
-    }
-  }
-  `;
-
-  const client = new ApolloClient({
-    uri: APIURL,
-    cache: new InMemoryCache(),
-  });
-  const data = "0xeae38e8d41aecc027e1b68c31f7039ae95651d4d";
-  client
-    .query({
-      query: gql(addressQuery),
-      variables: {
-        address: data,
-      },
-    })
-    .then((data) => console.log("Subgraph data: ", data))
-    .catch((err) => {
-      console.log("Error fetching data: ", err);
-    });
-  return <div>Content</div>;
+  const { active, account, library } = useWeb3React();
+  const provider = library;
+  const bal = async () => {
+    const balance = await provider.getBalance(contracts.deadAddress);
+    console.log(utils.formatEther(balance));
+  };
+  return <div onClick={bal}>Get Balance</div>;
 }
