@@ -20,7 +20,6 @@ export default function Connect() {
     const kcs = bal.substring(0, 4);
     setBal(kcs);
   };
-  console.log(balanceOfAccount);
   if (active) {
     bal();
   }

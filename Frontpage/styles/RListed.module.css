@@ -1,5 +1,4 @@
 .main {
-  height: 70vh;
   position: relative;
 }
 .text {
@@ -38,7 +37,7 @@
     display: block;
   }
   .cards::-webkit-scrollbar-track {
-    background-color: #5e0684;
+    background-color: #757575;
     border-radius: 5px;
   }
   .cards::-webkit-scrollbar-thumb {
@@ -46,6 +45,9 @@
     background-color: #2fc0db;
   }
   .cards::-webkit-scrollbar-thumb:hover {
+    background-color: #757575;
+  }
+  .cards::-webkit-scrollbar-track:hover {
     background-color: #2fc0db;
   }
 }

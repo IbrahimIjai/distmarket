@@ -1,16 +1,17 @@
 .main {
   background-image: url(../img/mobile-black.png);
-  height: max(100vh, 600px);
+  height: max(100vh, 700px);
   background-color: black;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   color: white;
   gap: 15px;
-  padding: 2.5vh 7vw;
+  padding: 2vw;
 }
 .main aside {
   display: flex;
@@ -57,7 +58,7 @@
   justify-content: center;
   align-items: center;
   margin: 15px 0;
-  width: 280px;
+  width: 300px;
 }
 .main .heroImage .slider {
   display: flex;
@@ -75,7 +76,7 @@
   -webkit-overflow-scrolling: touch;
   text-align: center;
   overflow: hidden;
-  height: 280px;
+  height: 320px;
 }
 .main .heroImage .slider .slides::-webkit-scrollbar {
   display: none;
@@ -83,8 +84,8 @@
 .main .heroImage .slider .slides div {
   scroll-snap-align: start;
   flex-shrink: 0;
-  width: 280px;
-  height: 280px;
+  width: 300px;
+  height: 320px;
   margin-right: 25px;
   border-radius: 10px;
   background: #eee;
@@ -99,14 +100,14 @@
   position: relative;
   left: 0;
   order: 1;
-  width: 280px;
-  height: 280px;
+  width: 300px;
+  height: 320px;
   display: flex;
   align-items: center;
 }
 .main .heroImage .slider .slides div .all .image {
-  width: 280px;
-  height: 280px;
+  width: 300px;
+  height: 320px;
   position: absolute;
   border-radius: 10px;
   overflow: hidden;
@@ -123,16 +124,21 @@
           backdrop-filter: blur(8.5px);
   width: 100%;
   height: 100px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 .main .heroImage .slider .slides div .all .image div h3 {
   margin: 5px 0;
 }
 .main .heroImage .slider .slides div .all .image div p {
   margin: 2px;
-  font-size: 12px;
+  font-size: 16px;
+  line-height: 1.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-direction: column;
 }
 .main .heroImage .slider .slides div .all .image div p span {
   text-align: right;
@@ -163,14 +169,12 @@
   .main {
     justify-content: center;
     background-image: url("../img/desktop-black.png");
-    background-image: url("../img/desktop-black.png");
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 20px;
     grid-row-gap: 20px;
     justify-items: stretch;
     align-items: stretch;
-    padding: 0 1vw 0 7vw;
   }
   .main aside {
     align-items: flex-start;
@@ -207,7 +211,7 @@
     -webkit-overflow-scrolling: touch;
     text-align: center;
     overflow: hidden;
-    height: 280px;
+    height: 400px;
   }
   .main .heroImage .slider .slides::-webkit-scrollbar {
     display: none;
@@ -215,8 +219,8 @@
   .main .heroImage .slider .slides div {
     scroll-snap-align: start;
     flex-shrink: 0;
-    width: 280px;
-    height: 280px;
+    width: 400px;
+    height: 400px;
     margin-right: 25px;
     border-radius: 10px;
     background: #eee;
@@ -231,14 +235,14 @@
     position: relative;
     left: 0;
     order: 1;
-    width: 280px;
-    height: 280px;
+    width: 400px;
+    height: 400px;
     display: flex;
     align-items: center;
   }
   .main .heroImage .slider .slides div .all .image {
-    width: 280px;
-    height: 280px;
+    width: 400px;
+    height: 400px;
     position: absolute;
     border-radius: 10px;
     overflow: hidden;
@@ -261,7 +265,7 @@
   }
   .main .heroImage .slider .slides div .all .image div p {
     margin: 2px;
-    font-size: 12px;
+    font-size: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -300,22 +304,59 @@
 @media screen and (min-width: 1024px) {
   .main {
     background-image: url("../img/desktop-black.png");
-    padding: 0 2vw 0 7vw;
   }
 }
 
 @media (min-width: 700px) and (min-height: 1000px) {
   .main {
-    height: 70vh !important;
+    height: 55vh !important;
   }
   .heroImage {
-    padding: 15vw 0 5vw 0 !important;
+    width: 100% !important;
   }
-  .heroImage .tab {
-    width: 90% !important;
+  .heroImage .slider .slides {
+    height: 350px !important;
   }
-  .heroImage .all {
-    display: none !important;
+  .heroImage .slider .slides div {
+    height: 350px !important;
+    width: 350px !important;
+  }
+  .heroImage .slider .slides div .all {
+    height: 350px !important;
+    width: 350px !important;
+  }
+  .heroImage .slider .slides div .all .image {
+    height: 350px !important;
+    width: 350px !important;
+  }
+  .heroImage .slider .slides div .all .image div {
+    height: 100px !important;
+  }
+}
+@media (min-width: 700px) and (min-height: 1000px) and (max-width: 750px) {
+  .main {
+    height: 55vh !important;
+  }
+  .heroImage {
+    width: 300px !important;
+  }
+  .heroImage .slider .slides {
+    height: 300px !important;
+  }
+  .heroImage .slider .slides div {
+    height: 300px !important;
+    width: 300px !important;
+  }
+  .heroImage .slider .slides div .all {
+    height: 300px !important;
+    width: 300px !important;
+  }
+  .heroImage .slider .slides div .all .image {
+    height: 300px !important;
+    width: 300px !important;
+  }
+  .heroImage .slider .slides div .all .image div {
+    height: 100px !important;
   }
 }
 .slider > a {

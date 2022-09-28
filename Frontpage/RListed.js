@@ -10,7 +10,7 @@ import me from "./img/me.jpeg";
 const RListed = (props) => {
   return (
     <main className={styles.main}>
-      <div className={styles.text}>Marketplace for KCC</div>
+      {/* <div className={styles.text}>Marketplace for KCC</div> */}
 
       <div className={styles.SliderContainer}>
         <div className={styles.cards}>

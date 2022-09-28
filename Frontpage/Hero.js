@@ -1,9 +1,7 @@
 import Button from "./Button";
 import styles from "./styles/Hero.module.css";
-import cb1 from "./img/2818.png";
-import cb2 from "./img/5346.png";
-import cb3 from "./img/5951.png";
 import Image from "next/image";
+import Socials from "../Socials";
 import Link from "next/link";
 const Hero = () => {
   return (
@@ -34,90 +32,29 @@ const Hero = () => {
         <div className={styles.heroImage}>
           <div className={styles.slider}>
             <div className={styles.slides}>
-              <div id="slide-1">
-                {" "}
-                <div className={styles.all}>
-                  <div className={styles.image}>
-                    <Image src={cb3} layout="fill" objectFit="cover" />
-                    <div>
-                      <h3>Booze-o-phile</h3>
-                      <p>
-                        Mojito Cattles <span>Price: $0.76</span>
-                      </p>
+              {Socials.map((item, i) => (
+                <div id={`slide-${i}`}>
+                  {" "}
+                  <div className={styles.all}>
+                    <div className={styles.image}>
+                      <Image src={item.image} layout="fill" objectFit="cover" />
+                      <div>
+                        <h3>{item.name}</h3>
+                        <p>
+                          {item.collection} <span>Price: ${item.price}</span>
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div id="slide-2">
-                {" "}
-                <div className={styles.all}>
-                  <div className={styles.image}>
-                    <Image src={cb3} layout="fill" objectFit="cover" />
-                    <div>
-                      <h3>Booze-o-phile</h3>
-                      <p>
-                        Mojito Cattles <span>Price: $0.76</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div id="slide-3">
-                <div className={styles.all}>
-                  <div className={styles.image}>
-                    <Image src={cb2} layout="fill" objectFit="cover" />
-                    <div>
-                      <h3>Booze-o-phile</h3>
-                      <p>
-                        Mojito Cattles <span>Price: $0.76</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div id="slide-4">
-                <div className={styles.all}>
-                  <div className={styles.image}>
-                    <Image src={cb3} layout="fill" objectFit="cover" />
-                    <div>
-                      <h3>Booze-o-phile</h3>
-                      <p>
-                        Mojito Cattles <span>Price: $0.76</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div id="slide-5">
-                <div className={styles.all}>
-                  <div className={styles.image}>
-                    <Image src={cb1} layout="fill" objectFit="cover" />
-                    <div>
-                      <h3>Booze-o-phile</h3>
-                      <p>
-                        Mojito Cattles <span>Price: $0.76</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
             <div className={styles.links}>
-              <Link href="#slide-1" scroll={false}>
-                <a></a>
-              </Link>
-              <Link href="#slide-2" scroll={false}>
-                <a></a>
-              </Link>
-              <Link href="#slide-3" scroll={false}>
-                <a></a>
-              </Link>
-              <Link href="#slide-4" scroll={false}>
-                <a></a>
-              </Link>
-              <Link href="#slide-5" scroll={false}>
-                <a></a>
-              </Link>
+              {Socials.map((item, i) => (
+                <Link href={`#slide-${i}`} scroll={false}>
+                  <a></a>
+                </Link>
+              ))}
             </div>
           </div>
         </div>

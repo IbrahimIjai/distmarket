@@ -24,7 +24,7 @@ export default [
     collectionSupply: 10,
   },
   {
-    collectionName: "Our Wives Collection",
+    collectionName: "Eyeballz 2",
     collectionAddress: "0xC175E2B0C7ef81612df5Eb45b1d64DbE9C527803",
     collectionTicker: "Wife",
     collectionSupply: 200,
