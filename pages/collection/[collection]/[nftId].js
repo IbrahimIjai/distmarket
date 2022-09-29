@@ -871,7 +871,7 @@ export async function getServerSideProps({ params, res }) {
         : tokenDetails;
       const { image, name } = await fetch(ipfsLink).then((r) => r.json());
       const imageUrl = image.includes("ipfs://", 0)
-        ? image.replace("ipfs://", "https://distant.mypinata.cloud/ipfs/")
+        ? image.replace("ipfs://", "https://ipfsfiles.distant.finance/ipfs/")
         : image;
       const obj = {
         image: imageUrl,
@@ -885,13 +885,13 @@ export async function getServerSideProps({ params, res }) {
   const tokenDetails = await instance.tokenURI(nftID);
   const owner = await instance.ownerOf(nftID);
   const ipfsLink = tokenDetails.includes("ipfs://", 0)
-    ? tokenDetails.replace("ipfs://", "https://distant.mypinata.cloud/ipfs/")
+    ? tokenDetails.replace("ipfs://", "https://ipfsfiles.distant.finance/ipfs/")
     : tokenDetails;
   const { image, description, name, attributes } = await fetch(ipfsLink).then(
     (r) => r.json()
   );
   const imageLink = image.includes("ipfs://", 0)
-    ? image.replace("ipfs://", "https://distant.mypinata.cloud/ipfs/")
+    ? image.replace("ipfs://", "https://ipfsfiles.distant.finance/ipfs/")
     : image;
   const collectionName = await instance.name();
   const ipfsData = [];

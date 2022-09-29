@@ -45,6 +45,7 @@ export default function Home({ nftId, listings, obj }) {
   const [visibility, setVisibility] = useState(false);
   useEffect(() => {
     const main = async () => {
+      try{
       const tokenId = nftId.map((nft) => nft.hex);
       const addresses = listings.map((list) => list[0]);
       const listingInfo = listings.map((list) => list[1].hex);
@@ -90,18 +91,18 @@ export default function Home({ nftId, listings, obj }) {
         );
       const names = [];
       
-      const contract = new Contract(collection, nftABI, provider);
-      const imageLinks = await itemId.map(async (item) => {
+        const contract = new Contract(collection, nftABI, provider);
+        const imageLinks = await itemId.map(async (item) => {
         const x = await contract.tokenURI(item.toString());
-        const link = x.replace(
+        const link = x.includes("ipfs://", 0) ? x.replace(
           "ipfs://",
-          "https://distant.mypinata.cloud/ipfs/"
-        );
+          "https://ipfsfiles.distant.finance/ipfs/"
+        ) : x
         const d = await fetch(link).then((r) => r.json());
-        const i = d.image.replace(
+        const i = d.image.includes("ipfs://", 0) ? d.image.replace(
           "ipfs://",
-          "https://distant.mypinata.cloud/ipfs/"
-        );
+          "https://ipfsfiles.distant.finance/ipfs/"
+        ) : d.image
         const n = d.name;
         names.push(n);
         const supply = await contract.totalSupply();
@@ -124,8 +125,14 @@ export default function Home({ nftId, listings, obj }) {
           name: names[i],
         };
         arr.push(object);
+        console.log(typeof bestOffers)
+        console.log( bestOffers.length)
       }
       setListedNFTs(arr);
+      }catch(error){
+        console.log(error)
+      }
+      
     };
     main();
   }, [runEffect]);
@@ -205,7 +212,7 @@ export default function Home({ nftId, listings, obj }) {
                 <p>Listed</p>
               </div>
               <div>
-                <h3>{obj.tradeVolume ? `${obj.tradeVolume}` : "-"}</h3>
+                <h3>{obj.tradeVolume ? `$${obj.tradeVolume}` : "-"}</h3>
                 <p>Trade Volume</p>
               </div>
               <div>
@@ -293,7 +300,7 @@ export default function Home({ nftId, listings, obj }) {
                               <p>
                                 <span>Price</span> ${nft.price}
                               </p>
-                              <p><span>Best Offer</span> {nft.bestOffer && `$${nft.bestOffer}`}</p>
+                              {nft.bestOffer.length>0 && <p><span>Best Offer</span> ${nft.bestOffer}</p>}
 
                            </div>
                             
