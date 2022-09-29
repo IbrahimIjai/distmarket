@@ -1,5 +1,5 @@
-import { ethers, utils } from "ethers";
-import { contracts } from "../constants/ABIs";
+import { Contract, ethers, utils } from "ethers";
+import { contracts, marketplaceABI } from "../constants/ABIs";
 import { useWeb3React } from "@web3-react/core";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
@@ -8,9 +8,7 @@ const collectionDataQuery = `
 query MyQuery ($address: ID){
   collection(id: $address) {
     name
-    symbol
     topSale
-    totalSales
     totalVolume
   }
 }
@@ -39,6 +37,7 @@ export default function Test() {
       })
       .then((data) => {
         collectionsDetails.push(data.data.collection);
+        console.log(collectionsDetails);
       })
       .catch((err) => console.log("Error fetching data: ", err));
   });

@@ -1,145 +1,113 @@
 import styles from "./styles/RListed.module.css";
 import Image from "next/image";
-import cb1 from "./img/2818.png";
-import cb2 from "./img/5346.png";
-import cb3 from "./img/5951.png";
-import lomen1 from "./img/lomen.jpeg";
-import lomen2 from "./img/6190.png";
-import me from "./img/me.jpeg";
+import SupportedCollections from "../SupportedCollections";
+import { useWeb3React } from "@web3-react/core";
+import { useState, useEffect } from "react";
+import { Contract, utils } from "ethers";
+import Link from "next/link";
+import { marketplaceABI, contracts, nftABI } from "../constants/ABIs";
 
-const RListed = (props) => {
+const RListed = () => {
+  const { active } = useWeb3React();
+  const [runEffect, setRunEffect] = useState(false);
+  const init = setTimeout(() => {
+    setRunEffect(true);
+  }, 300);
+  if (active || !active) {
+    setTimeout(() => {
+      setRunEffect(false);
+    }, 1200);
+    clearTimeout(init);
+  }
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    const main = async () => {
+      const recentListings = [];
+      const contract = new Contract(
+        contracts.marketplace,
+        marketplaceABI,
+        contracts.provider
+      );
+      try {
+        for (let i = 0; i < SupportedCollections.length; i++) {
+          const listings = await contract.availableListings(
+            SupportedCollections[i].collectionAddress
+          );
+          const instance = new Contract(
+            SupportedCollections[i].collectionAddress,
+            nftABI,
+            contracts.provider
+          );
+          let data = listings[1].length;
+          let dat = data - 1;
+          let tokenId = parseInt(listings[0][dat]._hex, 16);
+          let value = parseInt(listings[1][dat][1]._hex, 16);
+          let tokenInfo = await instance.tokenURI(tokenId.toString());
+          let info = tokenInfo.includes("ipfs://", 0)
+            ? tokenInfo.replace(
+                "ipfs://",
+                "https://ipfsfiles.distant.finance/ipfs/"
+              )
+            : tokenInfo;
+          const json = await fetch(info).then((res) => res.json());
+          const { name, image } = json;
+          let imageFile = image.includes("ipfs://", 0)
+            ? image.replace(
+                "ipfs://",
+                "https://ipfsfiles.distant.finance/ipfs/"
+              )
+            : image;
+          const obj = {
+            tokenId: tokenId,
+            collectionAddress: SupportedCollections[i].collectionAddress,
+            address: listings[1][dat][0],
+            price: utils.formatEther(value.toString()),
+            name: name,
+            image: imageFile,
+          };
+          recentListings.push(obj);
+        }
+        setData(recentListings);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    main();
+  }, [runEffect]);
+  console.log(data, "Use State");
   return (
     <main className={styles.main}>
-      {/* <div className={styles.text}>Marketplace for KCC</div> */}
+      {data && (
+        <div className={styles.text}>
+          <h3>Recently listed NFTs</h3>
+        </div>
+      )}
 
       <div className={styles.SliderContainer}>
         <div className={styles.cards}>
-          <div className={styles.imageContainer}>
-            <Image
-              src={cb1}
-              layout="fill"
-              objectFit="cover"
-              style={{ padding: "0 20px" }}
-            />
-            <div
-              className={styles.description}
-              style={{
-                color: props.state ? "black" : "white",
-                background: props.state
-                  ? "rgba(255, 255, 255, 0.33)"
-                  : "rgba(0, 0, 0, 0.44)",
-              }}
-            >
-              <h3>Lomen NFT</h3>
-              <p>Price tag</p>
-              components and styles using components as a low-level styling
-            </div>
-          </div>
-          <div className={styles.imageContainer}>
-            <Image
-              src={cb2}
-              layout="fill"
-              objectFit="cover"
-              style={{ padding: "0 20px" }}
-            />
-            <div
-              className={styles.description}
-              style={{
-                color: props.state ? "black" : "white",
-                background: props.state
-                  ? "rgba(255, 255, 255, 0.33)"
-                  : "rgba(0, 0, 0, 0.44)",
-              }}
-            >
-              <h3>Lomen NFT</h3>
-              <p>Price tag</p>
-              components and styles using components as a low-level styling
-            </div>
-          </div>
-          <div className={styles.imageContainer}>
-            <Image
-              src={cb3}
-              layout="fill"
-              objectFit="cover"
-              style={{ padding: "0 20px" }}
-            />
-            <div
-              className={styles.description}
-              style={{
-                color: props.state ? "black" : "white",
-                background: props.state
-                  ? "rgba(255, 255, 255, 0.33)"
-                  : "rgba(0, 0, 0, 0.44)",
-              }}
-            >
-              <h3>Lomen NFT</h3>
-              <p>Price tag</p>
-              components and styles using components as a low-level styling
-            </div>
-          </div>
-          <div className={styles.imageContainer}>
-            <Image
-              src={lomen1}
-              layout="fill"
-              objectFit="cover"
-              style={{ padding: "0 20px" }}
-            />
-            <div
-              className={styles.description}
-              style={{
-                color: props.state ? "black" : "white",
-                background: props.state
-                  ? "rgba(255, 255, 255, 0.33)"
-                  : "rgba(0, 0, 0, 0.44)",
-              }}
-            >
-              <h3>Lomen NFT</h3>
-              <p>Price tag</p>
-              components and styles using components as a low-level styling
-            </div>
-          </div>
-          <div className={styles.imageContainer}>
-            <Image
-              src={lomen2}
-              layout="fill"
-              objectFit="cover"
-              style={{ padding: "0 20px" }}
-            />
-            <div
-              className={styles.description}
-              style={{
-                color: props.state ? "black" : "white",
-                background: props.state
-                  ? "rgba(255, 255, 255, 0.33)"
-                  : "rgba(0, 0, 0, 0.44)",
-              }}
-            >
-              <h3>Lomen NFT</h3>
-              <p>Price tag</p>
-              components and styles using components as a low-level styling
-            </div>
-          </div>
-          <div className={styles.imageContainer}>
-            <Image
-              src={me}
-              layout="fill"
-              objectFit="cover"
-              style={{ padding: "0 20px" }}
-            />
-            <div
-              className={styles.description}
-              style={{
-                color: props.state ? "black" : "white",
-                background: props.state
-                  ? "rgba(255, 255, 255, 0.33)"
-                  : "rgba(0, 0, 0, 0.44)",
-              }}
-            >
-              <h3>Lomen NFT</h3>
-              <p>Price tag</p>
-              components and styles using components as a low-level styling
-            </div>
-          </div>
+          {data &&
+            data.map((nft, i) => (
+              <Link
+                key={i}
+                href={`/collection/${nft.collectionAddress}/${nft.tokenId}`}
+              >
+                <a>
+                  <div className={styles.imageContainer}>
+                    <Image
+                      src={nft.image}
+                      layout="fill"
+                      objectFit="cover"
+                      style={{ padding: "0 20px" }}
+                      alt="Nft image"
+                    />
+                    <div className={styles.description}>
+                      <h3>{nft.name}</h3>
+                      <p>Price tag: {nft.price} </p>
+                    </div>
+                  </div>
+                </a>
+              </Link>
+            ))}
         </div>
       </div>
     </main>

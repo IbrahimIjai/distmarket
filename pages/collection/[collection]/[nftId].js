@@ -33,6 +33,7 @@ export default function NftId({
     margin: "0 auto",
     borderColor: "red",
   };
+  console.log(extraListings);
   let highestOfferInitiator = "";
   const [verificationDisplay, setVerificationDisplay] = useState(false);
   // Contracts and constant addresses
@@ -854,22 +855,24 @@ export async function getServerSideProps({ params, res }) {
   const threeListings = await contract.availableListings(collection);
   const collectionInfo = await contract.collection(collection);
   const instance = new Contract(collection, nftABI, provider);
+  const nftListings = threeListings[0].slice(-2);
+  const listingDetails = threeListings[1].slice(-2);
   const extraListings = [];
-  const gg = threeListings[0];
-  const numValue = gg.map((listing) => listing.toNumber());
-  const hexValues = threeListings[1].map((hex) => parseInt(hex[1]._hex, 16));
+  const numValue = nftListings.map((listing) => listing.toNumber());
+  const hexValues = listingDetails.map((hex) => parseInt(hex[1]._hex, 16));
   for (let i = 0; i < numValue.length; i++) {
     if (numValue[i] !== Number(nftID)) {
       const tokenDetails = await instance.tokenURI(numValue[i]);
-      const ipfsLink = tokenDetails.replace(
-        "ipfs://",
-        "https://distant.mypinata.cloud/ipfs/"
-      );
+      const ipfsLink = tokenDetails.includes("ipfs://", 0)
+        ? tokenDetails.replace(
+            "ipfs://",
+            "https://ipfsfiles.distant.finance/ipfs/"
+          )
+        : tokenDetails;
       const { image, name } = await fetch(ipfsLink).then((r) => r.json());
-      const imageUrl = image.replace(
-        "ipfs://",
-        "https://distant.mypinata.cloud/ipfs/"
-      );
+      const imageUrl = image.includes("ipfs://", 0)
+        ? image.replace("ipfs://", "https://distant.mypinata.cloud/ipfs/")
+        : image;
       const obj = {
         image: imageUrl,
         name: name,
@@ -881,17 +884,15 @@ export async function getServerSideProps({ params, res }) {
   }
   const tokenDetails = await instance.tokenURI(nftID);
   const owner = await instance.ownerOf(nftID);
-  const ipfsLink = tokenDetails.replace(
-    "ipfs://",
-    "https://distant.mypinata.cloud/ipfs/"
-  );
+  const ipfsLink = tokenDetails.includes("ipfs://", 0)
+    ? tokenDetails.replace("ipfs://", "https://distant.mypinata.cloud/ipfs/")
+    : tokenDetails;
   const { image, description, name, attributes } = await fetch(ipfsLink).then(
     (r) => r.json()
   );
-  const imageLink = image.replace(
-    "ipfs://",
-    "https://distant.mypinata.cloud/ipfs/"
-  );
+  const imageLink = image.includes("ipfs://", 0)
+    ? image.replace("ipfs://", "https://distant.mypinata.cloud/ipfs/")
+    : image;
   const collectionName = await instance.name();
   const ipfsData = [];
   ipfsData.push(

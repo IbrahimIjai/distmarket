@@ -124,7 +124,7 @@ export default function Home({ nftId, listings, obj }) {
       setListedNFTs(arr);
     };
     main();
-  }, []);
+  }, [runEffect]);
   const [linkShow, setLinkShow] = useState(false);
   const [stats, setStats] = useState({});
   const marketContract = contracts.marketplace;
@@ -145,6 +145,7 @@ export default function Home({ nftId, listings, obj }) {
     };
   });
   const [listedNFTs, setListedNFTs] = useState([]);
+
   return (
     <>
       {!active ? (
