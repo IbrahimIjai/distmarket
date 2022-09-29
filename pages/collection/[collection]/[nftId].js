@@ -806,7 +806,7 @@ export default function NftId({
               <h2>More Items from the {ipfsData[4]}</h2>
               <div className={styles.SliderContainer}>
                 <div className={styles.cards}>
-                  {extraListings.map((listing, i) => (
+                  {extraListings.slice(0,3).map((listing, i) => (
                     <Link
                       href={`/collection/${collection}/${listing.tokenId}`}
                       key={i}

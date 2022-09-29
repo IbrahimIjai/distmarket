@@ -59,7 +59,7 @@
   }
 }
 .description {
-  padding: 30px 7vw;
+  padding: 30px, 7vw;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -94,14 +94,16 @@
   margin-bottom: 40px;
   .nftFlex {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     grid-auto-rows: 1fr;
     grid-auto-flow: dense;
-    gap: 26px;
+    justify-items: center;
+    margin: 1rem;
+    gap: 25px;
     .nft {
-      min-height: 400px;
-      height: 450px;
-      width: 100%;
+      // min-height: 400px;
+      height: 360px;
+      width: 330px;
       border-radius: 25px;
       display: flex;
       flex-direction: column;
@@ -113,6 +115,45 @@
         position: relative;
         height: 100%;
         width: 100%;
+        transition: all 0.8s ease-out;
+        .firstLayer{
+          position: absolute;
+          transition: all 0.8s ease-out;
+           display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 0;
+            height: 100%;
+            width: 100%;
+            padding: 1rem;
+            background: rgba(23, 20, 20, 0.76);
+            transition:  1.5s ease-out;
+            .firstLayerTop{
+              display: flex;
+              flex-direction: row;
+             span{
+              padding: 0.7rem;
+             }
+            }
+           
+            @keyframes move{
+              from{z-index: 0;}
+              to{
+                z-index: 5;
+              }
+            }
+            &:hover{
+              animation: move  3s;
+            }
+          
+        }
+
+        &:hover{
+          .firstLayer{
+            animation: move 3s ;
+            // transition: all 0.8s ease-out;
+          }
+        }
       }
       .content {
         display: flex;
@@ -120,10 +161,32 @@
         align-items: flex-start;
         justify-content: start;
         padding: 10px 20px;
+        align-items: center;
+        justify-content: center;
+        p{
+          font-size: 0.855rem;
+          letter-spacing: 1.2px;
+          span{
+            color: #2fc0db;
+            font-weight: 700;
+          }
+        }
+        .contentCont{
+          border: 0.3px solid rgb(8, 100, 107);
+          width: 100%;
+          height: 100%;
+          align-items: center;
+          justify-content: center;
+          padding: 0.7rem;
+          border-radius: 0.7rem;
+          margin: 0.15rem;
+          }
+
+        }
       }
     }
   }
-}
+
 .notActive {
   display: flex;
   justify-content: center;
