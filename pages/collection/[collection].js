@@ -8,6 +8,9 @@ import { marketplaceABI, nftABI, contracts } from "../../constants/ABIs";
 import { BsThreeDots, BsGlobe, BsTwitter, BsTelegram } from "react-icons/bs";
 import Link from "next/link";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import { AiOutlineCheckCircle, AiOutlineExclamationCircle } from "react-icons/ai";
+
+  
 
 const APIURL = "https://api.thegraph.com/subgraphs/name/steffqing/721-clone";
 const collectionDataQuery = `
@@ -86,8 +89,9 @@ export default function Home({ nftId, listings, obj }) {
           Number(acc) > Number(cur) ? Number(acc) : Number(cur)
         );
       const names = [];
+      
+      const contract = new Contract(collection, nftABI, provider);
       const imageLinks = await itemId.map(async (item) => {
-        const contract = new Contract(collection, nftABI, provider);
         const x = await contract.tokenURI(item.toString());
         const link = x.replace(
           "ipfs://",
@@ -256,6 +260,7 @@ export default function Home({ nftId, listings, obj }) {
                 <h1 style={{ textAlign: "center" }}>Loading...</h1>
               ) : (
                 listedNFTs.map((nft) => {
+
                   return (
                     <Link
                       key={nft.tokenId}
@@ -265,19 +270,33 @@ export default function Home({ nftId, listings, obj }) {
                       <a className={styles.nft}>
                         <div className={styles.nft}>
                           <div className={styles.nftImage}>
-                            <Image
-                              src={nft.image}
-                              alt={nft.tokenId}
-                              layout="fill"
-                              objectFit="cover"
-                            />
+                            <div className={styles.firstLayer}>
+                              <div className={styles.firstLayerTop}>
+                                <span><AiOutlineCheckCircle/> <AiOutlineExclamationCircle/></span> 
+                                <span><p>{nft.seller.slice(0,4)}...{nft.seller.slice(35,39)}</p></span>
+                              </div>
+                              <div className={styles.firstLayerButtom}><p> <h3>{nft.name}</h3></p></div>
+                            </div>
+
+                            <div className={styles.image}>
+                                <Image
+                                src={nft.image}
+                                alt={nft.tokenId}
+                                layout="fill"
+                                objectFit="cover"
+                                />
+                            </div>
+                            
                           </div>
                           <div className={styles.content}>
-                            <h2>{nft.name}</h2>
-                            <p>
-                              <span>Price</span> ${nft.price}
-                            </p>
-                            <p>Best Offer ${nft.bestOffer}</p>
+                           <div className={styles.contentCont}>
+                              <p>
+                                <span>Price</span> ${nft.price}
+                              </p>
+                              <p><span>Best Offer</span> {nft.bestOffer && `$${nft.bestOffer}`}</p>
+
+                           </div>
+                            
                           </div>
                         </div>
                       </a>
