@@ -34,18 +34,28 @@ const Hero = () => {
             <div className={styles.slides}>
               {Socials.map((item, i) => (
                 <div id={`slide-${i}`}>
-                  {" "}
-                  <div className={styles.all}>
-                    <div className={styles.image}>
-                      <Image src={item.image} layout="fill" objectFit="cover" />
-                      <div>
-                        <h3>{item.name}</h3>
-                        <p>
-                          {item.collection} <span>Price: ${item.price}</span>
-                        </p>
+                  <Link
+                    href={`/collection/${item.collectionAddress}/${item.tokenId}`}
+                  >
+                    <a>
+                      <div className={styles.all}>
+                        <div className={styles.image}>
+                          <Image
+                            src={item.image}
+                            layout="fill"
+                            objectFit="cover"
+                          />
+                          <div>
+                            <h3>{item.name}</h3>
+                            <p>
+                              {item.collection}{" "}
+                              <span>Price: ${item.price}</span>
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
+                    </a>
+                  </Link>
                 </div>
               ))}
             </div>

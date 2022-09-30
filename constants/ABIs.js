@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 
 const marketplaceABI = [
   {
@@ -1757,6 +1757,11 @@ const tokenABI = [
 
 const mumbai = "https://matic-mumbai.chainstacklabs.com";
 const provider = new ethers.providers.JsonRpcProvider(mumbai);
+const contractInstance = new Contract(
+  "0xa9EBa0cc148FC3Ab7E9863Cdb6907cEcBD8B1dAD",
+  marketplaceABI,
+  provider
+);
 
 const contracts = {
   marketplace: "0xa9EBa0cc148FC3Ab7E9863Cdb6907cEcBD8B1dAD",
@@ -1766,6 +1771,7 @@ const contracts = {
   deadAddress: "0x0000000000000000000000000000000000000000",
   queryUrl: "https://api.thegraph.com/subgraphs/name/steffqing/721-clone",
   provider: provider,
+  contractInstance: contractInstance,
 };
 
 export { marketplaceABI, nftABI, tokenABI, contracts };

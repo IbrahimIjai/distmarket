@@ -8,9 +8,10 @@ import { marketplaceABI, nftABI, contracts } from "../../constants/ABIs";
 import { BsThreeDots, BsGlobe, BsTwitter, BsTelegram } from "react-icons/bs";
 import Link from "next/link";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import { AiOutlineCheckCircle, AiOutlineExclamationCircle } from "react-icons/ai";
-
-  
+import {
+  AiOutlineCheckCircle,
+  AiOutlineExclamationCircle,
+} from "react-icons/ai";
 
 const APIURL = "https://api.thegraph.com/subgraphs/name/steffqing/721-clone";
 const collectionDataQuery = `
@@ -40,6 +41,7 @@ export default function Home({ nftId, listings, obj }) {
     }, 2000);
     clearTimeout(init);
   }
+  // console.log( listings);
 
   const provider = library;
   const [visibility, setVisibility] = useState(false);
@@ -47,19 +49,17 @@ export default function Home({ nftId, listings, obj }) {
     const main = async () => {
       const tokenId = nftId.map((nft) => nft.hex);
       const addresses = listings.map((list) => list[0]);
-      const listingInfo = listings.map((list) => list[1].hex);
+      const listingInfo = listings.map((list) => BigNumber.from(list[1].hex));
       const itemId = tokenId.map((token) => parseInt(token, 16));
-      const prices = listingInfo.map((listing) => parseInt(listing, 16));
-      const value = prices.map((p) => {
-        const v = BigNumber.from(p.toString());
-        return utils.formatEther(v);
-      });
+      const prices = listingInfo.map((listing) => utils.formatEther(listing));
       const lowestValue =
-        value.length > 0 &&
-        value.reduce((acc, cur) => (Number(acc) < Number(cur) ? acc : cur));
+        prices.length > 0 &&
+        prices.reduce((acc, cur) => (Number(acc) < Number(cur) ? acc : cur));
       const allOffers = await itemId.map(async (item) => {
-        const contract = new Contract(marketContract, marketplaceABI, provider);
-        const x = await contract.availableOffers(collection, item.toString());
+        const x = await contracts.contractInstance.availableOffers(
+          collection,
+          item.toString()
+        );
         const r = x[1].map((xs) => xs[1]);
         const offers = r.map((v) => {
           const hexValue = v._hex;
@@ -89,7 +89,7 @@ export default function Home({ nftId, listings, obj }) {
           Number(acc) > Number(cur) ? Number(acc) : Number(cur)
         );
       const names = [];
-      
+
       const contract = new Contract(collection, nftABI, provider);
       const imageLinks = await itemId.map(async (item) => {
         const x = await contract.tokenURI(item.toString());
@@ -260,7 +260,6 @@ export default function Home({ nftId, listings, obj }) {
                 <h1 style={{ textAlign: "center" }}>Loading...</h1>
               ) : (
                 listedNFTs.map((nft) => {
-
                   return (
                     <Link
                       key={nft.tokenId}
@@ -272,31 +271,44 @@ export default function Home({ nftId, listings, obj }) {
                           <div className={styles.nftImage}>
                             <div className={styles.firstLayer}>
                               <div className={styles.firstLayerTop}>
-                                <span><AiOutlineCheckCircle/> <AiOutlineExclamationCircle/></span> 
-                                <span><p>{nft.seller.slice(0,4)}...{nft.seller.slice(35,39)}</p></span>
+                                <span>
+                                  <AiOutlineCheckCircle />{" "}
+                                  <AiOutlineExclamationCircle />
+                                </span>
+                                <span>
+                                  <p>
+                                    {nft.seller.slice(0, 4)}...
+                                    {nft.seller.slice(35, 39)}
+                                  </p>
+                                </span>
                               </div>
-                              <div className={styles.firstLayerButtom}><p> <h3>{nft.name}</h3></p></div>
+                              <div className={styles.firstLayerButtom}>
+                                <p>
+                                  {" "}
+                                  <h3>{nft.name}</h3>
+                                </p>
+                              </div>
                             </div>
 
                             <div className={styles.image}>
-                                <Image
+                              <Image
                                 src={nft.image}
                                 alt={nft.tokenId}
                                 layout="fill"
                                 objectFit="cover"
-                                />
+                              />
                             </div>
-                            
                           </div>
                           <div className={styles.content}>
-                           <div className={styles.contentCont}>
+                            <div className={styles.contentCont}>
                               <p>
                                 <span>Price</span> ${nft.price}
                               </p>
-                              <p><span>Best Offer</span> {nft.bestOffer && `$${nft.bestOffer}`}</p>
-
-                           </div>
-                            
+                              <p>
+                                <span>Best Offer</span>{" "}
+                                {nft.bestOffer && `$${nft.bestOffer}`}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </a>

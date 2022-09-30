@@ -10,6 +10,7 @@ const nextConfig = {
       "gateway.pinata.cloud",
       "distant.mypinata.cloud",
       "ipfsfiles.distant.finance",
+      "cdn.pixabay.com",
     ],
     formats: ["image/avif", "image/webp"],
   },

@@ -421,6 +421,7 @@
   overflow-x: auto;
   scrollbar-width: none;
   position: relative;
+  overflow-y: hidden;
 }
 .cards::-webkit-scrollbar {
   display: none;

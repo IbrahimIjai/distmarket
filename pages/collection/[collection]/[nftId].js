@@ -20,7 +20,6 @@ import { useWeb3React } from "@web3-react/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
 export default function NftId({
-  threeListings,
   offerInfo,
   nftSaleInfo,
   ipfsData,
@@ -33,7 +32,7 @@ export default function NftId({
     margin: "0 auto",
     borderColor: "red",
   };
-  console.log(extraListings);
+  ``;
   let highestOfferInitiator = "";
   const [verificationDisplay, setVerificationDisplay] = useState(false);
   // Contracts and constant addresses
@@ -45,29 +44,8 @@ export default function NftId({
   const [attr, setAttr] = useState(false);
   const [desc, setDesc] = useState(false);
   // Props from getServerSideProps function. Destructuring and assignments
-  // More listings from same collection
-  const [tokenId, details] = [...threeListings];
-  const address = [];
-  const price = [];
-  details.map((detail) => {
-    address.push(detail[0]);
-    price.push(detail[1]);
-  });
-  const value = price.map((p) => {
-    const val = parseInt(p.hex, 16);
-    const v = BigNumber.from(val.toString());
-    return utils.formatEther(v);
-  });
-  const salePrice = parseInt(nftSaleInfo[1].hex, 16).toString();
-  const moreListings = [];
-  for (let i = 0; i < tokenId.length; i++) {
-    let object = {
-      tokenId: tokenId[i],
-      address: address[i],
-      price: value[i],
-    };
-    moreListings.push(object);
-  }
+  const sellingPrice = BigNumber.from(nftSaleInfo[1].hex);
+  const salePrice = utils.formatEther(sellingPrice);
   //Offers section
   const offerer = [];
   const offerValue = [];
@@ -78,9 +56,9 @@ export default function NftId({
     });
   const priceDifference = [];
   const percentageDifference = () => {
+    console.log(offerValue);
     const values = offerValue.map((val) => Number(utils.formatEther(val)));
-    const saleValueString = utils.formatEther(salePrice);
-    const saleValue = Number(saleValueString);
+    const saleValue = Number(salePrice);
     values.map((val) => {
       if (val > saleValue) {
         priceDifference.push((val / saleValue) * 100 - 100);
@@ -402,7 +380,7 @@ export default function NftId({
                     {salePrice === "0" ? (
                       "Not for Sale"
                     ) : (
-                      <span>(${utils.formatEther(salePrice)})</span>
+                      <span>(${salePrice})</span>
                     )}
                   </span>
                 </h3>
@@ -807,7 +785,7 @@ export default function NftId({
               <h2>More Items from the {ipfsData[4]}</h2>
               <div className={styles.SliderContainer}>
                 <div className={styles.cards}>
-                  {extraListings.slice(0,3).map((listing, i) => (
+                  {extraListings.slice(0, 3).map((listing, i) => (
                     <Link
                       href={`/collection/${collection}/${listing.tokenId}`}
                       key={i}
@@ -908,7 +886,6 @@ export async function getServerSideProps({ params, res }) {
       ipfsData: ipfsData,
       nftSaleInfo: JSON.parse(JSON.stringify(nftSaleInfo)),
       offerInfo: JSON.parse(JSON.stringify(offerInfo[1])),
-      threeListings: JSON.parse(JSON.stringify(threeListings)),
       collectionInfo: JSON.parse(JSON.stringify(collectionInfo[2])),
       extraListings: JSON.parse(JSON.stringify(extraListings)),
     },

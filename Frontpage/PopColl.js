@@ -1,304 +1,157 @@
 import styles from "./styles/popcol.module.css";
 import Image from "next/image";
-import nft from "./img/me.jpeg";
-import nft1 from "./img/2818.png";
-import lomen from "./img/lomen.jpeg";
+import { useState, useEffect } from "react";
+import { contracts, nftABI } from "../constants/ABIs";
+import Link from "next/link";
+import { utils, Contract } from "ethers";
 import { MdOutlineGppGood } from "react-icons/md";
-const PopularCollection = (props) => {
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+
+const collectionDataQuery = `
+query MyQuery ($address: ID){
+  collection(id: $address) {
+    id
+    name
+    totalSupply
+    totalVolume
+    totalSales
+    topSale
+  }
+}
+`;
+const PopularCollection = ({ address }) => {
+  const [runEffect, setRunEffect] = useState(false);
+  const init = setTimeout(() => {
+    setRunEffect(true);
+  }, 300);
+  if (true) {
+    setTimeout(() => {
+      setRunEffect(false);
+    }, 2000);
+    clearTimeout(init);
+  }
+  const [topCollections, setTopCollections] = useState(null);
+  useEffect(() => {
+    const main = async () => {
+      const collectionsDetails = [];
+      for (let i = 0; i < address.length; i++) {
+        const instance = new Contract(address[i], nftABI, contracts.provider);
+        let object;
+        const client = new ApolloClient({
+          uri: contracts.queryUrl,
+          cache: new InMemoryCache(),
+        });
+        client
+          .query({
+            query: gql(collectionDataQuery),
+            variables: {
+              address: address[i].toLowerCase(),
+            },
+          })
+          .then((data) => (object = data.data.collection))
+          .catch((err) => console.log("Error fetching data: ", err));
+        const uri = await instance.tokenURI("1");
+        const url = uri.includes("ipfs://", 0)
+          ? uri.replace("ipfs://", "https://ipfsfiles.distant.finance/ipfs/")
+          : uri;
+        const data = await fetch(url).then((res) => res.json());
+        const image = data.image.includes("ipfs://", 0)
+          ? data.image.replace(
+              "ipfs://",
+              "https://ipfsfiles.distant.finance/ipfs/"
+            )
+          : data.image;
+        const results = await contracts.contractInstance.availableListings(
+          address[i]
+        );
+        const listings = results[1];
+        if (listings.length > 0) {
+          const prices = listings.map((listing) =>
+            utils.formatEther(listing[1])
+          );
+          const lowestValue =
+            prices.length > 0 &&
+            prices.reduce((acc, cur) =>
+              Number(acc) < Number(cur) ? acc : cur
+            );
+          const obj = {
+            image: image,
+            floor: lowestValue,
+            items: prices.length,
+            name: object.name,
+            address: object.id,
+            topSale: object.topSale,
+            totalSupply: object.totalSupply,
+            totalSales: object.totalSales,
+            totalVolume: object.totalVolume,
+          };
+          collectionsDetails.push(obj);
+        }
+      }
+      setTopCollections(collectionsDetails);
+    };
+    main();
+  }, [runEffect]);
   return (
     <div className={styles.Cointainer}>
-      <div className={styles.Header}>
-        <span
-          className={styles.HeaderTittle}
-          style={{
-            backgroundColor: props.state ? "#EBDDDD" : "black",
-            color: props.state ? "black" : "white",
-          }}
-        >
-          {" "}
-          Top Collections{" "}
-        </span>
-        <hr
-          className={styles.hr}
-          style={{ border: props.state ? "1px solid #7B1FA2" : "" }}
-        />
-      </div>
-      <div className={styles.mobile}>
-        <div className={styles.TopcollectionContainer}>
-          <div className={styles.container}>
-            <div className={styles.imageContainer}>
-              <Image src={lomen} layout="fill" objectFit="cover" />
-            </div>
-            <div className={styles.textContainer}>
-              <div
-                className={styles.textContent}
-                style={{ backgroundColor: props.state ? "#DEDEDE" : "" }}
-              >
-                <p
-                  className={styles.NftCollectionName}
-                  style={{ color: props.state ? "black" : "white" }}
-                >
-                  Vixen punk
-                </p>
-                <p
-                  className={styles.FloorPrice}
-                  style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}
-                >
-                  Floor Price: <span className={styles.Price}>20 KCS </span>{" "}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className={styles.container}>
-            <div className={styles.imageContainer}>
-              <Image src={nft1} layout="fill" objectFit="cover" />
-            </div>
-            <div className={styles.textContainer}>
-              <div
-                className={styles.textContent}
-                style={{ backgroundColor: props.state ? "#DEDEDE" : "" }}
-              >
-                <p
-                  className={styles.NftCollectionName}
-                  style={{ color: props.state ? "" : "white" }}
-                >
-                  Vixen punk
-                </p>
-                <p
-                  className={styles.FloorPrice}
-                  style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}
-                >
-                  Floor Price: <span className={styles.Price}>20 KCS </span>{" "}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className={styles.container}>
-            <div className={styles.imageContainer}>
-              <Image src={nft} layout="fill" objectFit="cover" />
-            </div>
-            <div className={styles.textContainer}>
-              <div
-                className={styles.textContent}
-                style={{ backgroundColor: props.state ? "#DEDEDE" : "" }}
-              >
-                <p
-                  className={styles.NftCollectionName}
-                  style={{ color: props.state ? "" : "white" }}
-                >
-                  Vixen punk
-                </p>
-                <p
-                  className={styles.FloorPrice}
-                  style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}
-                >
-                  Floor Price: <span className={styles.Price}>20 KCS </span>{" "}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className={styles.container}>
-            <div className={styles.imageContainer}>
-              <Image src={nft} layout="fill" objectFit="cover" />
-            </div>
-            <div className={styles.textContainer}>
-              <div
-                className={styles.textContent}
-                style={{ backgroundColor: props.state ? "#DEDEDE" : "" }}
-              >
-                <p
-                  className={styles.NftCollectionName}
-                  style={{ color: props.state ? "" : "white" }}
-                >
-                  Vixen punk
-                </p>
-                <p
-                  className={styles.FloorPrice}
-                  style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}
-                >
-                  Floor Price: <span className={styles.Price}>20 KCS </span>
-                </p>
-              </div>
-            </div>
-          </div>
+      {topCollections && (
+        <div className={styles.Header}>
+          <span className={styles.HeaderTittle}> Top Collections </span>
+          <hr className={styles.hr} />
         </div>
-      </div>
-      <div className={styles.tab}>
-        {" "}
-        <main className={styles.main}>
-          <div
-            className={styles.cardContainer}
-            style={{ background: props.state ? "#DEDEDE" : "" }}
-          >
-            <div className={styles.Imagecontainer}>
-              <Image src={nft} alt="" layout="fill" objectFit="cover" />
-            </div>
-            <div className={styles.tabtext}>
-              <h2
-                className={styles.collectionName}
-                style={{ color: props.state ? "black" : "white" }}
-              >
-                Lomen
-                <span style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
-                  <MdOutlineGppGood />
-                </span>
-              </h2>
-              <p
-                className={styles.collectionDescription}
-                style={{ color: props.state ? "black" : "white" }}
-              >
-                {" "}
-                This is a all time collection nothing sub
-              </p>
-              <div
-                className={styles.text}
-                style={{ backgroundColor: props.state ? "#DEDEDE" : "#181111" }}
-              >
-                <p style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
-                  Floor price:{" "}
-                  <span style={{ color: props.state ? "black" : "white" }}>
-                    2kcs
-                  </span>
-                </p>
-                <p style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
-                  Highestbid:{" "}
-                  <span style={{ color: props.state ? "black" : "white" }}>
-                    2kcs
-                  </span>
-                </p>
-              </div>
-            </div>{" "}
+      )}
+      <div className={styles.topCollections}>
+        {topCollections && (
+          <div className={styles.head}>
+            <div className={styles.collection}>Collection</div>
+            <div>Floor</div>
+            <div>Volume</div>
+            <div>Top Sale</div>
+            <div>Listed</div>
+            <div>Supply</div>
           </div>
-          <div
-            className={styles.cardContainer}
-            style={{ background: props.state ? "#DEDEDE" : "" }}
-          >
-            <div className={styles.Imagecontainer}>
-              <Image src={nft1} alt="" layout="fill" objectFit="cover" />
-            </div>
-            <div className={styles.tabtext}>
-              <h2
-                className={styles.collectionName}
-                style={{ color: props.state ? "black" : "white" }}
-              >
-                Lomen
-                <span style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
-                  <MdOutlineGppGood />
-                </span>
-              </h2>
-              <p
-                className={styles.collectionDescription}
-                style={{ color: props.state ? "black" : "white" }}
-              >
-                {" "}
-                This is a all time collection nothing sub
-              </p>
-              <div
-                className={styles.text}
-                style={{ backgroundColor: props.state ? "#DEDEDE" : "#181111" }}
-              >
-                <p style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
-                  Floor price:{" "}
-                  <span style={{ color: props.state ? "black" : "white" }}>
-                    2kcs
-                  </span>
-                </p>
-                <p style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
-                  Highestbid:{" "}
-                  <span style={{ color: props.state ? "black" : "white" }}>
-                    2kcs
-                  </span>
-                </p>
-              </div>
-            </div>{" "}
-          </div>
-          <div
-            className={styles.cardContainer}
-            style={{ background: props.state ? "#DEDEDE" : "" }}
-          >
-            <div className={styles.Imagecontainer}>
-              <Image src={nft} alt="" layout="fill" objectFit="cover" />
-            </div>
-            <div className={styles.tabtext}>
-              <h2
-                className={styles.collectionName}
-                style={{ color: props.state ? "black" : "white" }}
-              >
-                Lomen
-                <span style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
-                  <MdOutlineGppGood />
-                </span>
-              </h2>
-              <p
-                className={styles.collectionDescription}
-                style={{ color: props.state ? "black" : "white" }}
-              >
-                {" "}
-                This is a all time collection nothing sub
-              </p>
-              <div
-                className={styles.text}
-                style={{ backgroundColor: props.state ? "#DEDEDE" : "#181111" }}
-              >
-                <p style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
-                  Floor price:{" "}
-                  <span style={{ color: props.state ? "black" : "white" }}>
-                    2kcs
-                  </span>
-                </p>
-                <p style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
-                  Highestbid:{" "}
-                  <span style={{ color: props.state ? "black" : "white" }}>
-                    2kcs
-                  </span>
-                </p>
-              </div>
-            </div>{" "}
-          </div>
-          <div
-            className={styles.cardContainer}
-            style={{ background: props.state ? "#DEDEDE" : "" }}
-          >
-            <div className={styles.Imagecontainer}>
-              <Image src={lomen} alt="" layout="fill" objectFit="cover" />
-            </div>
-            <div className={styles.tabtext}>
-              <h2
-                className={styles.collectionName}
-                style={{ color: props.state ? "black" : "white" }}
-              >
-                Lomen
-                <span style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
-                  <MdOutlineGppGood />
-                </span>
-              </h2>
-              <p
-                className={styles.collectionDescription}
-                style={{ color: props.state ? "black" : "white" }}
-              >
-                {" "}
-                This is a all time collection nothing sub
-              </p>
-              <div
-                className={styles.text}
-                style={{ backgroundColor: props.state ? "#DEDEDE" : "#181111" }}
-              >
-                <p style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
-                  Floor price:{" "}
-                  <span style={{ color: props.state ? "black" : "white" }}>
-                    2kcs
-                  </span>
-                </p>
-                <p style={{ color: props.state ? "#7B1FA2" : "#2fc0db" }}>
-                  Highestbid:{" "}
-                  <span style={{ color: props.state ? "black" : "white" }}>
-                    2kcs
-                  </span>
-                </p>
-              </div>
-            </div>{" "}
-          </div>
-        </main>
+        )}
+        <div className={styles.body}>
+          {topCollections &&
+            topCollections.map((collection, i) => (
+              <Link href={`/collection/${collection.address}`}>
+                <a>
+                  <div key={i} className={styles.key}>
+                    <div className={styles.count}>
+                      <div>
+                        <div className={styles.imageContainer}>
+                          <Image
+                            src={collection.image}
+                            height="90px"
+                            width="90px"
+                          />
+                        </div>
+                        <div className={styles.name}>{collection.name}</div>
+                      </div>
+                    </div>
+                    <div className={styles.content}> ${collection.floor} </div>
+                    <div className={styles.content}>
+                      {" "}
+                      {collection.totalVolume == 0
+                        ? `-`
+                        : `$${collection.totalVolume}`}{" "}
+                    </div>
+                    <div className={styles.content}>
+                      {" "}
+                      {collection.topSale == 0
+                        ? `-`
+                        : `$${collection.topSale}`}{" "}
+                    </div>
+                    <div className={styles.content}> {collection.items} </div>
+                    <div className={styles.content}>
+                      {" "}
+                      {collection.totalSupply}{" "}
+                    </div>
+                  </div>
+                </a>
+              </Link>
+            ))}
+        </div>
       </div>
     </div>
   );

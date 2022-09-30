@@ -38,34 +38,36 @@ const RListed = () => {
             nftABI,
             contracts.provider
           );
-          let data = listings[1].length;
-          let dat = data - 1;
-          let tokenId = parseInt(listings[0][dat]._hex, 16);
-          let value = parseInt(listings[1][dat][1]._hex, 16);
-          let tokenInfo = await instance.tokenURI(tokenId.toString());
-          let info = tokenInfo.includes("ipfs://", 0)
-            ? tokenInfo.replace(
-                "ipfs://",
-                "https://ipfsfiles.distant.finance/ipfs/"
-              )
-            : tokenInfo;
-          const json = await fetch(info).then((res) => res.json());
-          const { name, image } = json;
-          let imageFile = image.includes("ipfs://", 0)
-            ? image.replace(
-                "ipfs://",
-                "https://ipfsfiles.distant.finance/ipfs/"
-              )
-            : image;
-          const obj = {
-            tokenId: tokenId,
-            collectionAddress: SupportedCollections[i].collectionAddress,
-            address: listings[1][dat][0],
-            price: utils.formatEther(value.toString()),
-            name: name,
-            image: imageFile,
-          };
-          recentListings.push(obj);
+          if (listings[1].length > 0) {
+            let data = listings[1].length;
+            let dat = data - 1;
+            let tokenId = parseInt(listings[0][dat]._hex, 16);
+            let value = parseInt(listings[1][dat][1]._hex, 16);
+            let tokenInfo = await instance.tokenURI(tokenId.toString());
+            let info = tokenInfo.includes("ipfs://", 0)
+              ? tokenInfo.replace(
+                  "ipfs://",
+                  "https://ipfsfiles.distant.finance/ipfs/"
+                )
+              : tokenInfo;
+            const json = await fetch(info).then((res) => res.json());
+            const { name, image } = json;
+            let imageFile = image.includes("ipfs://", 0)
+              ? image.replace(
+                  "ipfs://",
+                  "https://ipfsfiles.distant.finance/ipfs/"
+                )
+              : image;
+            const obj = {
+              tokenId: tokenId,
+              collectionAddress: SupportedCollections[i].collectionAddress,
+              address: listings[1][dat][0],
+              price: utils.formatEther(value.toString()),
+              name: name,
+              image: imageFile,
+            };
+            recentListings.push(obj);
+          }
         }
         setData(recentListings);
       } catch (error) {
@@ -74,7 +76,6 @@ const RListed = () => {
     };
     main();
   }, [runEffect]);
-  console.log(data, "Use State");
   return (
     <main className={styles.main}>
       {data && (
@@ -102,7 +103,7 @@ const RListed = () => {
                     />
                     <div className={styles.description}>
                       <h3>{nft.name}</h3>
-                      <p>Price tag: {nft.price} </p>
+                      <p>Price tag: ${nft.price} </p>
                     </div>
                   </div>
                 </a>

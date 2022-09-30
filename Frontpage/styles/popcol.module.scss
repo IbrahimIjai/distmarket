@@ -28,192 +28,121 @@ $darkModeColor: #2fc0db;
     border: 1px solid $darkModeColor;
   }
 }
-
-.mobile {
-  display: block;
-  .TopcollectionContainer {
-    padding: 0 7vw;
+.topCollections {
+  overflow-x: scroll;
+  width: 100%;
+  padding: 1vh 7vw 1vh 0;
+}
+.topCollections::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background: blue;
+}
+.topCollections::-webkit-scrollbar-thumb {
+  background: orange;
+}
+.head {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 200%;
+  position: sticky;
+  padding: 4vh 0;
+  .collection {
+    flex: 1.5;
+    backdrop-filter: blur(29.5px);
+    z-index: 33;
+    top: 0;
+    left: 0;
+    position: sticky;
+  }
+  div {
+    flex: 1;
     display: flex;
-    align-items: center;
     justify-content: center;
-    flex-direction: column;
-    .container {
-      height: min(20vh, 100px);
-      width: min(100%, 330px);
-      display: flex;
-      align-content: center;
-      position: relative;
-      align-items: center;
-      margin: 5% 0;
+    align-items: center;
+  }
+}
+.body {
+  width: 200%;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  // align-items: center;
+  flex-direction: column;
+  .key {
+    height: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+    &:hover {
       .imageContainer {
-        position: relative;
-        height: 100%;
-        border-radius: 10px 10px 0 10px;
-        overflow: hidden;
-        box-shadow: -16.4px 18.9px 5.6px -31px rgba(0, 0, 0, 0.64),
-          -19.4px 22.3px 23.6px -31px rgba(0, 0, 0, 0.482),
-          -23.8px 27.4px 34.3px -31px rgba(0, 0, 0, 0.372),
-          -46px 53px 37px -31px rgba(0, 0, 0, 0.303);
-        width: 40%;
-        &:hover {
-          border: 1px solid #2fc0db;
-        }
-      }
-      .textContainer {
-        width: 70%;
-        height: 100%;
-        position: relative;
-        .textContent {
-          border-radius: 0px 10px 10px 0px;
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-          backdrop-filter: blur(11.4px);
-          height: 80%;
-          width: 70%;
-          position: absolute;
-          bottom: 0;
-          background-color: #252727;
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          font-weight: 700;
-          &:hover {
-            border: 1px solid #2fc0db;
-          }
-          .NftCollectionName {
-            margin: 0;
-          }
-          .FloorPrice {
-            margin: 0;
-            font-size: 0.9rem;
-            font-weight: 300;
-            color: #673ab7;
-            .Price {
-              font-weight: 600;
-            }
+        span {
+          img {
+            transform: scale(1.1);
           }
         }
       }
     }
-  }
-}
-.tab {
-  display: none;
-}
-@media (min-width: 600px) {
-  .mobile {
-    display: none;
-  }
-  .tab {
-    display: block;
-    .main {
-      min-height: 400px;
-      padding: 0 7vw;
-      display: grid;
-      @media (min-width: 600px) {
-        grid-template-columns: 1fr 1fr;
-        grid-column-gap: 20px;
-        grid-row-gap: 20px;
-        justify-items: center;
-        align-items: stretch;
-      }
-      @media (min-width: 850px) {
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-column-gap: 20px;
-        grid-row-gap: 20px;
-        justify-items: stretch;
-        align-items: stretch;
-      }
-      @media (min-width: 1100px) {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        grid-column-gap: 20px;
-        grid-row-gap: 20px;
-        justify-items: stretch;
-        align-items: stretch;
-      }
-      @media (min-width: 1500px) {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-        grid-column-gap: 20px;
-        grid-row-gap: 20px;
-        justify-items: stretch;
-        align-items: stretch;
-      }
-      .cardContainer {
-        background: rgba(33, 23, 23, 0.79);
-        border-radius: 16px;
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(17px);
-        border: 1px solid rgba(33, 23, 23, 0.3);
+    .count {
+      flex: 1.5;
+      z-index: 33;
+      display: flex;
+      top: 0;
+      left: 0;
+      position: sticky;
+      backdrop-filter: blur(29.5px);
+      div {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        color: aliceblue;
-        margin: 1rem;
-        transition: border 100ms;
-        &:hover {
-          border: 2px solid rgba(33, 23, 23, 0.3);
+        justify-content: center;
+        gap: 8px;
+        .name {
+          display: flex;
+          justify-content: flex-start;
         }
-        .Imagecontainer {
-          border-radius: 4px;
-          overflow: hidden;
-          position: relative;
-          height: min(40vh, 225px);
-          border-radius: 10px;
-          overflow: hidden;
-          box-shadow: -16.4px 18.9px 5.6px -31px rgba(0, 0, 0, 0.64),
-            -19.4px 22.3px 23.6px -31px rgba(0, 0, 0, 0.482),
-            -23.8px 27.4px 34.3px -31px rgba(0, 0, 0, 0.372),
-            -46px 53px 37px -31px rgba(0, 0, 0, 0.303);
-          width: 90%;
-          margin: 0.5rem 0.5rem;
-          transition: scale 500ms;
+      }
+    }
+    .imageContainer {
+      position: relative;
+      span {
+        border-radius: 5px;
+        border: 2px solid $darkModeColor !important;
+        img {
           &:hover {
-            scale: 1.035;
-          }
-        }
-        .tabtext {
-          width: 90%;
-          .collectionName {
-            margin: 0;
-            font-weight: 500;
-            padding: 0;
-            font-size: clamp(1.3rem, 1.55rem, 1.8vw);
-            span {
-              color: aqua;
-              font-size: clamp(1.1rem, 1.4rem, 1.3vw);
-              padding-left: 3px;
-            }
-          }
-          .collectionDescription {
-            font-weight: 400;
-            font-size: clamp(0.9rem, 1.1rem, 1.1vw);
-            margin: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            width: 100%;
-          }
-          .text {
-            background: rgba(175, 129, 129, 0.79);
-            border-radius: 8px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(175, 129, 129, 0.35);
-            margin: 0.5rem 0;
-            p {
-              margin: 0rem 1rem;
-              color: aqua;
-              line-height: 1.6rem;
-              font-size: 0.8rem;
-              font-weight: 400;
-              span {
-                color: aliceblue;
-                font-weight: 500;
-              }
-            }
+            transform: scale(1.3);
           }
         }
       }
     }
+    .content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+@media (min-width: 750px) {
+  .topCollections {
+    padding: 1vh 7vw;
+  }
+  .topCollections::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    background: blue;
+  }
+  .head,
+  .body {
+    width: 100%;
+  }
+}
+.key {
+  &:hover {
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   }
 }
