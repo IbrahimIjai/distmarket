@@ -4,7 +4,6 @@ import Image from "next/image";
 import Socials from "../Socials";
 import Link from "next/link";
 const Hero = () => {
-  console.log(styles);
   return (
     <div className={styles.blur}>
       <main className={styles.main}>
@@ -34,7 +33,7 @@ const Hero = () => {
           <div className={styles.slider}>
             <div className={styles.slides}>
               {Socials.map((item, i) => (
-                <div id={`slide-${i}`}>
+                <div id={`slide-${i}`} key={i}>
                   <Link
                     href={`/collection/${item.collectionAddress}/${item.tokenId}`}
                   >
@@ -62,7 +61,7 @@ const Hero = () => {
             </div>
             <div className={styles.links}>
               {Socials.map((item, i) => (
-                <Link href={`#slide-${i}`} scroll={false}>
+                <Link href={`#slide-${i}`} key={i} scroll={false}>
                   <a></a>
                 </Link>
               ))}

@@ -72,8 +72,11 @@ export default function Footer() {
             Careers <span>💼</span>
           </h2>
           <ul>
-            <li className={styles.cross}>
-              <a href="#"> Available Positions </a>
+            <li>
+              <a href="https://distant.finance/careers/career.html">
+                {" "}
+                Available Positions{" "}
+              </a>
             </li>
           </ul>
         </div>
@@ -86,7 +89,7 @@ export default function Footer() {
             <li>
               <a
                 rel="noopener noreferrer"
-                href="./FAQ/faq.html"
+                href="https://distant.finance/FAQ/faq.html"
                 target="_blank"
               >
                 {" "}

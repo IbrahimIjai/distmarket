@@ -3,8 +3,8 @@ import { useWeb3React } from "@web3-react/core";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { Contract, utils, ethers, BigNumber } from "ethers";
-import { marketplaceABI, nftABI, contracts } from "../../constants/ABIs";
+import { Contract, utils, BigNumber } from "ethers";
+import { nftABI, contracts } from "../../constants/ABIs";
 import { BsThreeDots, BsGlobe, BsTwitter, BsTelegram } from "react-icons/bs";
 import Link from "next/link";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
@@ -13,7 +13,6 @@ import {
   AiOutlineExclamationCircle,
 } from "react-icons/ai";
 
-const APIURL = "https://api.thegraph.com/subgraphs/name/steffqing/721-clone";
 const collectionDataQuery = `
   query collectionDataQuery($address: ID){
     collection(id: $address){
@@ -28,10 +27,17 @@ const collectionDataQuery = `
 `;
 
 export default function Home({ nftId, listings, obj }) {
+  // States
+  const [listedNFTs, setListedNFTs] = useState([]);
+  const [linkShow, setLinkShow] = useState(false);
+  const [stats, setStats] = useState({});
+  const [visibility, setVisibility] = useState(false);
+  const [runEffect, setRunEffect] = useState(false);
+  // Other hooks
   const router = useRouter();
   const { collection } = router.query;
-  const { library, active } = useWeb3React();
-  const [runEffect, setRunEffect] = useState(false);
+  const { active } = useWeb3React();
+  // Array dependency function
   const init = setTimeout(() => {
     setRunEffect(true);
   }, 300);
@@ -42,11 +48,10 @@ export default function Home({ nftId, listings, obj }) {
     clearTimeout(init);
   }
 
-  const provider = library;
-  const [visibility, setVisibility] = useState(false);
   useEffect(() => {
     const main = async () => {
       try {
+        // Destructure serverSide data
         const tokenId = nftId.map((nft) => nft.hex);
         const addresses = listings.map((list) => list[0]);
         const listingInfo = listings.map((list) => BigNumber.from(list[1].hex));
@@ -69,6 +74,12 @@ export default function Home({ nftId, listings, obj }) {
             const v = BigNumber.from(offer.toString());
             return utils.formatEther(v);
           });
+          console.log(`
+        x: ${x}
+        r: ${r}
+        Offers: ${offers}
+        Offer Values: ${offerValues}
+        `);
           return offerValues;
         });
         const offers = [];
@@ -90,7 +101,7 @@ export default function Home({ nftId, listings, obj }) {
           );
         const names = [];
 
-        const contract = new Contract(collection, nftABI, provider);
+        const contract = new Contract(collection, nftABI, contracts.provider);
         const imageLinks = await itemId.map(async (item) => {
           const x = await contract.tokenURI(item.toString());
           const link = x.includes("ipfs://", 0)
@@ -105,8 +116,6 @@ export default function Home({ nftId, listings, obj }) {
             : d.image;
           const n = d.name;
           names.push(n);
-          const supply = await contract.totalSupply();
-          const totalSupply = parseInt(supply._hex, 16);
           setStats({
             highestOffer: highestOffer,
             floor: lowestValue,
@@ -115,11 +124,11 @@ export default function Home({ nftId, listings, obj }) {
           return i;
         });
         const arr = [];
-        for (let i = 0; i < value.length; i++) {
+        for (let i = 0; i < addresses.length; i++) {
           const object = {
             tokenId: itemId[i],
             seller: addresses[i],
-            price: value[i],
+            price: prices[i],
             image: await imageLinks[i],
             bestOffer: bestOffers[i],
             name: names[i],
@@ -133,9 +142,6 @@ export default function Home({ nftId, listings, obj }) {
     };
     main();
   }, [runEffect]);
-  const [linkShow, setLinkShow] = useState(false);
-  const [stats, setStats] = useState({});
-  const marketContract = contracts.marketplace;
   let menuRef = useRef();
   useEffect(() => {
     let handler = (e) => {
@@ -152,7 +158,6 @@ export default function Home({ nftId, listings, obj }) {
       document.removeEventListener("mousedown", handler);
     };
   });
-  const [listedNFTs, setListedNFTs] = useState([]);
 
   return (
     <>
@@ -209,7 +214,7 @@ export default function Home({ nftId, listings, obj }) {
                 <p>Listed</p>
               </div>
               <div>
-                <h3>{obj.tradeVolume ? `$${obj.tradeVolume}` : "-"}</h3>
+                <h3>{obj.tradeVolume > 0 ? `$${obj.tradeVolume}` : "-"}</h3>
                 <p>Trade Volume</p>
               </div>
               <div>
@@ -335,11 +340,9 @@ export async function getServerSideProps({ params, res }) {
   );
   let objectData = {};
   const collection = params.collection;
-  const marketContract = contracts.marketplace;
-  const provider = new ethers.providers.JsonRpcProvider(contracts.mumbai);
-  const contract = new Contract(marketContract, marketplaceABI, provider);
+  const contract = contracts.contractInstance;
   const client = new ApolloClient({
-    uri: APIURL,
+    uri: contracts.queryUrl,
     cache: new InMemoryCache(),
   });
   client
@@ -358,15 +361,19 @@ export async function getServerSideProps({ params, res }) {
   const nftId = results[0];
   const listingInfo = results[1];
   const { totalSupply, tokens, totalVolume, name } = objectData;
-  const url = tokens[1].tokenURI.replace(
-    "ipfs://",
-    "https://distant.mypinata.cloud/ipfs/"
-  );
+  const url = tokens[1].tokenURI.includes("ipfs://", 0)
+    ? tokens[1].tokenURI.replace(
+        "ipfs://",
+        "https://distant.mypinata.cloud/ipfs/"
+      )
+    : tokens[1].tokenURI;
   const image_attributes = await fetch(url).then((res) => res.json());
-  const imageUrl = image_attributes.image.replace(
-    "ipfs://",
-    "https://distant.mypinata.cloud/ipfs/"
-  );
+  const imageUrl = image_attributes.image.includes("ipfs://", 0)
+    ? image_attributes.image.replace(
+        "ipfs://",
+        "https://distant.mypinata.cloud/ipfs/"
+      )
+    : image_attributes.image;
   const obj = {
     totalSupply: totalSupply,
     tradeVolume: totalVolume,
