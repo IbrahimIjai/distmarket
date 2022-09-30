@@ -4,6 +4,7 @@ import Image from "next/image";
 import Socials from "../Socials";
 import Link from "next/link";
 const Hero = () => {
+  console.log(styles);
   return (
     <div className={styles.blur}>
       <main className={styles.main}>

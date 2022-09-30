@@ -114,9 +114,9 @@ const PopularCollection = ({ address }) => {
         <div className={styles.body}>
           {topCollections &&
             topCollections.map((collection, i) => (
-              <Link href={`/collection/${collection.address}`}>
+              <Link key={i} href={`/collection/${collection.address}`}>
                 <a>
-                  <div key={i} className={styles.key}>
+                  <div className={styles.key}>
                     <div className={styles.count}>
                       <div>
                         <div className={styles.imageContainer}>

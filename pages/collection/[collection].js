@@ -41,7 +41,6 @@ export default function Home({ nftId, listings, obj }) {
     }, 2000);
     clearTimeout(init);
   }
-  // console.log( listings);
 
   const provider = library;
   const [visibility, setVisibility] = useState(false);
@@ -126,8 +125,6 @@ export default function Home({ nftId, listings, obj }) {
             name: names[i],
           };
           arr.push(object);
-          console.log(typeof bestOffers);
-          console.log(bestOffers.length);
         }
         setListedNFTs(arr);
       } catch (error) {
