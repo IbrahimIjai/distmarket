@@ -46,28 +46,10 @@ export default function NftId({
   const [desc, setDesc] = useState(false);
   // Props from getServerSideProps function. Destructuring and assignments
   // More listings from same collection
-  const [tokenId, details] = [...threeListings];
-  const address = [];
-  const price = [];
-  details.map((detail) => {
-    address.push(detail[0]);
-    price.push(detail[1]);
-  });
-  const value = price.map((p) => {
-    const val = parseInt(p.hex, 16);
-    const v = BigNumber.from(val.toString());
-    return utils.formatEther(v);
-  });
+
   const salePrice = parseInt(nftSaleInfo[1].hex, 16).toString();
   const moreListings = [];
-  for (let i = 0; i < tokenId.length; i++) {
-    let object = {
-      tokenId: tokenId[i],
-      address: address[i],
-      price: value[i],
-    };
-    moreListings.push(object);
-  }
+ 
   //Offers section
   const offerer = [];
   const offerValue = [];
@@ -190,15 +172,21 @@ export default function NftId({
     router.replace(router.asPath);
   };
   const cancelListing = async () => {
-    const signer = await library.getSigner();
+    try{
+  const signer = await library.getSigner();
     const contract = new Contract(marketContract, marketplaceABI, signer);
     const tx = await contract.cancelListing(collection, nftId);
     setLoading(true);
     await tx.wait();
     tx.hash && setLoading(false);
     router.replace(router.asPath);
+    } catch(err){
+      console.log(err)
+    }
+    
   };
   const updateListing = async () => {
+    try{
     const val = utils.parseEther(updateListingValue);
     const signer = await library.getSigner();
     const contract = new Contract(marketContract, marketplaceABI, signer);
@@ -208,9 +196,13 @@ export default function NftId({
     tx.hash && setLoading(false);
     setUpdateListingModal(false);
     router.replace(router.asPath);
+    } catch(err){
+      console.log(err)
+    }
+    
   };
   const makeOffer = async () => {
-    const signer = await library.getSigner();
+    try{
     const offerVal = parseInt(
       utils.parseEther(createOfferValue)._hex,
       16
@@ -236,8 +228,14 @@ export default function NftId({
     tx.hash && setLoading(false);
     setCreateOfferModal(false);
     router.replace(router.asPath);
+    } catch(err){
+      console.log(err)
+    }
+    const signer = await library.getSigner();
+    
   };
   const updateOffer = async () => {
+    try{
     const signer = await library.getSigner();
     const offerVal = parseInt(
       utils.parseEther(updateOfferValue)._hex,
@@ -264,8 +262,13 @@ export default function NftId({
     tx.hash && setLoading(false);
     setCreateOfferModal(false);
     router.replace(router.asPath);
+    } catch(err){
+      console.log(err)
+    }
+    
   };
   const cancelOffer = async () => {
+    try{
     const signer = await library.getSigner();
     const contract = new Contract(marketContract, marketplaceABI, signer);
     const tx = await contract.cancelOffer(collection, nftId);
@@ -273,8 +276,13 @@ export default function NftId({
     await tx.wait();
     tx.hash && setLoading(false);
     router.replace(router.asPath);
+    } catch(err){
+      console.log(err)
+    }
+    
   };
   const acceptOffer1 = async (offerVal, initiator) => {
+    try{
     const signer = library.getSigner();
     const instance = new Contract(tokenContract, tokenABI, signer);
     const balance = await instance.balanceOf(highestOfferInitiator);
@@ -307,8 +315,14 @@ export default function NftId({
     await tx.wait();
     tx.hash && setLoading(false);
     router.replace(router.asPath);
+    } catch(err){
+      console.log(err)
+    }
+
+    
   };
   const acceptOffer2 = async (offerVal, initiator) => {
+    try{
     const signer = library.getSigner();
     const instance = new Contract(tokenContract, tokenABI, signer);
     const balance = await instance.balanceOf(initiator);
@@ -334,6 +348,10 @@ export default function NftId({
     await tx.wait();
     tx.hash && setLoading(false);
     router.replace(router.asPath);
+    } catch(err){
+      console.log(err)
+    }
+    
   };
   return (
     <main className={styles.main}>

@@ -421,6 +421,7 @@
   overflow-x: auto;
   scrollbar-width: none;
   position: relative;
+  overflow-y: hidden;
 }
 .cards::-webkit-scrollbar {
   display: none;
@@ -458,7 +459,7 @@
   transform: scale(1.05);
 }
 .description {
-  z-index: 5555;
+  z-index: 55;
   position: absolute;
   bottom: 0;
   margin-top: 20px;
