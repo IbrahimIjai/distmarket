@@ -44,8 +44,16 @@ export default function NftId({
   const [attr, setAttr] = useState(false);
   const [desc, setDesc] = useState(false);
   // Props from getServerSideProps function. Destructuring and assignments
+<<<<<<< HEAD
   const sellingPrice = BigNumber.from(nftSaleInfo[1].hex);
   const salePrice = utils.formatEther(sellingPrice);
+=======
+  // More listings from same collection
+
+  const salePrice = parseInt(nftSaleInfo[1].hex, 16).toString();
+  const moreListings = [];
+ 
+>>>>>>> 2309461218cdfadbde1884c6e51ba2548ec5319b
   //Offers section
   const offerer = [];
   const offerValue = [];
@@ -168,15 +176,21 @@ export default function NftId({
     router.replace(router.asPath);
   };
   const cancelListing = async () => {
-    const signer = await library.getSigner();
+    try{
+  const signer = await library.getSigner();
     const contract = new Contract(marketContract, marketplaceABI, signer);
     const tx = await contract.cancelListing(collection, nftId);
     setLoading(true);
     await tx.wait();
     tx.hash && setLoading(false);
     router.replace(router.asPath);
+    } catch(err){
+      console.log(err)
+    }
+    
   };
   const updateListing = async () => {
+    try{
     const val = utils.parseEther(updateListingValue);
     const signer = await library.getSigner();
     const contract = new Contract(marketContract, marketplaceABI, signer);
@@ -186,9 +200,13 @@ export default function NftId({
     tx.hash && setLoading(false);
     setUpdateListingModal(false);
     router.replace(router.asPath);
+    } catch(err){
+      console.log(err)
+    }
+    
   };
   const makeOffer = async () => {
-    const signer = await library.getSigner();
+    try{
     const offerVal = parseInt(
       utils.parseEther(createOfferValue)._hex,
       16
@@ -214,8 +232,14 @@ export default function NftId({
     tx.hash && setLoading(false);
     setCreateOfferModal(false);
     router.replace(router.asPath);
+    } catch(err){
+      console.log(err)
+    }
+    const signer = await library.getSigner();
+    
   };
   const updateOffer = async () => {
+    try{
     const signer = await library.getSigner();
     const offerVal = parseInt(
       utils.parseEther(updateOfferValue)._hex,
@@ -242,8 +266,13 @@ export default function NftId({
     tx.hash && setLoading(false);
     setCreateOfferModal(false);
     router.replace(router.asPath);
+    } catch(err){
+      console.log(err)
+    }
+    
   };
   const cancelOffer = async () => {
+    try{
     const signer = await library.getSigner();
     const contract = new Contract(marketContract, marketplaceABI, signer);
     const tx = await contract.cancelOffer(collection, nftId);
@@ -251,8 +280,13 @@ export default function NftId({
     await tx.wait();
     tx.hash && setLoading(false);
     router.replace(router.asPath);
+    } catch(err){
+      console.log(err)
+    }
+    
   };
   const acceptOffer1 = async (offerVal, initiator) => {
+    try{
     const signer = library.getSigner();
     const instance = new Contract(tokenContract, tokenABI, signer);
     const balance = await instance.balanceOf(highestOfferInitiator);
@@ -285,8 +319,14 @@ export default function NftId({
     await tx.wait();
     tx.hash && setLoading(false);
     router.replace(router.asPath);
+    } catch(err){
+      console.log(err)
+    }
+
+    
   };
   const acceptOffer2 = async (offerVal, initiator) => {
+    try{
     const signer = library.getSigner();
     const instance = new Contract(tokenContract, tokenABI, signer);
     const balance = await instance.balanceOf(initiator);
@@ -312,6 +352,10 @@ export default function NftId({
     await tx.wait();
     tx.hash && setLoading(false);
     router.replace(router.asPath);
+    } catch(err){
+      console.log(err)
+    }
+    
   };
   return (
     <main className={styles.main}>
@@ -849,7 +893,7 @@ export async function getServerSideProps({ params, res }) {
         : tokenDetails;
       const { image, name } = await fetch(ipfsLink).then((r) => r.json());
       const imageUrl = image.includes("ipfs://", 0)
-        ? image.replace("ipfs://", "https://distant.mypinata.cloud/ipfs/")
+        ? image.replace("ipfs://", "https://ipfsfiles.distant.finance/ipfs/")
         : image;
       const obj = {
         image: imageUrl,
@@ -863,13 +907,13 @@ export async function getServerSideProps({ params, res }) {
   const tokenDetails = await instance.tokenURI(nftID);
   const owner = await instance.ownerOf(nftID);
   const ipfsLink = tokenDetails.includes("ipfs://", 0)
-    ? tokenDetails.replace("ipfs://", "https://distant.mypinata.cloud/ipfs/")
+    ? tokenDetails.replace("ipfs://", "https://ipfsfiles.distant.finance/ipfs/")
     : tokenDetails;
   const { image, description, name, attributes } = await fetch(ipfsLink).then(
     (r) => r.json()
   );
   const imageLink = image.includes("ipfs://", 0)
-    ? image.replace("ipfs://", "https://distant.mypinata.cloud/ipfs/")
+    ? image.replace("ipfs://", "https://ipfsfiles.distant.finance/ipfs/")
     : image;
   const collectionName = await instance.name();
   const ipfsData = [];
