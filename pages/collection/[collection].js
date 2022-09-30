@@ -47,98 +47,92 @@ export default function Home({ nftId, listings, obj }) {
   const [visibility, setVisibility] = useState(false);
   useEffect(() => {
     const main = async () => {
-      try{
-      const tokenId = nftId.map((nft) => nft.hex);
-      const addresses = listings.map((list) => list[0]);
-      const listingInfo = listings.map((list) => BigNumber.from(list[1].hex));
-      const itemId = tokenId.map((token) => parseInt(token, 16));
-      const prices = listingInfo.map((listing) => utils.formatEther(listing));
-      const lowestValue =
-        prices.length > 0 &&
-        prices.reduce((acc, cur) => (Number(acc) < Number(cur) ? acc : cur));
-      const allOffers = await itemId.map(async (item) => {
-        const x = await contracts.contractInstance.availableOffers(
-          collection,
-          item.toString()
-        );
-        const r = x[1].map((xs) => xs[1]);
-        const offers = r.map((v) => {
-          const hexValue = v._hex;
-          return parseInt(hexValue, 16);
-        });
-        const offerValues = offers.map((offer) => {
-          const v = BigNumber.from(offer.toString());
-          return utils.formatEther(v);
-        });
-        return offerValues;
-      });
-      const offers = [];
-      for (let i = 0; i < allOffers.length; i++) {
-        offers.push(await allOffers[i]);
-      }
-      const bestOffers = offers.map((offer) => {
-        if (offer.length > 1) {
-          return offer.reduce((cur, prev) =>
-            Number(cur) > Number(prev) ? Number(cur) : Number(prev)
+      try {
+        const tokenId = nftId.map((nft) => nft.hex);
+        const addresses = listings.map((list) => list[0]);
+        const listingInfo = listings.map((list) => BigNumber.from(list[1].hex));
+        const itemId = tokenId.map((token) => parseInt(token, 16));
+        const prices = listingInfo.map((listing) => utils.formatEther(listing));
+        const lowestValue =
+          prices.length > 0 &&
+          prices.reduce((acc, cur) => (Number(acc) < Number(cur) ? acc : cur));
+        const allOffers = await itemId.map(async (item) => {
+          const x = await contracts.contractInstance.availableOffers(
+            collection,
+            item.toString()
           );
+          const r = x[1].map((xs) => xs[1]);
+          const offers = r.map((v) => {
+            const hexValue = v._hex;
+            return parseInt(hexValue, 16);
+          });
+          const offerValues = offers.map((offer) => {
+            const v = BigNumber.from(offer.toString());
+            return utils.formatEther(v);
+          });
+          return offerValues;
+        });
+        const offers = [];
+        for (let i = 0; i < allOffers.length; i++) {
+          offers.push(await allOffers[i]);
         }
-        return offer;
-      });
-      const highestOffer =
-        bestOffers.length > 0 &&
-        bestOffers.reduce((acc, cur) =>
-          Number(acc) > Number(cur) ? Number(acc) : Number(cur)
-        );
-      const names = [];
-<<<<<<< HEAD
+        const bestOffers = offers.map((offer) => {
+          if (offer.length > 1) {
+            return offer.reduce((cur, prev) =>
+              Number(cur) > Number(prev) ? Number(cur) : Number(prev)
+            );
+          }
+          return offer;
+        });
+        const highestOffer =
+          bestOffers.length > 0 &&
+          bestOffers.reduce((acc, cur) =>
+            Number(acc) > Number(cur) ? Number(acc) : Number(cur)
+          );
+        const names = [];
 
-      const contract = new Contract(collection, nftABI, provider);
-      const imageLinks = await itemId.map(async (item) => {
-=======
-      
         const contract = new Contract(collection, nftABI, provider);
         const imageLinks = await itemId.map(async (item) => {
->>>>>>> 2309461218cdfadbde1884c6e51ba2548ec5319b
-        const x = await contract.tokenURI(item.toString());
-        const link = x.includes("ipfs://", 0) ? x.replace(
-          "ipfs://",
-          "https://ipfsfiles.distant.finance/ipfs/"
-        ) : x
-        const d = await fetch(link).then((r) => r.json());
-        const i = d.image.includes("ipfs://", 0) ? d.image.replace(
-          "ipfs://",
-          "https://ipfsfiles.distant.finance/ipfs/"
-        ) : d.image
-        const n = d.name;
-        names.push(n);
-        const supply = await contract.totalSupply();
-        const totalSupply = parseInt(supply._hex, 16);
-        setStats({
-          highestOffer: highestOffer,
-          floor: lowestValue,
-          listed: itemId.length,
+          const x = await contract.tokenURI(item.toString());
+          const link = x.includes("ipfs://", 0)
+            ? x.replace("ipfs://", "https://ipfsfiles.distant.finance/ipfs/")
+            : x;
+          const d = await fetch(link).then((r) => r.json());
+          const i = d.image.includes("ipfs://", 0)
+            ? d.image.replace(
+                "ipfs://",
+                "https://ipfsfiles.distant.finance/ipfs/"
+              )
+            : d.image;
+          const n = d.name;
+          names.push(n);
+          const supply = await contract.totalSupply();
+          const totalSupply = parseInt(supply._hex, 16);
+          setStats({
+            highestOffer: highestOffer,
+            floor: lowestValue,
+            listed: itemId.length,
+          });
+          return i;
         });
-        return i;
-      });
-      const arr = [];
-      for (let i = 0; i < value.length; i++) {
-        const object = {
-          tokenId: itemId[i],
-          seller: addresses[i],
-          price: value[i],
-          image: await imageLinks[i],
-          bestOffer: bestOffers[i],
-          name: names[i],
-        };
-        arr.push(object);
-        console.log(typeof bestOffers)
-        console.log( bestOffers.length)
+        const arr = [];
+        for (let i = 0; i < value.length; i++) {
+          const object = {
+            tokenId: itemId[i],
+            seller: addresses[i],
+            price: value[i],
+            image: await imageLinks[i],
+            bestOffer: bestOffers[i],
+            name: names[i],
+          };
+          arr.push(object);
+          console.log(typeof bestOffers);
+          console.log(bestOffers.length);
+        }
+        setListedNFTs(arr);
+      } catch (error) {
+        console.log(error);
       }
-      setListedNFTs(arr);
-      }catch(error){
-        console.log(error)
-      }
-      
     };
     main();
   }, [runEffect]);
@@ -317,18 +311,11 @@ export default function Home({ nftId, listings, obj }) {
                               <p>
                                 <span>Price</span> ${nft.price}
                               </p>
-<<<<<<< HEAD
                               <p>
                                 <span>Best Offer</span>{" "}
                                 {nft.bestOffer && `$${nft.bestOffer}`}
                               </p>
                             </div>
-=======
-                              {nft.bestOffer.length>0 && <p><span>Best Offer</span> ${nft.bestOffer}</p>}
-
-                           </div>
-                            
->>>>>>> 2309461218cdfadbde1884c6e51ba2548ec5319b
                           </div>
                         </div>
                       </a>

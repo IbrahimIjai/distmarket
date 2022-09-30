@@ -44,16 +44,8 @@ export default function NftId({
   const [attr, setAttr] = useState(false);
   const [desc, setDesc] = useState(false);
   // Props from getServerSideProps function. Destructuring and assignments
-<<<<<<< HEAD
   const sellingPrice = BigNumber.from(nftSaleInfo[1].hex);
   const salePrice = utils.formatEther(sellingPrice);
-=======
-  // More listings from same collection
-
-  const salePrice = parseInt(nftSaleInfo[1].hex, 16).toString();
-  const moreListings = [];
- 
->>>>>>> 2309461218cdfadbde1884c6e51ba2548ec5319b
   //Offers section
   const offerer = [];
   const offerValue = [];
@@ -176,186 +168,182 @@ export default function NftId({
     router.replace(router.asPath);
   };
   const cancelListing = async () => {
-    try{
-  const signer = await library.getSigner();
-    const contract = new Contract(marketContract, marketplaceABI, signer);
-    const tx = await contract.cancelListing(collection, nftId);
-    setLoading(true);
-    await tx.wait();
-    tx.hash && setLoading(false);
-    router.replace(router.asPath);
-    } catch(err){
-      console.log(err)
+    try {
+      const signer = await library.getSigner();
+      const contract = new Contract(marketContract, marketplaceABI, signer);
+      const tx = await contract.cancelListing(collection, nftId);
+      setLoading(true);
+      await tx.wait();
+      tx.hash && setLoading(false);
+      router.replace(router.asPath);
+    } catch (err) {
+      console.log(err);
     }
-    
   };
   const updateListing = async () => {
-    try{
-    const val = utils.parseEther(updateListingValue);
-    const signer = await library.getSigner();
-    const contract = new Contract(marketContract, marketplaceABI, signer);
-    const tx = await contract.updateListing(collection, nftId, val.toString());
-    setLoading(true);
-    await tx.wait();
-    tx.hash && setLoading(false);
-    setUpdateListingModal(false);
-    router.replace(router.asPath);
-    } catch(err){
-      console.log(err)
+    try {
+      const val = utils.parseEther(updateListingValue);
+      const signer = await library.getSigner();
+      const contract = new Contract(marketContract, marketplaceABI, signer);
+      const tx = await contract.updateListing(
+        collection,
+        nftId,
+        val.toString()
+      );
+      setLoading(true);
+      await tx.wait();
+      tx.hash && setLoading(false);
+      setUpdateListingModal(false);
+      router.replace(router.asPath);
+    } catch (err) {
+      console.log(err);
     }
-    
   };
   const makeOffer = async () => {
-    try{
-    const offerVal = parseInt(
-      utils.parseEther(createOfferValue)._hex,
-      16
-    ).toString();
-    const instance = new Contract(tokenContract, tokenABI, signer);
-    const approved = await instance.allowance(account, marketContract);
-    const approvedAmount = utils.formatEther(
-      parseInt(approved._hex, 16).toString()
-    );
-    if (Number(approvedAmount) < Number(createOfferValue)) {
-      const approval = await instance.increaseAllowance(
-        marketContract,
-        offerVal
+    try {
+      const offerVal = parseInt(
+        utils.parseEther(createOfferValue)._hex,
+        16
+      ).toString();
+      const instance = new Contract(tokenContract, tokenABI, signer);
+      const approved = await instance.allowance(account, marketContract);
+      const approvedAmount = utils.formatEther(
+        parseInt(approved._hex, 16).toString()
       );
+      if (Number(approvedAmount) < Number(createOfferValue)) {
+        const approval = await instance.increaseAllowance(
+          marketContract,
+          offerVal
+        );
+        setLoading(true);
+        await approval.wait();
+        approval.hash && setLoading(false);
+      }
+      const contract = new Contract(marketContract, marketplaceABI, signer);
+      const tx = await contract.createOffer(collection, nftId, offerVal);
       setLoading(true);
-      await approval.wait();
-      approval.hash && setLoading(false);
-    }
-    const contract = new Contract(marketContract, marketplaceABI, signer);
-    const tx = await contract.createOffer(collection, nftId, offerVal);
-    setLoading(true);
-    await tx.wait();
-    tx.hash && setLoading(false);
-    setCreateOfferModal(false);
-    router.replace(router.asPath);
-    } catch(err){
-      console.log(err)
+      await tx.wait();
+      tx.hash && setLoading(false);
+      setCreateOfferModal(false);
+      router.replace(router.asPath);
+    } catch (err) {
+      console.log(err);
     }
     const signer = await library.getSigner();
-    
   };
   const updateOffer = async () => {
-    try{
-    const signer = await library.getSigner();
-    const offerVal = parseInt(
-      utils.parseEther(updateOfferValue)._hex,
-      16
-    ).toString();
-    const instance = new Contract(tokenContract, tokenABI, signer);
-    const approved = await instance.allowance(account, marketContract);
-    const approvedAmount = utils.formatEther(
-      parseInt(approved._hex, 16).toString()
-    );
-    if (Number(approvedAmount) < Number(updateOfferValue)) {
-      const approval = await instance.increaseAllowance(
-        marketContract,
-        offerVal
+    try {
+      const signer = await library.getSigner();
+      const offerVal = parseInt(
+        utils.parseEther(updateOfferValue)._hex,
+        16
+      ).toString();
+      const instance = new Contract(tokenContract, tokenABI, signer);
+      const approved = await instance.allowance(account, marketContract);
+      const approvedAmount = utils.formatEther(
+        parseInt(approved._hex, 16).toString()
       );
+      if (Number(approvedAmount) < Number(updateOfferValue)) {
+        const approval = await instance.increaseAllowance(
+          marketContract,
+          offerVal
+        );
+        setLoading(true);
+        await approval.wait();
+        approval.hash && setLoading(false);
+      }
+      const contract = new Contract(marketContract, marketplaceABI, signer);
+      const tx = await contract.updateOffer(collection, nftId, offerVal);
       setLoading(true);
-      await approval.wait();
-      approval.hash && setLoading(false);
+      await tx.wait();
+      tx.hash && setLoading(false);
+      setCreateOfferModal(false);
+      router.replace(router.asPath);
+    } catch (err) {
+      console.log(err);
     }
-    const contract = new Contract(marketContract, marketplaceABI, signer);
-    const tx = await contract.updateOffer(collection, nftId, offerVal);
-    setLoading(true);
-    await tx.wait();
-    tx.hash && setLoading(false);
-    setCreateOfferModal(false);
-    router.replace(router.asPath);
-    } catch(err){
-      console.log(err)
-    }
-    
   };
   const cancelOffer = async () => {
-    try{
-    const signer = await library.getSigner();
-    const contract = new Contract(marketContract, marketplaceABI, signer);
-    const tx = await contract.cancelOffer(collection, nftId);
-    setLoading(true);
-    await tx.wait();
-    tx.hash && setLoading(false);
-    router.replace(router.asPath);
-    } catch(err){
-      console.log(err)
+    try {
+      const signer = await library.getSigner();
+      const contract = new Contract(marketContract, marketplaceABI, signer);
+      const tx = await contract.cancelOffer(collection, nftId);
+      setLoading(true);
+      await tx.wait();
+      tx.hash && setLoading(false);
+      router.replace(router.asPath);
+    } catch (err) {
+      console.log(err);
     }
-    
   };
   const acceptOffer1 = async (offerVal, initiator) => {
-    try{
-    const signer = library.getSigner();
-    const instance = new Contract(tokenContract, tokenABI, signer);
-    const balance = await instance.balanceOf(highestOfferInitiator);
-    const approved = await instance.allowance(
-      highestOfferInitiator,
-      marketContract
-    );
-    const initiatorBalance = utils.formatEther(
-      parseInt(balance._hex, 16).toString()
-    );
-    const initiatorApproval = utils.formatEther(
-      parseInt(approved._hex, 16).toString()
-    );
-    if (
-      Number(initiatorBalance) < offerVal &&
-      Number(initiatorApproval) < offerVal
-    ) {
-      console.log(
-        "Offer Initiator has insufficient funds/approval for this Transaction. Try someone else"
+    try {
+      const signer = library.getSigner();
+      const instance = new Contract(tokenContract, tokenABI, signer);
+      const balance = await instance.balanceOf(highestOfferInitiator);
+      const approved = await instance.allowance(
+        highestOfferInitiator,
+        marketContract
       );
-      //I want to add a modal that pops up for 5 seconds, telling a user that the Offerer has insuffficient funds
+      const initiatorBalance = utils.formatEther(
+        parseInt(balance._hex, 16).toString()
+      );
+      const initiatorApproval = utils.formatEther(
+        parseInt(approved._hex, 16).toString()
+      );
+      if (
+        Number(initiatorBalance) < offerVal &&
+        Number(initiatorApproval) < offerVal
+      ) {
+        console.log(
+          "Offer Initiator has insufficient funds/approval for this Transaction. Try someone else"
+        );
+        //I want to add a modal that pops up for 5 seconds, telling a user that the Offerer has insuffficient funds
+      }
+      const contract = new Contract(marketContract, marketplaceABI, signer);
+      const tx = await contract.acceptOffer(
+        collection,
+        nftId,
+        highestOfferInitiator
+      );
+      setLoading(true);
+      await tx.wait();
+      tx.hash && setLoading(false);
+      router.replace(router.asPath);
+    } catch (err) {
+      console.log(err);
     }
-    const contract = new Contract(marketContract, marketplaceABI, signer);
-    const tx = await contract.acceptOffer(
-      collection,
-      nftId,
-      highestOfferInitiator
-    );
-    setLoading(true);
-    await tx.wait();
-    tx.hash && setLoading(false);
-    router.replace(router.asPath);
-    } catch(err){
-      console.log(err)
-    }
-
-    
   };
   const acceptOffer2 = async (offerVal, initiator) => {
-    try{
-    const signer = library.getSigner();
-    const instance = new Contract(tokenContract, tokenABI, signer);
-    const balance = await instance.balanceOf(initiator);
-    const approved = await instance.allowance(initiator, marketContract);
-    const initiatorBalance = utils.formatEther(
-      parseInt(balance._hex, 16).toString()
-    );
-    const initiatorApproval = utils.formatEther(
-      parseInt(approved._hex, 16).toString()
-    );
-    if (
-      Number(initiatorBalance) < offerVal &&
-      Number(initiatorApproval) < offerVal
-    ) {
-      console.log(
-        "Offer Initiator has insufficient funds/approval for this Transaction. Try someone else"
+    try {
+      const signer = library.getSigner();
+      const instance = new Contract(tokenContract, tokenABI, signer);
+      const balance = await instance.balanceOf(initiator);
+      const approved = await instance.allowance(initiator, marketContract);
+      const initiatorBalance = utils.formatEther(
+        parseInt(balance._hex, 16).toString()
       );
-      //I want to add a modal that pops up for 5 seconds, telling a user that the Offerer has insuffficient funds
+      const initiatorApproval = utils.formatEther(
+        parseInt(approved._hex, 16).toString()
+      );
+      if (
+        Number(initiatorBalance) < offerVal &&
+        Number(initiatorApproval) < offerVal
+      ) {
+        console.log(
+          "Offer Initiator has insufficient funds/approval for this Transaction. Try someone else"
+        );
+        //I want to add a modal that pops up for 5 seconds, telling a user that the Offerer has insuffficient funds
+      }
+      const contract = new Contract(marketContract, marketplaceABI, signer);
+      const tx = await contract.acceptOffer(collection, nftId, initiator);
+      setLoading(true);
+      await tx.wait();
+      tx.hash && setLoading(false);
+      router.replace(router.asPath);
+    } catch (err) {
+      console.log(err);
     }
-    const contract = new Contract(marketContract, marketplaceABI, signer);
-    const tx = await contract.acceptOffer(collection, nftId, initiator);
-    setLoading(true);
-    await tx.wait();
-    tx.hash && setLoading(false);
-    router.replace(router.asPath);
-    } catch(err){
-      console.log(err)
-    }
-    
   };
   return (
     <main className={styles.main}>
