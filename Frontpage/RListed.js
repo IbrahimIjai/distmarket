@@ -5,7 +5,7 @@ import { useWeb3React } from "@web3-react/core";
 import { useState, useEffect } from "react";
 import { Contract, utils } from "ethers";
 import Link from "next/link";
-import { marketplaceABI, contracts, nftABI } from "../constants/ABIs";
+import { contracts, nftABI } from "../constants/ABIs";
 
 const RListed = () => {
   const { active } = useWeb3React();
@@ -23,12 +23,8 @@ const RListed = () => {
   useEffect(() => {
     const main = async () => {
       const recentListings = [];
-      const contract = new Contract(
-        contracts.marketplace,
-        marketplaceABI,
-        contracts.provider
-      );
       try {
+        const contract = contracts.contractInstance;
         for (let i = 0; i < SupportedCollections.length; i++) {
           const listings = await contract.availableListings(
             SupportedCollections[i].collectionAddress
@@ -42,7 +38,7 @@ const RListed = () => {
             let data = listings[1].length;
             let dat = data - 1;
             let tokenId = parseInt(listings[0][dat]._hex, 16);
-            let value = parseInt(listings[1][dat][1]._hex, 16);
+            let value = utils.formatEther(listings[1][dat][1]);
             let tokenInfo = await instance.tokenURI(tokenId.toString());
             let info = tokenInfo.includes("ipfs://", 0)
               ? tokenInfo.replace(
@@ -62,7 +58,7 @@ const RListed = () => {
               tokenId: tokenId,
               collectionAddress: SupportedCollections[i].collectionAddress,
               address: listings[1][dat][0],
-              price: utils.formatEther(value.toString()),
+              price: value,
               name: name,
               image: imageFile,
             };
