@@ -1,17 +1,15 @@
 import styles from "../../styles/nft.module.css";
 import { useWeb3React } from "@web3-react/core";
+import Typical from "react-typical";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Contract, utils, BigNumber } from "ethers";
 import { nftABI, contracts } from "../../constants/ABIs";
+import Loading from "../../components/Loading";
 import { BsThreeDots, BsGlobe, BsTwitter, BsTelegram } from "react-icons/bs";
 import Link from "next/link";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import {
-  AiOutlineCheckCircle,
-  AiOutlineExclamationCircle,
-} from "react-icons/ai";
 
 const collectionDataQuery = `
   query collectionDataQuery($address: ID){
@@ -33,6 +31,8 @@ export default function Home({ nftId, listings, obj }) {
   const [stats, setStats] = useState({});
   const [visibility, setVisibility] = useState(false);
   const [runEffect, setRunEffect] = useState(false);
+  const [load, setLoad] = useState(false);
+  const [nftLoad, setNftLoad] = useState(false);
   // Other hooks
   const router = useRouter();
   const { collection } = router.query;
@@ -48,6 +48,19 @@ export default function Home({ nftId, listings, obj }) {
     }, 2000);
     clearTimeout(init);
   }
+  setTimeout(() => {
+    setLoad(true);
+  }, 20000);
+  const loadNfts = setTimeout(() => {
+    setNftLoad(true);
+    console.log("Timeout ran");
+  }, 60000);
+  if (listedNFTs.length > 0) {
+    setTimeout(() => {
+      setNftLoad(false);
+    }, 1000);
+    clearTimeout(loadNfts);
+  }
 
   useEffect(() => {
     const main = async () => {
@@ -58,6 +71,8 @@ export default function Home({ nftId, listings, obj }) {
         const listingInfo = listings.map((list) => BigNumber.from(list[1].hex));
         const itemId = tokenId.map((token) => parseInt(token, 16));
         const prices = listingInfo.map((listing) => utils.formatEther(listing));
+        // Get Approval
+        const contract = new Contract(collection, nftABI, provider);
         // Floor price
         const lowestValue =
           prices.length > 0 &&
@@ -101,7 +116,6 @@ export default function Home({ nftId, listings, obj }) {
           );
         const names = [];
         // Call data from contracts for the NFts
-        const contract = new Contract(collection, nftABI, provider);
         const imageLinks = await itemId.map(async (item) => {
           const x = await contract.tokenURI(item.toString());
           const link = x.includes("ipfs://", 0)
@@ -114,8 +128,7 @@ export default function Home({ nftId, listings, obj }) {
                 "https://ipfsfiles.distant.finance/ipfs/"
               )
             : d.image;
-          const n = d.name;
-          names.push(n);
+          names.push(d.name);
           setStats({
             highestOffer: highestOffer,
             floor: lowestValue,
@@ -162,9 +175,10 @@ export default function Home({ nftId, listings, obj }) {
   return (
     <>
       {!active ? (
-        <h1 className={styles.notActive}>Please Connect Wallet first</h1>
+        <h1 className={styles.notActive}>Please Connect Wallet</h1>
       ) : (
         <>
+          {!load && <Loading />}
           <div className={styles.banner}>
             <div className={styles.bannerImage}>
               <Image
@@ -264,70 +278,79 @@ export default function Home({ nftId, listings, obj }) {
             </div>
           </div>
           <div className={styles.nfts}>
-            <div className={styles.nftFlex}>
+            <div className={styles["nftFlex"] + " " + styles["nftGrid"]}>
               {listedNFTs.length < 1 ? (
-                <h1 style={{ textAlign: "center" }}>Loading...</h1>
+                <h1 style={{ textAlign: "center" }}>
+                  {!nftLoad ? (
+                    "Loading..."
+                  ) : (
+                    <Typical
+                      steps={["Loading failed", 2000, "Try hard refresh", 2000]}
+                      loop={Infinity}
+                      wrapper={"p"}
+                    />
+                  )}
+                </h1>
               ) : (
                 listedNFTs.map((nft) => {
                   return (
-                    <Link
-                      key={nft.tokenId}
-                      href={`/collection/${collection}/${nft.tokenId}`}
-                      prefetch={false}
-                    >
-                      <a className={styles.nft}>
-                        <div className={styles.nft}>
-                          <div className={styles.nftImage}>
-                            <div className={styles.firstLayer}>
-                              <div className={styles.firstLayerTop}>
-                                <span>
-                                  <AiOutlineCheckCircle />{" "}
-                                  <AiOutlineExclamationCircle />
-                                </span>
-                                <span>
-                                  <p>
-                                    {nft.seller.slice(0, 4)}...
-                                    {nft.seller.slice(35, 39)}
-                                  </p>
-                                </span>
+                    <div className={styles.card}>
+                      <Link
+                        key={nft.tokenId}
+                        href={`/collection/${collection}/${nft.tokenId}`}
+                        prefetch={false}
+                      >
+                        <a>
+                          <div className={styles.nftCard}>
+                            <div className={styles.nft}>
+                              <div className={styles.holster}>
+                                {" "}
+                                <Image
+                                  src={nft.image}
+                                  alt={nft.tokenId}
+                                  layout="fill"
+                                  objectFit="cover"
+                                  className={styles.image}
+                                />
+                                <div className={styles.overlay}>
+                                  <div className={styles.topOverlay}>
+                                    <div className={styles.approvalClass}>
+                                      {/* <AiOutlineCheckCircle />{" "}
+                                  <AiOutlineExclamationCircle /> */}
+                                      <div className={styles.indicator}></div>
+                                    </div>
+                                    <div className={styles.approvalText}>
+                                      {" "}
+                                      <p>Active</p>
+                                    </div>
+                                  </div>
+                                  <div className={styles.bottomOverlay}>
+                                    <h1>{nft.name}</h1>
+                                  </div>
+                                </div>
                               </div>
-                              <div className={styles.firstLayerButtom}>
+                            </div>
+                            <div className={styles.content}>
+                              <div className={styles.contentPrice}>
                                 <p>
-                                  {" "}
-                                  <h3>{nft.name}</h3>
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className={styles.image}>
-                              <Image
-                                src={nft.image}
-                                alt={nft.tokenId}
-                                layout="fill"
-                                objectFit="cover"
-                              />
-                            </div>
-                          </div>
-                          <div className={styles.content}>
-                            <div className={styles.contentCont}>
-                              <p>
-                                <em>
                                   List Price: <span>{`$${nft.price}`}</span>
-                                </em>
-                              </p>
-                              <p>
+                                </p>
                                 {nft.bestOffer.length > 0 && (
-                                  <em>
+                                  <p>
                                     Best Offer:{" "}
                                     <span>{`$${nft.bestOffer}`}</span>
-                                  </em>
+                                  </p>
                                 )}
-                              </p>
+                              </div>
+                              <div className={styles.contentSeller}>
+                                {nft.seller.slice(0, 4)}...
+                                {nft.seller.slice(35, 39)}{" "}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </a>
-                    </Link>
+                        </a>
+                      </Link>
+                    </div>
                   );
                 })
               )}

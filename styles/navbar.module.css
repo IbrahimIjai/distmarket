@@ -10,7 +10,7 @@
   -ms-flex-align: center;
   align-items: center;
   /* overflow-x: hidden; */
-  padding: 0 7vw;
+  padding: 0 2vw;
   color: #757575;
   position: sticky;
   left: 0;
@@ -28,6 +28,7 @@
 }
 .logo {
   font-weight: bold;
+  padding-left: 2vw;
 }
 .collections {
   font-weight: normal;

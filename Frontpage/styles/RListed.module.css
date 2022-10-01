@@ -1,19 +1,16 @@
 .main {
   position: relative;
+  padding: 0 2vw;
 }
 .text {
   display: flex;
-  background-color: #5e0684;
-  padding: 0 20px;
-  align-items: center;
-  justify-content: space-between;
-  justify-content: center;
-  font-size: clamp(1rem, 1.4rem, 1.6vw);
+  padding: 20px 20px 0 20px;
+  font-size: clamp(1.3rem, 1.7rem, 1.9vw);
 }
 .text h3 {
   color: white;
-  margin: 12px;
-  font-weight: 400;
+  margin: 4px;
+  font-weight: 600;
 }
 .SliderContainer {
   width: 100%;
@@ -21,7 +18,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 30px 7vw;
+  padding: 20px 0;
 }
 
 .cards {
@@ -60,6 +57,7 @@
   overflow: hidden;
   animation: move 4s ease-in-out 4 alternate;
   transition: transform 500ms;
+  border: 0.4px solid #2fc0db;
 }
 .cards:hover > div {
   animation-play-state: paused;

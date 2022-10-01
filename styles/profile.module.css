@@ -2,6 +2,7 @@
   min-height: 100vh;
   padding: 0 7vw;
   background-color: #f0f0f0;
+  background-image: url("/white.png");
   color: #000;
 }
 .main .container {
@@ -12,7 +13,7 @@
 .main .container .user {
   display: block;
   margin: 20px auto;
-  color: purple;
+  color: black;
 }
 .main .container .ownedItems {
   display: grid;
@@ -35,7 +36,17 @@
   padding: 32px;
   text-decoration: none;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+  transition: all 500ms ease-in-out;
   border: 2px solid rgba(0, 0, 0, 0.2);
+}
+.main .container .ownedItems .nft:hover {
+  transform: translateY(-5px);
+}
+.main .container .ownedItems .nft:hover div > span {
+  transform: scale(1.05);
+}
+.main .container .ownedItems .nft div > span {
+  transition: all 500ms ease-in-out;
 }
 .main .container .ownedItems .nft .image {
   position: relative;

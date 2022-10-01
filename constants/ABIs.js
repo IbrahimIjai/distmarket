@@ -1765,7 +1765,6 @@ const tokenInstance = new Contract(token, tokenABI, provider);
 const contracts = {
   marketplace: marketplace,
   token: token,
-  defaultProfile: "0xeae38e8d41aecc027e1b68c31f7039ae95651d4d",
   mumbai: mumbai,
   deadAddress: "0x0000000000000000000000000000000000000000",
   queryUrl: "https://api.thegraph.com/subgraphs/name/steffqing/721-clone",

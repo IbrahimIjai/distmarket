@@ -1,3 +1,14 @@
+.notActive {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 500;
+  color: gray;
+}
+
 .header {
   background-color: black;
   background-image: url("/desktop-black.png");
@@ -62,7 +73,7 @@
 }
 
 .description {
-  padding: 30px, 7vw;
+  padding: 30px 7vw;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -93,119 +104,6 @@
   padding: 10px 0;
 }
 
-.nfts {
-  padding: 0 7vw;
-  margin-bottom: 40px;
-}
-.nfts .nftFlex {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  grid-auto-rows: 1fr;
-  grid-auto-flow: dense;
-  justify-items: center;
-  margin: 1rem;
-  gap: 25px;
-}
-.nfts .nftFlex .nft {
-  height: 360px;
-  width: 330px;
-  border-radius: 25px;
-  display: flex;
-  flex-direction: column;
-  background-color: #232121;
-  overflow: hidden;
-  will-change: transform;
-  border-radius: 8px;
-}
-.nfts .nftFlex .nft .nftImage {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  transition: all 0.8s ease-out;
-}
-.nfts .nftFlex .nft .nftImage .firstLayer {
-  position: absolute;
-  transition: all 0.8s ease-out;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  z-index: 0;
-  height: 100%;
-  width: 100%;
-  padding: 1rem;
-  background: rgba(23, 20, 20, 0.76);
-  transition: 1.5s ease-out;
-}
-.nfts .nftFlex .nft .nftImage .firstLayer .firstLayerTop {
-  display: flex;
-  flex-direction: row;
-}
-.nfts .nftFlex .nft .nftImage .firstLayer .firstLayerTop span {
-  padding: 0.7rem;
-}
-@-webkit-keyframes move {
-  from {
-    z-index: 0;
-  }
-  to {
-    z-index: 5;
-  }
-}
-@keyframes move {
-  from {
-    z-index: 0;
-  }
-  to {
-    z-index: 5;
-  }
-}
-.nfts .nftFlex .nft .nftImage .firstLayer:hover {
-  -webkit-animation: move 3s;
-          animation: move 3s;
-}
-.nfts .nftFlex .nft .nftImage:hover .firstLayer {
-  -webkit-animation: move 3s;
-          animation: move 3s;
-}
-.nfts .nftFlex .nft .content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: start;
-  padding: 10px 20px;
-  align-items: center;
-  justify-content: center;
-}
-.nfts .nftFlex .nft .content p {
-  font-size: 0.855rem;
-  letter-spacing: 1.2px;
-}
-.nfts .nftFlex .nft .content p span {
-  color: #2fc0db;
-  font-weight: 700;
-}
-.nfts .nftFlex .nft .content .contentCont {
-  border: 0.3px solid rgb(8, 100, 107);
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  padding: 0.7rem;
-  border-radius: 0.7rem;
-  margin: 0.15rem;
-}
-
-.notActive {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100%;
-  font-size: 20px;
-  font-weight: 500;
-  color: gray;
-}
-
 .loadingModal {
   background-color: rgba(0, 0, 0, 0.7);
   padding: 95px 24px;
@@ -230,4 +128,235 @@
   padding-top: 30px;
   color: #2fc0db;
   color: #fff;
+}
+
+.nfts {
+  padding: 0 2vw;
+  margin-bottom: 40px;
+}
+.nfts .nftGrid {
+  display: grid;
+}
+.nfts .nftFlex {
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-auto-rows: 1fr;
+  grid-auto-flow: dense;
+  gap: 16px;
+}
+@media (min-width: 800px) {
+  .nfts .nftFlex {
+    gap: 24px;
+  }
+}
+@media (min-width: 1200px) {
+  .nfts .nftFlex {
+    gap: 32px;
+  }
+}
+.nfts .nftFlex .card {
+  height: 100%;
+  position: relative;
+  isolation: isolate;
+}
+.nfts .nftFlex .card .nftCard {
+  display: flex;
+  flex-direction: column;
+  transition: all 1s ease-in-out;
+  border-radius: 8px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  position: relative;
+  text-decoration: none;
+  transform: translateZ(0px);
+  height: 100%;
+  flex: 1 1 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 2px, rgba(0, 0, 0, 0.05) 0px 2px 5px, rgba(0, 0, 0, 0.04) 0px 8px 40px;
+}
+.nfts .nftFlex .card .nftCard .nft {
+  display: flex;
+  flex-grow: 0;
+  background-color: #232121;
+  min-height: 390px;
+  flex-direction: column;
+  box-shadow: 0px 10px 20px rgba(250, 250, 250, 0.1);
+  transition: all 1s ease-in-out;
+  will-change: transform;
+  position: relative;
+  color: currentcolor;
+  background-size: cover;
+  overflow: hidden;
+  background-position: center center;
+  transition: all 1s ease-in-out;
+}
+.nfts .nftFlex .card .nftCard .nft .holster {
+  transition: all 400ms ease-in-out;
+}
+.nfts .nftFlex .card .nftCard .nft .holster:hover > span {
+  background: rgba(23, 20, 20, 0.76) !important;
+}
+.nfts .nftFlex .card .nftCard .nft .holster > span {
+  background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.438)) !important;
+}
+.nfts .nftFlex .card .nftCard .nft .holster .image {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  transition: transform 500ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.nfts .nftFlex .card .nftCard .nft .holster .image img {
+  -o-object-fit: cover;
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  transition: transform 500ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.nfts .nftFlex .card .nftCard .nft .holster .overlay {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 32px;
+  width: 100%;
+  z-index: 1;
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  font-family: inherit;
+  align-items: flex-start;
+  font-size: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  justify-content: space-between;
+}
+.nfts .nftFlex .card .nftCard .nft .holster .overlay .topOverlay {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  opacity: 0.07;
+}
+.nfts .nftFlex .card .nftCard .nft .holster .overlay .topOverlay .approvalClass {
+  border-radius: 50%;
+  background: rgb(77, 226, 77);
+  padding: 8px;
+  display: block;
+  position: relative;
+  height: 30px;
+  width: 30px;
+}
+.nfts .nftFlex .card .nftCard .nft .holster .overlay .topOverlay .approvalText {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.nfts .nftFlex .card .nftCard .nft .holster .overlay .topOverlay .approvalText p {
+  letter-spacing: 1px;
+}
+.nfts .nftFlex .card .nftCard .nft .holster .overlay .bottomOverlay h1 {
+  color: #fff;
+  word-break: break-word;
+  line-height: 1;
+  font-size: 33px;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+.nfts .nftFlex .card .nftCard .nft .holster .content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: start;
+  padding: 10px 20px;
+  align-items: center;
+  justify-content: center;
+}
+.nfts .nftFlex .card .nftCard .nft .holster .content p {
+  font-size: 0.855rem;
+  letter-spacing: 1.2px;
+}
+.nfts .nftFlex .card .nftCard .nft .holster .content p span {
+  color: #2fc0db;
+  font-weight: 700;
+}
+.nfts .nftFlex .card .nftCard .nft .holster .content .contentCont {
+  border: 0.3px solid rgb(8, 100, 107);
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem;
+  border-radius: 0.7rem;
+  margin: 0.15rem;
+}
+.nfts .nftFlex .card .nftCard:hover .nft {
+  transition: all 1s ease-in-out;
+}
+.nfts .nftFlex .card .nftCard:hover .nft .holster {
+  transition: all 1s ease-in-out;
+}
+.nfts .nftFlex .card .nftCard:hover .nft .holster .overlay {
+  transition: all 1s ease-in-out;
+}
+.nfts .nftFlex .card .nftCard:hover .nft .holster .overlay .topOverlay {
+  -webkit-animation: display 1000ms ease-in-out forwards;
+          animation: display 1000ms ease-in-out forwards;
+}
+.nfts .nftFlex .card .nftCard .content {
+  display: flex;
+  justify-content: space-between;
+  height: 120px;
+  align-items: center;
+  background-color: #161515;
+  font-size: clamp(1.25rem, 1.44rem, 1.76vw);
+  padding: 0 20px;
+}
+.nfts .nftFlex .card .nftCard .content .contentPrice {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@-webkit-keyframes display {
+  0% {
+    opacity: 0.1;
+  }
+  20% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  73% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes display {
+  0% {
+    opacity: 0.1;
+  }
+  20% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  73% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
 }/*# sourceMappingURL=nft.module.css.map */

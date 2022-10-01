@@ -6,9 +6,10 @@ import {
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
 } from "react-icons/md";
-import { IoIosArrowDown, IoIosCloseCircleOutline } from "react-icons/io";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useState, useEffect } from "react";
 import HashLoader from "react-spinners/HashLoader";
+import Loaders from "../../../components/Loaders";
 import { Contract, ethers, BigNumber, utils } from "ethers";
 import {
   marketplaceABI,
@@ -41,6 +42,10 @@ export default function NftId({
   const [verificationDisplay, setVerificationDisplay] = useState(false);
   const [runEffect, setRunEffect] = useState(false);
   const [userBalance, setUserBalance] = useState(null);
+  const [load, setLoad] = useState(false);
+  const loadSite = setTimeout(() => {
+    setLoad(true);
+  }, 3300);
   // Array dependency function
   const init = setTimeout(() => {
     setRunEffect(true);
@@ -50,6 +55,7 @@ export default function NftId({
       setRunEffect(false);
     }, 2000);
     clearTimeout(init);
+    clearTimeout(loadSite);
   }
 
   useEffect(() => {
@@ -367,14 +373,16 @@ export default function NftId({
       console.log(err);
     }
   };
+
   return (
     <main className={styles.main}>
+      {!load && <Loaders />}
       <div className={styles.container}>
         <div className={styles.headerContainer}>
           <div className={styles.imageContainer}>
             <Image
               src={ipfsData[0]}
-              alt={ipfsData[0]}
+              alt={ipfsData[4]}
               layout="fill"
               objectFit="cover"
             />
@@ -428,16 +436,15 @@ export default function NftId({
             <div className={styles.purchase}>
               <div className={styles.buy}>
                 <span>Sale price</span>
-                <h3>
-                  - KCS{" "}
-                  <span>
-                    {salePrice === "0" ? (
-                      "Not for Sale"
-                    ) : (
-                      <span>(${salePrice})</span>
-                    )}
-                  </span>
-                </h3>
+                {!salePrice === "0.0" ? (
+                  <h3>
+                    {salePrice} USDT <span>-</span>
+                  </h3>
+                ) : (
+                  <h3>
+                    - USDT<span>Not for Sale</span>{" "}
+                  </h3>
+                )}
                 <div
                   onClick={
                     account === ipfsData[5] && deadAddress === nftSaleInfo[0]
@@ -848,7 +855,7 @@ export default function NftId({
                         <div className={styles.imageContainer}>
                           <Image
                             src={listing.image}
-                            alt={listing.image}
+                            alt={listing.name}
                             layout="fill"
                             objectFit="cover"
                             style={{ padding: "0 20px" }}

@@ -12,19 +12,14 @@ export default function Home({ addresses }) {
     setLoad(true);
   }, 20000);
   return (
-    <>
-      {load ? (
-        <main>
-          <Hero />
-          <RListed />
-          <PopularCollection address={addresses} />
-          <Mint1 />
-          <Mint />
-        </main>
-      ) : (
-        <Loader />
-      )}
-    </>
+    <main>
+      {!load && <Loader />}
+      <Hero />
+      <RListed />
+      <PopularCollection address={addresses} />
+      <Mint1 />
+      <Mint />
+    </main>
   );
 }
 

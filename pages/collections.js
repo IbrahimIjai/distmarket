@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import styles from "../styles/collections.module.css";
-import banner from "../Frontpage/img/banner.jpg";
+import styles from "../styles/allCollections.module.css";
+import banner from "../assets/banner.png";
 import { Contract, ethers } from "ethers";
 import SupportedCollections from "../SupportedCollections";
 import { marketplaceABI, contracts } from "../constants/ABIs";
 
 export default function Collections({ coll }) {
+  console.log(coll);
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -30,7 +31,7 @@ export default function Collections({ coll }) {
               prefetch={false}
             >
               <a>
-                <div>
+                <div className={styles.imageHolster}>
                   <Image
                     src="/5951.png"
                     layout="fill"

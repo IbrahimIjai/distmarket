@@ -2,6 +2,9 @@ import styles from "./styles/mint.module.css";
 const Mint1 = () => {
   return (
     <main className={styles.mint1}>
+      <div className={styles.text}>
+        <h3>NFT Minter</h3>
+      </div>
       <div className={styles.cards}>
         <div className={styles.card}>
           <div className={styles.card__title}>

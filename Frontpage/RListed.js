@@ -99,7 +99,7 @@ const RListed = () => {
                     />
                     <div className={styles.description}>
                       <h3>{nft.name}</h3>
-                      <p>Price tag: ${nft.price} </p>
+                      <p>Sale price: ${nft.price} </p>
                     </div>
                   </div>
                 </a>

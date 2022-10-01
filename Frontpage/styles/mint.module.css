@@ -117,7 +117,17 @@
 }
 
 .mint1 {
-  padding: 0 7vw;
+  padding: 0 2vw;
+}
+.mint1 .text {
+  display: flex;
+  padding: 20px 20px 0 20px;
+  font-size: clamp(1.3rem, 1.7rem, 1.9vw);
+}
+.mint1 .text h3 {
+  color: white;
+  margin: 4px;
+  font-weight: 600;
 }
 .mint1 .cards {
   display: flex;
@@ -166,6 +176,7 @@
 .mint1 .card__body {
   color: rgba(255, 255, 255, 0.9333333333);
   overflow-y: hidden;
+  text-align: center;
 }
 .mint1 .card__body p {
   margin: 0;

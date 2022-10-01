@@ -1,14 +1,10 @@
 import styles from "../../styles/profile.module.css";
 import Image from "next/image";
-import { Contract, utils, ethers, BigNumber } from "ethers";
-import { useWeb3React } from "@web3-react/core";
-import { nftABI, marketplaceABI, contracts } from "../../constants/ABIs";
+import { contracts } from "../../constants/ABIs";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-
-const APIURL = "https://api.thegraph.com/subgraphs/name/steffqing/721-clone";
 
 export default function Profile({ profile }) {
   const router = useRouter();
@@ -22,9 +18,6 @@ export default function Profile({ profile }) {
     }, 2000);
     clearTimeout(init);
   }
-  const provider = new ethers.providers.JsonRpcProvider(contracts.mumbai);
-  const marketContract = contracts.marketplace;
-  const deadAddress = contracts.deadAddress;
   const [allData, setAllData] = useState([]);
   const [graphData, setGraphData] = useState([]);
   const addressQuery = `
@@ -43,10 +36,9 @@ export default function Profile({ profile }) {
   `;
   useEffect(() => {
     const main = async () => {
-      // const contract = new Contract(marketContract, marketplaceABI, provider);
       const array = [];
       const client = new ApolloClient({
-        uri: APIURL,
+        uri: contracts.queryUrl,
         cache: new InMemoryCache(),
       });
       client
@@ -59,16 +51,20 @@ export default function Profile({ profile }) {
         .then((data) => setGraphData(data.data.account.tokens))
         .catch((err) => console.log("Error fetching data: ", err));
       for (let i = 0; i < graphData.length; i++) {
-        const url = graphData[i].tokenURI.replace(
-          "ipfs://",
-          "https://ipfsfiles.distant.finance/ipfs/"
-        );
+        const url = graphData[i].tokenURI.includes("ipfs://", 0)
+          ? graphData[i].tokenURI.replace(
+              "ipfs://",
+              "https://ipfsfiles.distant.finance/ipfs/"
+            )
+          : graphData[i].tokenURI;
         const content = await fetch(url);
         const link = await content.json();
-        const image = link.image.replace(
-          "ipfs://",
-          "https://ipfsfiles.distant.finance/ipfs/"
-        );
+        const image = link.image.includes("ipfs://", 0)
+          ? link.image.replace(
+              "ipfs://",
+              "https://ipfsfiles.distant.finance/ipfs/"
+            )
+          : link.image;
         // const listingExists = await contract.sellNFT(
         //   graphData[i].collection.id,
         //   graphData[i].identifier
