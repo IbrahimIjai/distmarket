@@ -38,5 +38,4 @@ export default [
     tokenId: 4,
     collectionAddress: "0x81d028a07fd843c549b9c634cb9e99419c42a0ee",
     price: 45,
-  },
-];
+  },];
