@@ -1,21 +1,34 @@
+import { DivArt_banner } from "./assets/DivArt_banner.png";
+import { VixenPunk_banner } from "./assets/VixenPunk_banner.png";
+import { VixenPups_banner } from "./assets/VixenPups_banner.png";
+import { DivArt_placeholder } from "./assets/DivArt_placeholder.png";
+import { VixenPunk_placeholder } from "./assets/VixenPunk_placeholder.png";
+import { VixenPups_placeholder } from "./assets/VixenPups_placeholder.png";
+
 export default [
   {
     collectionName: "Eyeballz",
     collectionAddress: "0x02f0A9f1e8C1B58107D1c8740d49Ad2999A45c67",
     collectionTicker: "Eyeballz",
     collectionSupply: 10,
+    banner: DivArt_banner,
+    placeholder: DivArt_placeholder,
   },
   {
     collectionName: "Crazy Arts",
     collectionAddress: "0xBE3bbf00ce1b8F27CA21821B15CBe39d816416B0",
     collectionTicker: "CRZY",
     collectionSupply: 10,
+    banner: VixenPunk_banner,
+    placeholder: VixenPunk_placeholder,
   },
   {
     collectionName: "Crazy Arts 2nd Edition",
     collectionAddress: "0x81D028A07Fd843C549b9C634cb9E99419c42a0Ee",
     collectionTicker: "CRZY2",
     collectionSupply: 10,
+    banner: VixenPups_banner,
+    placeholder: VixenPups_placeholder,
   },
   {
     collectionName: "Rogue Collection",

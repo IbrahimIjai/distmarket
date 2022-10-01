@@ -68,7 +68,6 @@ $darkModeColor: #2fc0db;
   height: fit-content;
   display: flex;
   justify-content: center;
-  // align-items: center;
   flex-direction: column;
   .key {
     height: 100px;
@@ -106,13 +105,20 @@ $darkModeColor: #2fc0db;
       }
     }
     .imageContainer {
-      position: relative;
-      span {
-        border-radius: 5px;
-        border: 2px solid $darkModeColor !important;
-        img {
-          &:hover {
-            transform: scale(1.3);
+      width: 90px;
+      height: 90px;
+      .image {
+        width: 80px;
+        height: 80px;
+        position: relative;
+        span {
+          border-radius: 5px;
+          border: 2px solid $darkModeColor !important;
+          img {
+            transition: all 0.4s ease-in-out;
+            &:hover {
+              transform: scale(1.25);
+            }
           }
         }
       }

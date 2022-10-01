@@ -26,6 +26,10 @@ export default function NftId({
   collectionInfo,
   extraListings,
 }) {
+  //Contract functions
+  const { account, library, active } = useWeb3React();
+  const router = useRouter();
+  const { collection, nftId } = router.query;
   // Loader helper variable
   const override = {
     display: "block",
@@ -35,6 +39,29 @@ export default function NftId({
   ``;
   let highestOfferInitiator = "";
   const [verificationDisplay, setVerificationDisplay] = useState(false);
+  const [runEffect, setRunEffect] = useState(false);
+  const [userBalance, setUserBalance] = useState(null);
+  // Array dependency function
+  const init = setTimeout(() => {
+    setRunEffect(true);
+  }, 300);
+  if (active) {
+    setTimeout(() => {
+      setRunEffect(false);
+    }, 2000);
+    clearTimeout(init);
+  }
+
+  useEffect(() => {
+    const main = async () => {
+      if (active) {
+        const balance = await contracts.tokenInstance.balanceOf(account);
+        const accountBalance = utils.formatEther(balance);
+        setUserBalance(accountBalance);
+      }
+    };
+    main();
+  }, [runEffect]);
   // Contracts and constant addresses
   const marketContract = contracts.marketplace;
   const tokenContract = contracts.token;
@@ -56,7 +83,6 @@ export default function NftId({
     });
   const priceDifference = [];
   const percentageDifference = () => {
-    console.log(offerValue);
     const values = offerValue.map((val) => Number(utils.formatEther(val)));
     const saleValue = Number(salePrice);
     values.map((val) => {
@@ -86,11 +112,6 @@ export default function NftId({
     bestOffers.reduce((acc, cur) =>
       Number(acc) > Number(cur) ? Number(acc) : Number(cur)
     );
-
-  //Contract functions
-  const { account, library, active } = useWeb3React();
-  const router = useRouter();
-  const { collection, nftId } = router.query;
   // State values for watching modals and inputs
   const [loading, setLoading] = useState(false);
   const [createOfferValue, setCreateOfferValue] = useState();
@@ -132,40 +153,51 @@ export default function NftId({
   };
   // Contract functions
   const buyNft = async () => {
-    const signer = await library.getSigner();
-    const instance = new Contract(tokenContract, tokenABI, signer);
-    const approved = await instance.allowance(account, marketContract);
-    const approvedAmount = utils.formatEther(
-      parseInt(approved._hex, 16).toString()
-    );
-    if (Number(approvedAmount) < Number(utils.formatEther(salePrice))) {
-      const approval = await instance.approve(marketContract, salePrice);
+    try {
+      const signer = await library.getSigner();
+      const instance = new Contract(tokenContract, tokenABI, signer);
+      const price = parseInt(utils.parseEther(salePrice)._hex, 16).toString();
+      if (Number(userBalance) > Number(salePrice)) {
+        const approved = await instance.allowance(account, marketContract);
+        const approvedAmount = utils.formatEther(approved);
+        if (Number(approvedAmount) < Number(salePrice)) {
+          const approval = await instance.approve(marketContract, price);
+          setLoading(true);
+          await approval.wait();
+          approval.hash && setLoading(false);
+        }
+      } else {
+        alert("Balance is low");
+      }
+      const contract = new Contract(marketContract, marketplaceABI, signer);
+      const tx = await contract.buyNFT(collection, nftId, price);
+      setLoading(true);
+      await tx.wait();
+      tx.hash && setLoading(false);
+      router.replace(router.asPath);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const sellNft = async () => {
+    try {
+      const val = utils.parseEther(listingValue);
+      const signer = await library.getSigner();
+      const instance = new Contract(collection, nftABI, signer);
+      const approval = await instance.approve(marketContract, nftId);
       setLoading(true);
       await approval.wait();
       approval.hash && setLoading(false);
+      const contract = new Contract(marketContract, marketplaceABI, signer);
+      const tx = await contract.list(collection, nftId, val.toString());
+      setLoading(true);
+      await tx.wait();
+      tx.hash && setLoading(false);
+      setCreateListing(false);
+      router.replace(router.asPath);
+    } catch (error) {
+      console.log(error);
     }
-    const contract = new Contract(marketContract, marketplaceABI, signer);
-    const tx = await contract.buyNFT(collection, nftId, salePrice);
-    setLoading(true);
-    await tx.wait();
-    tx.hash && setLoading(false);
-    router.replace(router.asPath);
-  };
-  const sellNft = async () => {
-    const val = utils.parseEther(listingValue);
-    const signer = await library.getSigner();
-    const instance = new Contract(collection, nftABI, signer);
-    const approval = await instance.approve(marketContract, nftId);
-    setLoading(true);
-    await approval.wait();
-    approval.hash && setLoading(false);
-    const contract = new Contract(marketContract, marketplaceABI, signer);
-    const tx = await contract.list(collection, nftId, val.toString());
-    setLoading(true);
-    await tx.wait();
-    tx.hash && setLoading(false);
-    setCreateListing(false);
-    router.replace(router.asPath);
   };
   const cancelListing = async () => {
     try {
@@ -201,35 +233,34 @@ export default function NftId({
   };
   const makeOffer = async () => {
     try {
-      const offerVal = parseInt(
-        utils.parseEther(createOfferValue)._hex,
-        16
-      ).toString();
-      const instance = new Contract(tokenContract, tokenABI, signer);
-      const approved = await instance.allowance(account, marketContract);
-      const approvedAmount = utils.formatEther(
-        parseInt(approved._hex, 16).toString()
-      );
-      if (Number(approvedAmount) < Number(createOfferValue)) {
-        const approval = await instance.increaseAllowance(
-          marketContract,
-          offerVal
-        );
+      if (active) {
+        const signer = await library.getSigner();
+        const offerVal = parseInt(
+          utils.parseEther(createOfferValue)._hex,
+          16
+        ).toString();
+        const instance = new Contract(tokenContract, tokenABI, signer);
+        const approved = await instance.allowance(account, marketContract);
+        const approvedAmount = utils.formatEther(approved);
+        if (Number(approvedAmount) < Number(createOfferValue)) {
+          const approval = await instance.approve(marketContract, offerVal);
+          setLoading(true);
+          await approval.wait();
+          approval.hash && setLoading(false);
+        }
+        const contract = new Contract(marketContract, marketplaceABI, signer);
+        const tx = await contract.createOffer(collection, nftId, offerVal);
         setLoading(true);
-        await approval.wait();
-        approval.hash && setLoading(false);
+        await tx.wait();
+        tx.hash && setLoading(false);
+        setCreateOfferModal(false);
+        router.replace(router.asPath);
+      } else {
+        alert("Please connect your wallet to execute this transaction");
       }
-      const contract = new Contract(marketContract, marketplaceABI, signer);
-      const tx = await contract.createOffer(collection, nftId, offerVal);
-      setLoading(true);
-      await tx.wait();
-      tx.hash && setLoading(false);
-      setCreateOfferModal(false);
-      router.replace(router.asPath);
     } catch (err) {
       console.log(err);
     }
-    const signer = await library.getSigner();
   };
   const updateOffer = async () => {
     try {
@@ -238,19 +269,18 @@ export default function NftId({
         utils.parseEther(updateOfferValue)._hex,
         16
       ).toString();
-      const instance = new Contract(tokenContract, tokenABI, signer);
-      const approved = await instance.allowance(account, marketContract);
-      const approvedAmount = utils.formatEther(
-        parseInt(approved._hex, 16).toString()
-      );
-      if (Number(approvedAmount) < Number(updateOfferValue)) {
-        const approval = await instance.increaseAllowance(
-          marketContract,
-          offerVal
-        );
-        setLoading(true);
-        await approval.wait();
-        approval.hash && setLoading(false);
+      if (Number(userBalance) > Number(updateOfferValue)) {
+        const instance = new Contract(tokenContract, tokenABI, signer);
+        const approved = await instance.allowance(account, marketContract);
+        const approvedAmount = utils.formatEther(approved);
+        if (Number(approvedAmount) < Number(updateOfferValue)) {
+          const approval = await instance.approve(marketContract, offerVal);
+          setLoading(true);
+          await approval.wait();
+          approval.hash && setLoading(false);
+        }
+      } else {
+        alert("New offer value is below Balance");
       }
       const contract = new Contract(marketContract, marketplaceABI, signer);
       const tx = await contract.updateOffer(collection, nftId, offerVal);
@@ -285,17 +315,13 @@ export default function NftId({
         highestOfferInitiator,
         marketContract
       );
-      const initiatorBalance = utils.formatEther(
-        parseInt(balance._hex, 16).toString()
-      );
-      const initiatorApproval = utils.formatEther(
-        parseInt(approved._hex, 16).toString()
-      );
+      const initiatorBalance = utils.formatEther(balance);
+      const initiatorApproval = utils.formatEther(approved);
       if (
         Number(initiatorBalance) < offerVal &&
         Number(initiatorApproval) < offerVal
       ) {
-        console.log(
+        alert(
           "Offer Initiator has insufficient funds/approval for this Transaction. Try someone else"
         );
         //I want to add a modal that pops up for 5 seconds, telling a user that the Offerer has insuffficient funds
@@ -320,17 +346,13 @@ export default function NftId({
       const instance = new Contract(tokenContract, tokenABI, signer);
       const balance = await instance.balanceOf(initiator);
       const approved = await instance.allowance(initiator, marketContract);
-      const initiatorBalance = utils.formatEther(
-        parseInt(balance._hex, 16).toString()
-      );
-      const initiatorApproval = utils.formatEther(
-        parseInt(approved._hex, 16).toString()
-      );
+      const initiatorBalance = utils.formatEther(balance);
+      const initiatorApproval = utils.formatEther(approved);
       if (
         Number(initiatorBalance) < offerVal &&
         Number(initiatorApproval) < offerVal
       ) {
-        console.log(
+        alert(
           "Offer Initiator has insufficient funds/approval for this Transaction. Try someone else"
         );
         //I want to add a modal that pops up for 5 seconds, telling a user that the Offerer has insuffficient funds
@@ -546,7 +568,7 @@ export default function NftId({
                               highestOffer,
                               offer.map(
                                 (offer) =>
-                                  offer.value === highestOffer &&
+                                  offer.value === Number(highestOffer) &&
                                   (highestOfferInitiator = offer.address)
                               )
                             )
@@ -869,7 +891,7 @@ export async function getServerSideProps({ params, res }) {
   const listingDetails = threeListings[1].slice(-2);
   const extraListings = [];
   const numValue = nftListings.map((listing) => listing.toNumber());
-  const hexValues = listingDetails.map((hex) => parseInt(hex[1]._hex, 16));
+  const hex = listingDetails.map((hexVal) => hexVal[1]);
   for (let i = 0; i < numValue.length; i++) {
     if (numValue[i] !== Number(nftID)) {
       const tokenDetails = await instance.tokenURI(numValue[i]);
@@ -886,7 +908,7 @@ export async function getServerSideProps({ params, res }) {
       const obj = {
         image: imageUrl,
         name: name,
-        value: utils.formatEther(hexValues[i].toString()),
+        value: utils.formatEther(hex[i]),
         tokenId: numValue[i],
       };
       extraListings.push(obj);

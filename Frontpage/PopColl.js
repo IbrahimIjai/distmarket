@@ -94,23 +94,19 @@ const PopularCollection = ({ address }) => {
   }, [runEffect]);
   return (
     <div className={styles.Cointainer}>
-      {topCollections && (
-        <div className={styles.Header}>
-          <span className={styles.HeaderTittle}> Top Collections </span>
-          <hr className={styles.hr} />
-        </div>
-      )}
+      <div className={styles.Header}>
+        <span className={styles.HeaderTittle}> Top Collections </span>
+        <hr className={styles.hr} />
+      </div>
       <div className={styles.topCollections}>
-        {topCollections && (
-          <div className={styles.head}>
-            <div className={styles.collection}>Collection</div>
-            <div>Floor</div>
-            <div>Volume</div>
-            <div>Top Sale</div>
-            <div>Listed</div>
-            <div>Supply</div>
-          </div>
-        )}
+        <div className={styles.head}>
+          <div className={styles.collection}>Collection</div>
+          <div>Floor</div>
+          <div>Volume</div>
+          <div>Top Sale</div>
+          <div>Listed</div>
+          <div>Supply</div>
+        </div>
         <div className={styles.body}>
           {topCollections &&
             topCollections.map((collection, i) => (
@@ -120,11 +116,9 @@ const PopularCollection = ({ address }) => {
                     <div className={styles.count}>
                       <div>
                         <div className={styles.imageContainer}>
-                          <Image
-                            src={collection.image}
-                            height="90px"
-                            width="90px"
-                          />
+                          <div className={styles.image}>
+                            <Image src={collection.image} layout="fill" />
+                          </div>
                         </div>
                         <div className={styles.name}>{collection.name}</div>
                       </div>

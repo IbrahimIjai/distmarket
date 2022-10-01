@@ -7,7 +7,7 @@ const injected = new InjectedConnector({
 
 const walletconnect = new WalletConnectConnector({
   rpc: {
-    80001: "https://matic-mumbai.chainstacklabs.com",
+    80001: "https://matic-testnet-archive-rpc.bwarelabs.com",
   },
   bridge: "https://bridge.walletconnect.org",
   qrcode: true,

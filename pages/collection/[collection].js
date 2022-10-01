@@ -36,7 +36,8 @@ export default function Home({ nftId, listings, obj }) {
   // Other hooks
   const router = useRouter();
   const { collection } = router.query;
-  const { active } = useWeb3React();
+  const { active, library } = useWeb3React();
+  const provider = library;
   // Array dependency function
   const init = setTimeout(() => {
     setRunEffect(true);
@@ -57,9 +58,11 @@ export default function Home({ nftId, listings, obj }) {
         const listingInfo = listings.map((list) => BigNumber.from(list[1].hex));
         const itemId = tokenId.map((token) => parseInt(token, 16));
         const prices = listingInfo.map((listing) => utils.formatEther(listing));
+        // Floor price
         const lowestValue =
           prices.length > 0 &&
           prices.reduce((acc, cur) => (Number(acc) < Number(cur) ? acc : cur));
+        //Get all offers
         const allOffers = await itemId.map(async (item) => {
           const x = await contracts.contractInstance.availableOffers(
             collection,
@@ -74,18 +77,14 @@ export default function Home({ nftId, listings, obj }) {
             const v = BigNumber.from(offer.toString());
             return utils.formatEther(v);
           });
-          console.log(`
-        x: ${x}
-        r: ${r}
-        Offers: ${offers}
-        Offer Values: ${offerValues}
-        `);
           return offerValues;
         });
+        // Await results of all offers
         const offers = [];
         for (let i = 0; i < allOffers.length; i++) {
           offers.push(await allOffers[i]);
         }
+        // Best offers for each NFT
         const bestOffers = offers.map((offer) => {
           if (offer.length > 1) {
             return offer.reduce((cur, prev) =>
@@ -94,14 +93,15 @@ export default function Home({ nftId, listings, obj }) {
           }
           return offer;
         });
+        // Highest offer for all listed NFTs
         const highestOffer =
           bestOffers.length > 0 &&
           bestOffers.reduce((acc, cur) =>
             Number(acc) > Number(cur) ? Number(acc) : Number(cur)
           );
         const names = [];
-
-        const contract = new Contract(collection, nftABI, contracts.provider);
+        // Call data from contracts for the NFts
+        const contract = new Contract(collection, nftABI, provider);
         const imageLinks = await itemId.map(async (item) => {
           const x = await contract.tokenURI(item.toString());
           const link = x.includes("ipfs://", 0)
@@ -123,6 +123,7 @@ export default function Home({ nftId, listings, obj }) {
           });
           return i;
         });
+        // All data for each NFT
         const arr = [];
         for (let i = 0; i < addresses.length; i++) {
           const object = {
@@ -158,7 +159,6 @@ export default function Home({ nftId, listings, obj }) {
       document.removeEventListener("mousedown", handler);
     };
   });
-
   return (
     <>
       {!active ? (
@@ -311,11 +311,17 @@ export default function Home({ nftId, listings, obj }) {
                           <div className={styles.content}>
                             <div className={styles.contentCont}>
                               <p>
-                                <span>Price</span> ${nft.price}
+                                <em>
+                                  List Price: <span>{`$${nft.price}`}</span>
+                                </em>
                               </p>
                               <p>
-                                <span>Best Offer</span>{" "}
-                                {nft.bestOffer && `$${nft.bestOffer}`}
+                                {nft.bestOffer.length > 0 && (
+                                  <em>
+                                    Best Offer:{" "}
+                                    <span>{`$${nft.bestOffer}`}</span>
+                                  </em>
+                                )}
                               </p>
                             </div>
                           </div>

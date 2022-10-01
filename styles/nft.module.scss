@@ -116,41 +116,42 @@
         height: 100%;
         width: 100%;
         transition: all 0.8s ease-out;
-        .firstLayer{
+        .firstLayer {
           position: absolute;
           transition: all 0.8s ease-out;
-           display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            z-index: 0;
-            height: 100%;
-            width: 100%;
-            padding: 1rem;
-            background: rgba(23, 20, 20, 0.76);
-            transition:  1.5s ease-out;
-            .firstLayerTop{
-              display: flex;
-              flex-direction: row;
-             span{
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          z-index: 0;
+          height: 100%;
+          width: 100%;
+          padding: 1rem;
+          background: rgba(23, 20, 20, 0.76);
+          transition: 1.5s ease-out;
+          .firstLayerTop {
+            display: flex;
+            flex-direction: row;
+            span {
               padding: 0.7rem;
-             }
             }
-           
-            @keyframes move{
-              from{z-index: 0;}
-              to{
-                z-index: 5;
-              }
+          }
+
+          @keyframes move {
+            from {
+              z-index: 0;
             }
-            &:hover{
-              animation: move  3s;
+            to {
+              z-index: 5;
             }
-          
+          }
+          &:hover {
+            animation: move 3s;
+          }
         }
 
-        &:hover{
-          .firstLayer{
-            animation: move 3s ;
+        &:hover {
+          .firstLayer {
+            animation: move 3s;
             // transition: all 0.8s ease-out;
           }
         }
@@ -163,15 +164,15 @@
         padding: 10px 20px;
         align-items: center;
         justify-content: center;
-        p{
+        p {
           font-size: 0.855rem;
           letter-spacing: 1.2px;
-          span{
+          span {
             color: #2fc0db;
             font-weight: 700;
           }
         }
-        .contentCont{
+        .contentCont {
           border: 0.3px solid rgb(8, 100, 107);
           width: 100%;
           height: 100%;
@@ -180,12 +181,11 @@
           padding: 0.7rem;
           border-radius: 0.7rem;
           margin: 0.15rem;
-          }
-
         }
       }
     }
   }
+}
 
 .notActive {
   display: flex;

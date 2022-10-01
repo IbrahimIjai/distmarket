@@ -52,7 +52,7 @@ export default function Connect() {
               {
                 chainId: "0x13881",
                 chainName: "Mumbai Network",
-                rpcUrls: ["https://matic-mumbai.chainstacklabs.com"],
+                rpcUrls: ["https://matic-testnet-archive-rpc.bwarelabs.com"],
                 nativeCurrency: {
                   name: "Polygon Matic",
                   symbol: "MATIC",

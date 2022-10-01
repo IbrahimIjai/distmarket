@@ -1755,23 +1755,23 @@ const tokenABI = [
   },
 ];
 
-const mumbai = "https://matic-mumbai.chainstacklabs.com";
+const marketplace = "0xa9EBa0cc148FC3Ab7E9863Cdb6907cEcBD8B1dAD";
+const token = "0xf75150d730ce97c1551e97df39c0a049024e4c25";
+const mumbai = "https://matic-testnet-archive-rpc.bwarelabs.com";
 const provider = new ethers.providers.JsonRpcProvider(mumbai);
-const contractInstance = new Contract(
-  "0xa9EBa0cc148FC3Ab7E9863Cdb6907cEcBD8B1dAD",
-  marketplaceABI,
-  provider
-);
+const contractInstance = new Contract(marketplace, marketplaceABI, provider);
+const tokenInstance = new Contract(token, tokenABI, provider);
 
 const contracts = {
-  marketplace: "0xa9EBa0cc148FC3Ab7E9863Cdb6907cEcBD8B1dAD",
-  token: "0xf75150d730ce97c1551e97df39c0a049024e4c25",
+  marketplace: marketplace,
+  token: token,
   defaultProfile: "0xeae38e8d41aecc027e1b68c31f7039ae95651d4d",
   mumbai: mumbai,
   deadAddress: "0x0000000000000000000000000000000000000000",
   queryUrl: "https://api.thegraph.com/subgraphs/name/steffqing/721-clone",
   provider: provider,
   contractInstance: contractInstance,
+  tokenInstance: tokenInstance,
 };
 
 export { marketplaceABI, nftABI, tokenABI, contracts };
