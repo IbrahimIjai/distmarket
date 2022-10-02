@@ -294,9 +294,8 @@ export default function Home({ nftId, listings, obj }) {
               ) : (
                 listedNFTs.map((nft) => {
                   return (
-                    <div className={styles.card}>
+                    <div className={styles.card} key={nft.tokenId}>
                       <Link
-                        key={nft.tokenId}
                         href={`/collection/${collection}/${nft.tokenId}`}
                         prefetch={false}
                       >
