@@ -1,0 +1,122 @@
+.embBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.embla {
+  position: relative;
+  background-color: #1bcacd;
+  padding: 2px;
+  max-width: 280px;
+  border-radius: 9px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+}
+@media (min-width: 750px) {
+  .embla {
+    max-width: 400px;
+  }
+}
+.embla .embla__viewport {
+  overflow: hidden;
+  width: 100%;
+}
+.embla .embla__viewport.is-draggable {
+  cursor: move;
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+.embla .embla__viewport.is-dragging {
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+.embla .embla__container {
+  display: flex;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -webkit-touch-callout: none;
+  -khtml-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.embla .embla__slide {
+  position: relative;
+  min-width: 100%;
+}
+.embla .embla__slide__inner {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  position: relative;
+  left: 0;
+  order: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.embla .embla__slide__inner .caroselText {
+  position: absolute;
+  bottom: 0;
+  padding: 5% 7%;
+  margin: 0;
+  background: rgba(0, 0, 0, 0.44);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  -webkit-backdrop-filter: blur(8.5px);
+          backdrop-filter: blur(8.5px);
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.embla .embla__slide__img {
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  min-width: 100%;
+  max-width: none;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 320px;
+  position: absolute;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.embla__dots {
+  display: flex;
+  list-style: none;
+  justify-content: center;
+  padding-top: 15px;
+}
+
+.embla__dot {
+  background-color: rgb(176, 167, 167);
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+  outline: 0;
+  border: none;
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  margin-right: 7.5px;
+  margin-left: 7.5px;
+  display: flex;
+  align-items: center;
+}
+
+.emb {
+  background-color: #1bcacd;
+  opacity: 1;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+}/*# sourceMappingURL=carosel.module.css.map */
