@@ -44,6 +44,7 @@
 .embla .embla__slide {
   position: relative;
   min-width: 100%;
+  cursor: pointer;
 }
 .embla .embla__slide__inner {
   position: relative;
