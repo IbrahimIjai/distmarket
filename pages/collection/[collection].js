@@ -1,6 +1,6 @@
 import styles from "../../styles/nft.module.css";
 import { useWeb3React } from "@web3-react/core";
-import Typical from "react-typical";
+import MyLoader from "../../components/Skeleton";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -10,6 +10,7 @@ import Loading from "../../components/Loading";
 import { BsThreeDots, BsGlobe, BsTwitter, BsTelegram } from "react-icons/bs";
 import Link from "next/link";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import Shimmer from "../../components/Shimmer";
 
 const collectionDataQuery = `
   query collectionDataQuery($address: ID){
@@ -31,8 +32,7 @@ export default function Home({ nftId, listings, obj }) {
   const [stats, setStats] = useState({});
   const [visibility, setVisibility] = useState(false);
   const [runEffect, setRunEffect] = useState(false);
-  const [load, setLoad] = useState(false);
-  const [nftLoad, setNftLoad] = useState(false);
+  const [load, setLoad] = useState(true);
   // Other hooks
   const router = useRouter();
   const { collection } = router.query;
@@ -47,19 +47,6 @@ export default function Home({ nftId, listings, obj }) {
       setRunEffect(false);
     }, 2000);
     clearTimeout(init);
-  }
-  setTimeout(() => {
-    setLoad(true);
-  }, 20000);
-  const loadNfts = setTimeout(() => {
-    setNftLoad(true);
-    console.log("Timeout ran");
-  }, 60000);
-  if (listedNFTs.length > 0) {
-    setTimeout(() => {
-      setNftLoad(false);
-    }, 1000);
-    clearTimeout(loadNfts);
   }
 
   useEffect(() => {
@@ -178,7 +165,7 @@ export default function Home({ nftId, listings, obj }) {
         <h1 className={styles.notActive}>Please Connect Wallet</h1>
       ) : (
         <>
-          {!load && <Loading />}
+          {/* {load && <Loading />} */}
           <div className={styles.banner}>
             <div className={styles.bannerImage}>
               <Image
@@ -279,19 +266,7 @@ export default function Home({ nftId, listings, obj }) {
           </div>
           <div className={styles.nfts}>
             <div className={styles["nftFlex"] + " " + styles["nftGrid"]}>
-              {listedNFTs.length < 1 ? (
-                <h1 style={{ textAlign: "center" }}>
-                  {!nftLoad ? (
-                    "Loading..."
-                  ) : (
-                    <Typical
-                      steps={["Loading failed", 2000, "Try hard refresh", 2000]}
-                      loop={Infinity}
-                      wrapper={"p"}
-                    />
-                  )}
-                </h1>
-              ) : (
+              {listedNFTs.length > 0 &&
                 listedNFTs.map((nft) => {
                   return (
                     <div className={styles.card} key={nft.tokenId}>
@@ -351,7 +326,21 @@ export default function Home({ nftId, listings, obj }) {
                       </Link>
                     </div>
                   );
-                })
+                })}
+            </div>
+            <div>
+              {listedNFTs.length < 1 && (
+                <div className={styles.skeletonCard}>
+                  <div className={styles.skeletonNftCard}>
+                    <MyLoader type="avatar" />
+                    <MyLoader type="avatar" />
+                    <MyLoader type="avatar" />
+                    <MyLoader type="avatar" />
+                    <MyLoader type="avatar" />
+                    <MyLoader type="avatar" />
+                  </div>
+                  <Shimmer />
+                </div>
               )}
             </div>
           </div>{" "}

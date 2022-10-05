@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import { Contract, utils } from "ethers";
 import Link from "next/link";
 import { contracts, nftABI } from "../constants/ABIs";
+import MyLoader from "../components/Skeleton";
+import Shimmer from "../components/Shimmer";
 
 const RListed = () => {
   const { active } = useWeb3React();
@@ -74,15 +76,13 @@ const RListed = () => {
   }, [runEffect]);
   return (
     <main className={styles.main}>
-      {data && (
-        <div className={styles.text}>
-          <h3>Recently listed NFTs</h3>
-        </div>
-      )}
+      <div className={styles.text}>
+        <h3>Recently listed NFTs</h3>
+      </div>
 
       <div className={styles.SliderContainer}>
         <div className={styles.cards}>
-          {data &&
+          {data ? (
             data.map((nft, i) => (
               <Link
                 key={i}
@@ -104,7 +104,18 @@ const RListed = () => {
                   </div>
                 </a>
               </Link>
-            ))}
+            ))
+          ) : (
+            <div className={styles.skeletonWrapper}>
+              <div className={styles.skeletonLoader}>
+                <MyLoader type="recentlylisted" />
+                <MyLoader type="recentlylisted" />
+                <MyLoader type="recentlylisted" />
+                <MyLoader type="recentlylisted" />
+              </div>
+              <Shimmer />
+            </div>
+          )}
         </div>
       </div>
     </main>

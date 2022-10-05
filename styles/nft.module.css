@@ -359,4 +359,20 @@
   100% {
     opacity: 1;
   }
+}
+.skeletonCard {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 12px;
+  grid-row-gap: 12px;
+  justify-items: stretch;
+  align-items: stretch;
+}
+
+.skeletonNftCard {
+  display: flex;
+  gap: 12px;
 }/*# sourceMappingURL=nft.module.css.map */

@@ -9,7 +9,6 @@ import {
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useState, useEffect } from "react";
 import HashLoader from "react-spinners/HashLoader";
-import Loaders from "../../../components/Loaders";
 import { Contract, ethers, BigNumber, utils } from "ethers";
 import {
   marketplaceABI,
@@ -376,7 +375,6 @@ export default function NftId({
 
   return (
     <main className={styles.main}>
-      {!load && <Loaders />}
       <div className={styles.container}>
         <div className={styles.headerContainer}>
           <div className={styles.imageContainer}>

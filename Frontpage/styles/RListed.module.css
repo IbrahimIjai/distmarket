@@ -59,11 +59,14 @@
   transition: transform 500ms;
   border: 0.4px solid #2fc0db;
 }
+.cards .imageContainer span img {
+  transition: all 0.5s ease-in-out;
+}
 .cards:hover > div {
   animation-play-state: paused;
 }
-.cards div:hover {
-  transform: scale(1.05);
+.cards div:hover > span img {
+  transform: scale(1.06);
 }
 @keyframes move {
   0% {
@@ -101,12 +104,17 @@
   .cards {
     height: 100% !important;
   }
-  /* .imageContainer {
-    width: 200px !important;
-    height: unset !important;
-  } */
   .description {
     font-size: 14px !important;
     line-height: 1.1 !important;
   }
+}
+.skeletonLoader {
+  display: flex;
+  gap: 12px;
+}
+
+.skeletonWrapper {
+  position: relative;
+  /* overflow: hidden; */
 }

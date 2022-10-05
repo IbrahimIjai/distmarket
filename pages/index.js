@@ -10,7 +10,7 @@ export default function Home({ addresses }) {
   const [load, setLoad] = useState(false);
   setTimeout(() => {
     setLoad(true);
-  }, 20000);
+  }, 5000);
   return (
     <main>
       {!load && <Loader />}

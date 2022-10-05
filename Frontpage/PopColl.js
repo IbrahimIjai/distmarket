@@ -6,6 +6,8 @@ import Link from "next/link";
 import { utils, Contract } from "ethers";
 import { MdOutlineGppGood } from "react-icons/md";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import MyLoader from "../components/Skeleton";
+import Shimmer from "../components/Shimmer";
 
 const collectionDataQuery = `
 query MyQuery ($address: ID){
@@ -108,7 +110,7 @@ const PopularCollection = ({ address }) => {
           <div>Supply</div>
         </div>
         <div className={styles.body}>
-          {topCollections &&
+          {topCollections ? (
             topCollections.map((collection, i) => (
               <Link key={i} href={`/collection/${collection.address}`}>
                 <a>
@@ -144,7 +146,19 @@ const PopularCollection = ({ address }) => {
                   </div>
                 </a>
               </Link>
-            ))}
+            ))
+          ) : (
+            <div className={styles.skeletonWrapper}>
+              <div>
+                <MyLoader type="popularcollections" />
+                <MyLoader type="popularcollections" />
+                <MyLoader type="popularcollections" />
+                <MyLoader type="popularcollections" />
+                <MyLoader type="popularcollections" />
+              </div>
+              <Shimmer />
+            </div>
+          )}
         </div>
       </div>
     </div>

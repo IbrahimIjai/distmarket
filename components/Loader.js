@@ -22,14 +22,12 @@ export default function Loader() {
       <div className={styles.loadingText}>
         <Typical
           steps={[
-            "",
-            2000,
             "Enter...",
-            4000,
-            "Enter the Void",
-            3000,
-            "Enter the Void...",
             1000,
+            "Enter the Void",
+            2000,
+            "Enter the Void...",
+            500,
           ]}
           loop={1}
           wrapper={"h1"}

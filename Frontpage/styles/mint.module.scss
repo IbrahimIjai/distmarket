@@ -18,18 +18,8 @@ $darkModeColor: #2fc0db;
     align-items: center;
     width: 100%;
     justify-content: center;
-    box-shadow: 4.5px 2.4px 3.6px rgba(255, 255, 255, 0.024),
-      -12.5px 12.5px 10px rgba(255, 255, 255, 0.035),
-      -10.1px 10.1px 14.1px rgba(255, 255, 255, 0.046),
-      10px 12px 10px rgba(255, 255, 255, 0.07);
     flex-direction: column;
     transition: all 350ms ease-in-out;
-    &:hover {
-      box-shadow: 4.5px 2.4px 3.6px rgba(255, 255, 255, 0.024),
-        -12.5px 12.5px 10px rgba(255, 255, 255, 0.035),
-        -30.1px 30.1px 24.1px rgba(255, 255, 255, 0.046),
-        70px 32px 80px rgba(255, 255, 255, 0.07);
-    }
     @media (min-width: 500px) {
       @media (max-width: 600px) {
         width: 80%;
@@ -119,6 +109,8 @@ $darkModeColor: #2fc0db;
 }
 .mint1 {
   padding: 0 2vw;
+  max-width: 1200px;
+  margin: 0px auto;
   .text {
     display: flex;
     padding: 20px 20px 0 20px;
