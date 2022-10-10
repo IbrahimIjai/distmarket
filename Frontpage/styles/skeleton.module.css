@@ -1,5 +1,5 @@
 .skeleton {
-  background: #d9d3d3;
+  background: #777;
   overflow: hidden;
   border-radius: 4px;
   box-shadow: rgb(0 0 0 / 8%) 0px 4px 15px;
@@ -38,14 +38,10 @@
   animation: loading 2.5s infinite;
 }
 .shimmer {
+  background: rgba(255, 255, 255, 0.05);
+  transform: skewX(-20deg);
   width: 50%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.2);
-  transform: skewX(-20deg);
-  box-shadow: 0 0 30px 30px rgba(255, 255, 255, 0.2);
-}
-.dark .shimmer {
-  background: rgba(255, 255, 255, 0.05);
   box-shadow: 0 0 30px 30px rgba(255, 255, 255, 0.05);
 }
 

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styles from "../../../styles/nftId.module.css";
-import { CgFileDocument, CgDanger } from "react-icons/cg";
+import { CgFileDocument, CgDanger, CgDetailsMore } from "react-icons/cg";
+import { BsFillTagFill } from "react-icons/bs";
 import {
   MdOutlineVerifiedUser,
   MdKeyboardArrowDown,
@@ -372,7 +373,7 @@ export default function NftId({
       console.log(err);
     }
   };
-
+  console.log(salePrice);
   return (
     <main className={styles.main}>
       <div className={styles.container}>
@@ -434,9 +435,9 @@ export default function NftId({
             <div className={styles.purchase}>
               <div className={styles.buy}>
                 <span>Sale price</span>
-                {!salePrice === "0.0" ? (
+                {salePrice !== "0.0" ? (
                   <h3>
-                    {salePrice} USDT <span>-</span>
+                    {salePrice} USDT <span></span>
                   </h3>
                 ) : (
                   <h3>
@@ -668,7 +669,7 @@ export default function NftId({
             <div className={styles.box}>
               <div className={styles.head}>
                 <span>
-                  <CgFileDocument />
+                  <BsFillTagFill />
                 </span>{" "}
                 <h2>Offers made</h2>
                 <button
@@ -791,7 +792,7 @@ export default function NftId({
             <div className={styles.box}>
               <div className={styles.head}>
                 <span>
-                  <CgFileDocument />
+                  <CgDetailsMore />
                 </span>{" "}
                 <h2>Attributes</h2>
                 <button

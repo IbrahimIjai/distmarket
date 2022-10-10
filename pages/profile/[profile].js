@@ -4,7 +4,23 @@ import { contracts } from "../../constants/ABIs";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import banner from "../../assets/DivArt_banner.png";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+
+const addressQuery = `
+query addressQuery($address: ID){
+account(id: $address){
+  id
+  tokens{
+    identifier
+    tokenURI
+    collection{
+      id
+    }
+  }
+}
+}
+`;
 
 export default function Profile({ profile }) {
   const router = useRouter();
@@ -20,20 +36,6 @@ export default function Profile({ profile }) {
   }
   const [allData, setAllData] = useState([]);
   const [graphData, setGraphData] = useState([]);
-  const addressQuery = `
-    query addressQuery($address: ID){
-    account(id: $address){
-      id
-      tokens{
-        identifier
-        tokenURI
-        collection{
-          id
-        }
-      }
-    }
-  }
-  `;
   useEffect(() => {
     const main = async () => {
       const array = [];
@@ -48,7 +50,9 @@ export default function Profile({ profile }) {
             address: profile.toLowerCase(),
           },
         })
-        .then((data) => setGraphData(data.data.account.tokens))
+        .then((data) => {
+          setGraphData(data.data.account.tokens);
+        })
         .catch((err) => console.log("Error fetching data: ", err));
       for (let i = 0; i < graphData.length; i++) {
         const url = graphData[i].tokenURI.includes("ipfs://", 0)
@@ -65,15 +69,16 @@ export default function Profile({ profile }) {
               "https://ipfsfiles.distant.finance/ipfs/"
             )
           : link.image;
-        // const listingExists = await contract.sellNFT(
+        // const listingExists = await contracts.contractInstance.sellNFT(
         //   graphData[i].collection.id,
         //   graphData[i].identifier
         // );
-        // const offersExists = await contract.availableOffers(
+        // const offersExists = await contracts.contractInstance.availableOffers(
         //   graphData[i].collection.id,
         //   graphData[i].identifier
         // );
-        // const listingTrue = listingExists[0] === deadAddress ? false : true;
+        // const listingTrue =
+        //   listingExists[0] === contracts.deadAddress ? false : true;
         // const offerTrue = offersExists[0].length > 0 ? true : false;
         const obj = {
           name: link.name,
@@ -93,11 +98,27 @@ export default function Profile({ profile }) {
     <main className={styles.main}>
       <div className={styles.container}>
         <div className={styles.user}>
+          <div className={styles.profile}>
+            <div className={styles.banner}>
+              <Image src={banner} objectFit="cover" layout="fill" />
+            </div>
+            <div className={styles.profileImage}>
+              <Image
+                src={allData.length > 0 ? allData[0].image : "/1960.jpeg"}
+                objectFit="cover"
+                layout="fill"
+              />
+            </div>
+          </div>
           {profile && (
-            <h1>{`${profile.slice(0, 5)}...${profile.slice(38, 42)}`}</h1>
+            <Link href={`https://explorer.kcc.io/en/tokentxns/${profile}`}>
+              <a>
+                <h1>{`${profile.slice(0, 5)}...${profile.slice(38, 42)}`}</h1>
+              </a>
+            </Link>
           )}
           <p>
-            NFTs owned:{" "}
+            Total NFTs owned:{" "}
             <span>{allData.length == 0 ? "Loading..." : allData.length}</span>
           </p>
         </div>

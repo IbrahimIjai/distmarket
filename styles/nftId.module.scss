@@ -6,12 +6,11 @@
   background-image: url("/white.png");
   background-color: #f0f0f0;
   color: #000;
-  padding-bottom: 30px;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   .container {
-    padding-top: min(70px, 12vh);
+    padding-top: 50px;
     position: relative;
     .headerContainer {
       display: flex;
@@ -32,20 +31,17 @@
         border-image-repeat: round round;
         border-image-source: url("../assets/placeholder.png");
         border-style: solid;
-        box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
       }
       aside {
         .openContent {
           display: flex;
           justify-content: space-between;
           margin: 10px 0;
-          background-color: transparent;
-          border: solid 1px #e6e6e6;
           border-radius: 12px;
           padding: 2px;
           flex-direction: column;
           align-items: center;
-          box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
           .openContentDetails {
             font-family: "Inter Tight", sans-serif;
             p {
@@ -128,8 +124,8 @@
               font-weight: 600;
               margin-bottom: 12px;
               letter-spacing: -0.02em;
-              font-size: clamp(26px, 2rem, 2.5vw);
-              font-size: 36px;
+              font-size: clamp(26px, 2.3rem, 3.1vw);
+              // font-size: 36px;
               span {
                 font-weight: 200;
                 font-size: clamp(16px, 1.2rem, 2.1vw);
@@ -400,17 +396,16 @@
       }
     }
     .footerContainer {
-      background-color: transparent;
-      border: solid 1px #e6e6e6;
+      margin-top: 20px;
       border-radius: 12px;
       padding: 1%;
-      box-shadow: 10px -10px 30px rgba(0, 0, 0, 0.2);
       .moreItems {
         width: 100%;
         margin: 20px auto;
         h2 {
-          padding: 0 10px;
+          margin: 0 auto;
           text-align: center;
+          width: min(350px, 100%);
         }
         .SliderContainer {
           display: flex;
@@ -439,20 +434,17 @@
   display: none;
 }
 
-@media (min-width: 100px) {
+@media (hover) or (print: fine) {
   .cards::-webkit-scrollbar {
     height: 5px;
     display: block;
   }
   .cards::-webkit-scrollbar-track {
-    background-color: #000;
+    background-color: #757575;
     border-radius: 5px;
   }
   .cards::-webkit-scrollbar-thumb {
     border-radius: 5px;
-    background-color: #2fc0db;
-  }
-  .cards::-webkit-scrollbar-thumb:hover {
     background-color: #2fc0db;
   }
 }

@@ -1,9 +1,8 @@
 .main {
   min-height: 100vh;
   padding: 0 7vw;
-  background-color: #f0f0f0;
-  background-image: url("/white.png");
-  color: #000;
+  background-color: #161616;
+  color: #f6f6f6;
 }
 .main .container {
   padding-top: min(30px, 5%);
@@ -13,7 +12,36 @@
 .main .container .user {
   display: block;
   margin: 20px auto;
-  color: black;
+  color: #f6f6f6;
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+.main .container .user .profile {
+  position: relative;
+  width: 100%;
+  height: 250px;
+}
+.main .container .user .profile .banner {
+  width: 100%;
+  position: relative;
+  height: 150px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #efefef;
+}
+.main .container .user .profile .profileImage {
+  width: 100px;
+  border: 1px solid #efefef;
+  height: 100px;
+  background-color: grey;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 2%;
+  overflow: hidden;
 }
 .main .container .ownedItems {
   display: grid;
@@ -37,13 +65,19 @@
   text-decoration: none;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
   transition: all 500ms ease-in-out;
-  border: 2px solid rgba(0, 0, 0, 0.2);
+  border: 1.22px solid #efefef;
+}
+.main .container .ownedItems .nft div > span {
+  display: none !important;
+  background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.438)) !important;
 }
 .main .container .ownedItems .nft:hover {
   transform: translateY(-5px);
 }
 .main .container .ownedItems .nft:hover div > span {
   transform: scale(1.05);
+  background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.438)) !important;
+  color: #f2f2f2;
 }
 .main .container .ownedItems .nft div > span {
   transition: all 500ms ease-in-out;

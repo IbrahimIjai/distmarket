@@ -39,11 +39,11 @@
 .topCollections::-webkit-scrollbar {
   width: 5px;
   height: 5px;
-  background: blue;
+  background: #2fc0db;
 }
 
 .topCollections::-webkit-scrollbar-thumb {
-  background: orange;
+  background: #757575;
 }
 
 .head {
