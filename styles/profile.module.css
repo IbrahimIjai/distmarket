@@ -68,7 +68,6 @@
   border: 1.22px solid #efefef;
 }
 .main .container .ownedItems .nft div > span {
-  display: none !important;
   background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.438)) !important;
 }
 .main .container .ownedItems .nft:hover {
