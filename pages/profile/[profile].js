@@ -2,7 +2,6 @@ import styles from "../../styles/profile.module.css";
 import Image from "next/image";
 import { contracts } from "../../constants/ABIs";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import banner from "../../assets/DivArt_banner.png";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
@@ -23,38 +22,14 @@ account(id: $address){
 `;
 
 export default function Profile({ profile, objectData, indexValue }) {
-  console.log(indexValue);
-  const router = useRouter();
-  const [runEffect, setRunEffect] = useState(0);
-  const init = setTimeout(() => {
-    setRunEffect(1);
-  }, 500);
-  if (router.isReady) {
-    setTimeout(() => {
-      setRunEffect(2);
-    }, 2000);
-    clearTimeout(init);
-  }
+  let nftCount = null;
+  Object.keys(objectData).length === 0
+    ? (nftCount = null)
+    : (nftCount = Object.keys(objectData).length);
   const [allData, setAllData] = useState([]);
-  const [objectData1, setobjectData] = useState([]);
   useEffect(() => {
     const main = async () => {
       const array = [];
-      const client = new ApolloClient({
-        uri: contracts.queryUrl,
-        cache: new InMemoryCache(),
-      });
-      client
-        .query({
-          query: gql(addressQuery),
-          variables: {
-            address: profile.toLowerCase(),
-          },
-        })
-        .then((data) => {
-          setobjectData(data.data.account.tokens);
-        })
-        .catch((err) => console.log("Error fetching data: ", err));
       for (let i = 0; i < objectData.length; i++) {
         const url = objectData[i].tokenURI.includes("ipfs://", 0)
           ? objectData[i].tokenURI.replace(
@@ -130,9 +105,18 @@ export default function Profile({ profile, objectData, indexValue }) {
             </Link>
           )}
           <p>
-            Total NFTs owned:{" "}
-            <span>{allData.length == 0 ? "Loading..." : allData.length}</span>
+            Total NFTs owned: <span>{nftCount ? nftCount : "0"}</span>
           </p>
+          {!nftCount && (
+            <i className={styles.promptBuy}>
+              <span>
+                Lets boost your Profile <i>🤩</i>
+              </span>
+              <span>
+                <a href="/collections">Purchase your first NFT</a>
+              </span>
+            </i>
+          )}
         </div>
         <div className={styles.ownedItems}>
           {allData?.map((nft, i) => {
@@ -189,18 +173,20 @@ export async function getServerSideProps({ params }) {
       },
     })
     .then((data) => {
+      console.log(data);
       let temp = data.data.account.tokens;
       objectData = temp;
     })
     .catch((err) => console.log("Error fetching data: ", err));
   const Host = await contracts.contractInstance.supportedCollections();
   contentData.push(Host);
-  let indexValue;
+  let indexValue = null;
   if (objectData.length > 1) {
     const index = Math.floor(Math.random() * objectData.length);
     console.log(index);
     indexValue = index;
   }
+  console.log(indexValue, objectData);
   return {
     props: {
       profile: profile,

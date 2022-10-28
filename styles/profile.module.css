@@ -115,4 +115,17 @@
   position: relative;
   height: 300px;
   width: 300px;
+}
+
+.promptBuy i {
+  font-style: normal;
+}
+.promptBuy span:nth-child(2) {
+  color: blue;
+  font-style: normal;
+}
+@media (max-width: 450px) {
+  .promptBuy span:nth-child(2) {
+    display: block;
+  }
 }/*# sourceMappingURL=profile.module.css.map */

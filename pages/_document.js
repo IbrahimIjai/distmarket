@@ -1,5 +1,4 @@
 import { Html, Head, Main, NextScript } from "next/document";
-// import Head from "next/head";
 
 export default function Document() {
   return (
@@ -24,7 +23,7 @@ export default function Document() {
           property="og:description"
           content="KCC #1 decentralized marketplace for NFTs"
         />
-        <meta property="og:image" content="/logo_img.png" />
+        <meta property="og:image" content="/logoL.png" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://mart.distant.finance/" />
         <meta property="twitter:title" content="Distant Finance Marketplace" />
@@ -32,7 +31,7 @@ export default function Document() {
           property="twitter:description"
           content="KCC #1 decentralized marketplace for NFTs"
         />
-        <meta property="twitter:image" content="/logo_img.png" />
+        <meta property="twitter:image" content="/logoL.png" />
         <link
           rel="apple-touch-icon"
           sizes="180x180"

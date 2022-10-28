@@ -168,7 +168,7 @@ export default function Home({ nftId, listings, obj }) {
           <div className={styles.banner}>
             <div className={styles.bannerImage}>
               <Image
-                src="/2818.png"
+                src="/defaultBanner.png"
                 objectFit="cover"
                 layout="fill"
                 alt="2818"

@@ -17,12 +17,11 @@
   }
   .modal {
     background-color: rgba(0, 0, 0, 0.7);
-    padding: 95px 24px;
     height: 100vh;
     inset: 0px;
     overflow: auto;
     display: flex;
-    transform: translate3d(0px, 0px, 0px);
+    transform: translateZ(0);
     will-change: opacity;
     color: black;
     backface-visibility: hidden;
@@ -31,6 +30,8 @@
     align-items: center;
     justify-content: center;
     position: fixed;
+    top: 0;
+    left: 0;
     z-index: 2222;
     cursor: default;
     .closeModal {
@@ -60,8 +61,7 @@
       transform: none;
       outline: none;
       border-radius: 24px;
-      width: 100%;
-      max-width: 350px;
+      width: min(90%, 350px);
       align-content: center;
       align-items: center;
       justify-content: center;
@@ -115,13 +115,12 @@
   }
   .board {
     background-color: rgba(0, 0, 0, 0.7);
-    padding: 95px 24px;
     height: 100vh;
     inset: 0px;
     overflow: auto;
     color: black;
     display: flex;
-    transform: translate3d(0px, 0px, 0px);
+    transform: translateZ(0);
     will-change: opacity;
     backface-visibility: hidden;
     backdrop-filter: blur(20px);
@@ -129,6 +128,8 @@
     align-items: center;
     justify-content: center;
     position: fixed;
+    top: 0;
+    left: 0;
     z-index: 2222;
     cursor: default;
     .closeModal {

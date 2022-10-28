@@ -3,9 +3,11 @@ import { contracts, nftABI } from "../constants/ABIs";
 
 const PopularCollection = () => {
   let addr = "0x3b12cd8b30dcf4fd9db69ce125183ac7ca567472";
-  const main = async () => {
-    console.log(await contracts.fetchCollection(addr));
+  console.log(navigator);
+  const copy = async () => {
+    await navigator.clipboard.writeText(addr);
+    alert("Text copied");
   };
-  return <div onClick={main}>Hello</div>;
+  return <div onClick={copy}>Copy</div>;
 };
 export default PopularCollection;

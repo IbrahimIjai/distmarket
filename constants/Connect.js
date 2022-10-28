@@ -123,6 +123,14 @@ export default function Connect() {
   const [connectModal, setConnectModal] = useState(false);
   const [disconnectModal, setDisconnectModal] = useState(false);
 
+  useEffect(() => {
+    const docCheck = () =>
+      typeof window !== "undefined" && connectModal
+        ? (document.body.style.overflow = "hidden !important")
+        : (document.body.style.overflow = "unset");
+    docCheck();
+  }, [connectModal, disconnectModal]);
+
   return (
     <div className={styles.container}>
       {active ? (
@@ -138,13 +146,11 @@ export default function Connect() {
       {connectModal && (
         <div className={styles.modalContainer}>
           <div className={styles.modal}>
-            <div>
-              <div
-                className={styles.closeModal}
-                onClick={() => setConnectModal(false)}
-              >
-                <IoIosCloseCircleOutline />
-              </div>
+            <div
+              className={styles.closeModal}
+              onClick={() => setConnectModal(false)}
+            >
+              <IoIosCloseCircleOutline />
             </div>
             <div className={styles.modalMenu}>
               <div className={styles.modalInternal}>

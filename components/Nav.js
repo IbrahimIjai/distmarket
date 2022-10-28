@@ -5,6 +5,7 @@ import Connect from "../constants/Connect";
 import { useState, useRef, useEffect } from "react";
 import { HiOutlineMenuAlt4 } from "react-icons/hi";
 import { CgClose } from "react-icons/cg";
+import Image from "next/image";
 
 export default function Navbar() {
   const { active, account } = useWeb3React();
@@ -25,7 +26,12 @@ export default function Navbar() {
     <nav className={styles.nav}>
       <div className={styles.logo}>
         <Link href="/">
-          <a>mART</a>
+          <a>
+            <div className={styles.logoImage}>
+              <Image src="/logoL.png" objectFit="contain" layout="fill" />
+            </div>{" "}
+            <span>mART</span>
+          </a>
         </Link>
       </div>
       <div className={styles.mobileFallback}>
@@ -56,7 +62,7 @@ export default function Navbar() {
                       }}
                       className={styles.list}
                     >
-                      Collection
+                      Collections
                     </li>
                   </a>
                 </Link>
