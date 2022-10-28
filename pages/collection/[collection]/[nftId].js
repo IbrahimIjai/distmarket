@@ -847,7 +847,7 @@ export default function NftId({
                         </div>
                         <div className={styles.purchaseUSDT}>
                           <Link href="https://app.mojitoswap.finance/swap">
-                            <a target="_blank" ref="noopener">
+                            <a target="_blank" rel="noopener">
                               <p>Purchase USDT on MojitoSwap </p>
                               <span className={styles.arrow}>
                                 <CgArrowLongRight />
@@ -1005,7 +1005,7 @@ export default function NftId({
                 </div>
                 <div className={styles.purchaseUSDT}>
                   <Link href="https://app.mojitoswap.finance/swap">
-                    <a target="_blank" ref="noopener">
+                    <a target="_blank" rel="noopener">
                       <p>Purchase USDT on MojitoSwap </p>
                       <span className={styles.arrow}>
                         <CgArrowLongRight />
