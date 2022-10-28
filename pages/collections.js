@@ -7,7 +7,6 @@ import SupportedCollections from "../SupportedCollections";
 import { marketplaceABI, contracts } from "../constants/ABIs";
 
 export default function Collections({ coll }) {
-  console.log(coll);
   return (
     <div className={styles.container}>
       <div className={styles.header}>

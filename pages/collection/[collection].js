@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Contract, utils, BigNumber } from "ethers";
 import { nftABI, contracts } from "../../constants/ABIs";
-import Loading from "../../components/Loading";
 import { BsThreeDots, BsGlobe, BsTwitter, BsTelegram } from "react-icons/bs";
 import Link from "next/link";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
@@ -162,7 +161,7 @@ export default function Home({ nftId, listings, obj }) {
   return (
     <>
       {!active ? (
-        <h1 className={styles.notActive}>Please Connect Wallet</h1>
+        <h1 className={styles.notActive}>Connect Your Wallet</h1>
       ) : (
         <>
           {/* {load && <Loading />} */}
@@ -343,7 +342,8 @@ export default function Home({ nftId, listings, obj }) {
                 </div>
               )}
             </div>
-          </div>{" "}
+          </div>
+          {"  "}
         </>
       )}
     </>

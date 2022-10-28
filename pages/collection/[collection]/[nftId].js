@@ -1,6 +1,11 @@
 import Image from "next/image";
 import styles from "../../../styles/nftId.module.css";
-import { CgFileDocument, CgDanger, CgDetailsMore } from "react-icons/cg";
+import {
+  CgFileDocument,
+  CgDanger,
+  CgDetailsMore,
+  CgArrowLongRight,
+} from "react-icons/cg";
 import { BsFillTagFill } from "react-icons/bs";
 import {
   MdOutlineVerifiedUser,
@@ -10,7 +15,7 @@ import {
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useState, useEffect } from "react";
 import HashLoader from "react-spinners/HashLoader";
-import { Contract, ethers, BigNumber, utils } from "ethers";
+import { Contract, BigNumber, utils } from "ethers";
 import {
   marketplaceABI,
   nftABI,
@@ -42,6 +47,9 @@ export default function NftId({
   const [verificationDisplay, setVerificationDisplay] = useState(false);
   const [runEffect, setRunEffect] = useState(false);
   const [userBalance, setUserBalance] = useState(null);
+  const [addressApprovedToSellNft, setAddressApprovedToSellNft] =
+    useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [load, setLoad] = useState(false);
   const loadSite = setTimeout(() => {
     setLoad(true);
@@ -57,7 +65,7 @@ export default function NftId({
     clearTimeout(init);
     clearTimeout(loadSite);
   }
-
+  //Get User balance
   useEffect(() => {
     const main = async () => {
       if (active) {
@@ -65,6 +73,9 @@ export default function NftId({
         const accountBalance = utils.formatEther(balance);
         setUserBalance(accountBalance);
       }
+      const nftContract = new Contract(collection, nftABI, contracts.provider);
+      const nftApproved = await nftContract.getApproved(nftId);
+      setAddressApprovedToSellNft(nftApproved);
     };
     main();
   }, [runEffect]);
@@ -72,6 +83,7 @@ export default function NftId({
   const marketContract = contracts.marketplace;
   const tokenContract = contracts.token;
   const deadAddress = contracts.deadAddress;
+  const genericAmount = "1000000000000000000000";
   // Constant States
   const [state, setState] = useState(false);
   const [attr, setAttr] = useState(false);
@@ -128,6 +140,7 @@ export default function NftId({
   const [createListing, setCreateListing] = useState(false);
   const [createOfferModal, setCreateOfferModal] = useState(false);
   const [updateOfferModal, setUpdateOfferModal] = useState(false);
+  const [errorModal, setErrorModal] = useState(false);
   // Write into State functions
   const writeValue = (e) => {
     setListingValue((value) => e.target.value);
@@ -149,7 +162,7 @@ export default function NftId({
     setCreateListing(true);
   };
   const deadSwitch = async () => {
-    console.log("Not Listed");
+    console.log("Not executable");
   };
   const createOfferModalPop = () => {
     setCreateOfferModal(true);
@@ -158,23 +171,74 @@ export default function NftId({
     setUpdateOfferModal(true);
   };
   // Contract functions
-  const buyNft = async () => {
+  const approveUSDT = async (signer) => {
     try {
-      const signer = await library.getSigner();
-      const instance = new Contract(tokenContract, tokenABI, signer);
-      const price = parseInt(utils.parseEther(salePrice)._hex, 16).toString();
+      const tokenContractInstance = new Contract(
+        tokenContract,
+        tokenABI,
+        signer
+      );
       if (Number(userBalance) > Number(salePrice)) {
-        const approved = await instance.allowance(account, marketContract);
+        const approved = await tokenContractInstance.allowance(
+          account,
+          marketContract
+        );
         const approvedAmount = utils.formatEther(approved);
         if (Number(approvedAmount) < Number(salePrice)) {
-          const approval = await instance.approve(marketContract, price);
+          const approval = await tokenContractInstance.approve(
+            marketContract,
+            genericAmount
+          );
           setLoading(true);
           await approval.wait();
           approval.hash && setLoading(false);
-        }
-      } else {
-        alert("Balance is low");
+        } else return;
+      } else if (Number(userBalance) < Number(salePrice)) {
+        setErrorModal(true);
+        setTimeout(() => {
+          setErrorModal(false);
+        }, 2000);
+        setErrorMessage("Balance is too low to execute transaction");
       }
+    } catch (error) {
+      if (Number(userBalance) > Number(salePrice)) {
+        setErrorModal(true);
+        setTimeout(() => {
+          setErrorModal(false);
+        }, 2000);
+        setErrorMessage("An unknown error occured. Try again: Approve USDT");
+      }
+      console.log(error);
+    }
+  };
+  const approveNFT = async (signer) => {
+    if (signer === marketContract) {
+      signer = await library.getSigner();
+    }
+    try {
+      const instance = new Contract(collection, nftABI, signer);
+      const approval = await instance.approve(marketContract, nftId);
+      setLoading(true);
+      await approval.wait();
+      approval.hash && setLoading(false);
+    } catch (error) {
+      setErrorModal(true);
+      setTimeout(() => {
+        setErrorModal(false);
+      }, 2000);
+      setCreateListing(false);
+      setErrorMessage(
+        `An unknown error occured. Try again: Approving ${ipfsData[2]}`
+      );
+      console.log(error);
+    }
+  };
+  const buyNft = async () => {
+    try {
+      const signer = await library.getSigner();
+      const price = parseInt(utils.parseEther(salePrice)._hex, 16).toString();
+      addressApprovedToSellNft === marketContract &&
+        (await approveUSDT(signer));
       const contract = new Contract(marketContract, marketplaceABI, signer);
       const tx = await contract.buyNFT(collection, nftId, price);
       setLoading(true);
@@ -182,6 +246,27 @@ export default function NftId({
       tx.hash && setLoading(false);
       router.replace(router.asPath);
     } catch (error) {
+      if (!active) {
+        setErrorModal(true);
+        setTimeout(() => {
+          setErrorModal(false);
+        }, 2000);
+        setErrorMessage("Connect wallet to execute transaction");
+        return;
+      }
+      if (addressApprovedToSellNft !== marketContract) {
+        setErrorModal(true);
+        setTimeout(() => {
+          setErrorModal(false);
+        }, 2000);
+        setErrorMessage("Marketplace is not approved to trade NFT");
+        return;
+      }
+      setErrorModal(true);
+      setTimeout(() => {
+        setErrorModal(false);
+      }, 2000);
+      setErrorMessage("An unknown error occured. Try again");
       console.log(error);
     }
   };
@@ -189,11 +274,7 @@ export default function NftId({
     try {
       const val = utils.parseEther(listingValue);
       const signer = await library.getSigner();
-      const instance = new Contract(collection, nftABI, signer);
-      const approval = await instance.approve(marketContract, nftId);
-      setLoading(true);
-      await approval.wait();
-      approval.hash && setLoading(false);
+      await approveNFT(signer);
       const contract = new Contract(marketContract, marketplaceABI, signer);
       const tx = await contract.list(collection, nftId, val.toString());
       setLoading(true);
@@ -202,6 +283,12 @@ export default function NftId({
       setCreateListing(false);
       router.replace(router.asPath);
     } catch (error) {
+      setErrorModal(true);
+      setTimeout(() => {
+        setErrorModal(false);
+      }, 2000);
+      setCreateListing(false);
+      setErrorMessage("An unknown error occured. Try again: Sell");
       console.log(error);
     }
   };
@@ -215,6 +302,11 @@ export default function NftId({
       tx.hash && setLoading(false);
       router.replace(router.asPath);
     } catch (err) {
+      setErrorModal(true);
+      setTimeout(() => {
+        setErrorModal(false);
+      }, 2000);
+      setErrorMessage("An unknown error occured. Try again");
       console.log(err);
     }
   };
@@ -233,8 +325,14 @@ export default function NftId({
       tx.hash && setLoading(false);
       setUpdateListingModal(false);
       router.replace(router.asPath);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      setErrorModal(true);
+      setTimeout(() => {
+        setErrorModal(false);
+      }, 2000);
+      setUpdateListingModal(false);
+      setErrorMessage("An unknown error occured. Try again");
+      console.log(error);
     }
   };
   const makeOffer = async () => {
@@ -246,13 +344,26 @@ export default function NftId({
           16
         ).toString();
         const instance = new Contract(tokenContract, tokenABI, signer);
-        const approved = await instance.allowance(account, marketContract);
-        const approvedAmount = utils.formatEther(approved);
-        if (Number(approvedAmount) < Number(createOfferValue)) {
-          const approval = await instance.approve(marketContract, offerVal);
-          setLoading(true);
-          await approval.wait();
-          approval.hash && setLoading(false);
+        if (Number(userBalance) > Number(createOfferValue)) {
+          const approved = await instance.allowance(account, marketContract);
+          const approvedAmount = utils.formatEther(approved);
+          if (Number(approvedAmount) < Number(createOfferValue)) {
+            const approval = await instance.approve(
+              marketContract,
+              genericAmount
+            );
+            setLoading(true);
+            await approval.wait();
+            approval.hash && setLoading(false);
+          }
+        } else {
+          setErrorModal(true);
+          setTimeout(() => {
+            setErrorModal(false);
+          }, 2000);
+          setErrorMessage("Insufficient Balance for approval");
+          setCreateOfferModal(false);
+          return;
         }
         const contract = new Contract(marketContract, marketplaceABI, signer);
         const tx = await contract.createOffer(collection, nftId, offerVal);
@@ -262,10 +373,23 @@ export default function NftId({
         setCreateOfferModal(false);
         router.replace(router.asPath);
       } else {
-        alert("Please connect your wallet to execute this transaction");
+        setErrorModal(true);
+        setTimeout(() => {
+          setErrorModal(false);
+        }, 2000);
+        setCreateOfferModal(false);
+        setErrorMessage(
+          "Please connect your wallet to execute this transaction"
+        );
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      setErrorModal(true);
+      setTimeout(() => {
+        setErrorModal(false);
+      }, 2000);
+      setCreateOfferModal(false);
+      setErrorMessage("An unknown error occured. Try again");
+      console.log(error);
     }
   };
   const updateOffer = async () => {
@@ -286,17 +410,27 @@ export default function NftId({
           approval.hash && setLoading(false);
         }
       } else {
-        alert("New offer value is below Balance");
+        setErrorModal(true);
+        setTimeout(() => {
+          setErrorModal(false);
+        }, 2000);
+        setErrorMessage("New offer value is below Balance");
+        setUpdateOfferModal(false);
       }
       const contract = new Contract(marketContract, marketplaceABI, signer);
       const tx = await contract.updateOffer(collection, nftId, offerVal);
       setLoading(true);
       await tx.wait();
       tx.hash && setLoading(false);
-      setCreateOfferModal(false);
+      setUpdateOfferModal(false);
       router.replace(router.asPath);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      setErrorModal(true);
+      setTimeout(() => {
+        setErrorModal(false);
+      }, 2000);
+      setErrorMessage("An unknown error occured. Try again");
+      console.log(error);
     }
   };
   const cancelOffer = async () => {
@@ -308,11 +442,16 @@ export default function NftId({
       await tx.wait();
       tx.hash && setLoading(false);
       router.replace(router.asPath);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      setErrorModal(true);
+      setTimeout(() => {
+        setErrorModal(false);
+      }, 2000);
+      setErrorMessage("An unknown error occured. Try again");
+      console.log(error);
     }
   };
-  const acceptOffer1 = async (offerVal, initiator) => {
+  const acceptHighestOffer = async (offerVal, initiator) => {
     try {
       const signer = library.getSigner();
       const instance = new Contract(tokenContract, tokenABI, signer);
@@ -324,13 +463,17 @@ export default function NftId({
       const initiatorBalance = utils.formatEther(balance);
       const initiatorApproval = utils.formatEther(approved);
       if (
-        Number(initiatorBalance) < offerVal &&
+        Number(initiatorBalance) < offerVal ||
         Number(initiatorApproval) < offerVal
       ) {
-        alert(
+        setErrorModal(true);
+        setTimeout(() => {
+          setErrorModal(false);
+        }, 2000);
+        setErrorMessage(
           "Offer Initiator has insufficient funds/approval for this Transaction. Try someone else"
         );
-        //I want to add a modal that pops up for 5 seconds, telling a user that the Offerer has insuffficient funds
+        return;
       }
       const contract = new Contract(marketContract, marketplaceABI, signer);
       const tx = await contract.acceptOffer(
@@ -342,11 +485,16 @@ export default function NftId({
       await tx.wait();
       tx.hash && setLoading(false);
       router.replace(router.asPath);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      setErrorModal(true);
+      setTimeout(() => {
+        setErrorModal(false);
+      }, 2000);
+      setErrorMessage("An unknown error occured. Try again");
+      console.log(error);
     }
   };
-  const acceptOffer2 = async (offerVal, initiator) => {
+  const acceptAvailableOffer = async (offerVal, initiator) => {
     try {
       const signer = library.getSigner();
       const instance = new Contract(tokenContract, tokenABI, signer);
@@ -355,13 +503,17 @@ export default function NftId({
       const initiatorBalance = utils.formatEther(balance);
       const initiatorApproval = utils.formatEther(approved);
       if (
-        Number(initiatorBalance) < offerVal &&
+        Number(initiatorBalance) < offerVal ||
         Number(initiatorApproval) < offerVal
       ) {
-        alert(
+        setErrorModal(true);
+        setTimeout(() => {
+          setErrorModal(false);
+        }, 2000);
+        setErrorMessage(
           "Offer Initiator has insufficient funds/approval for this Transaction. Try someone else"
         );
-        //I want to add a modal that pops up for 5 seconds, telling a user that the Offerer has insuffficient funds
+        return;
       }
       const contract = new Contract(marketContract, marketplaceABI, signer);
       const tx = await contract.acceptOffer(collection, nftId, initiator);
@@ -369,13 +521,43 @@ export default function NftId({
       await tx.wait();
       tx.hash && setLoading(false);
       router.replace(router.asPath);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      setErrorModal(true);
+      setTimeout(() => {
+        setErrorModal(false);
+      }, 2000);
+      setErrorMessage("An unknown error occured. Try again");
+      console.log(error);
     }
   };
-  console.log(salePrice);
   return (
     <main className={styles.main}>
+      {errorModal && (
+        <div className={styles.errorModalContainer}>
+          <div className={styles.errorModal}>
+            <p>
+              {errorMessage}
+              {Number(userBalance) < Number(salePrice) &&
+                addressApprovedToSellNft === marketContract &&
+                active && (
+                  <span>
+                    {" "}
+                    Buy on{" "}
+                    <Link href="https://app.mojitoswap.finance/swap">
+                      <a
+                        className={styles.dexLink}
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        MojitoSwap
+                      </a>
+                    </Link>
+                  </span>
+                )}
+            </p>
+          </div>
+        </div>
+      )}
       <div className={styles.container}>
         <div className={styles.headerContainer}>
           <div className={styles.imageContainer}>
@@ -451,6 +633,10 @@ export default function NftId({
                       : account !== ipfsData[5] &&
                         deadAddress === nftSaleInfo[0]
                       ? deadSwitch
+                      : account === ipfsData[5] &&
+                        account === nftSaleInfo[0] &&
+                        addressApprovedToSellNft !== marketContract
+                      ? () => approveNFT(marketContract)
                       : buyNft
                   }
                   className={styles.buyButton}
@@ -472,56 +658,67 @@ export default function NftId({
                         ? "default"
                         : "",
                     display:
-                      account === ipfsData[5] && account === nftSaleInfo[0]
+                      account === ipfsData[5] &&
+                      account === nftSaleInfo[0] &&
+                      addressApprovedToSellNft === marketContract
                         ? "none"
                         : "",
                   }}
                 >
                   {account === ipfsData[5] && deadAddress === nftSaleInfo[0]
                     ? "List NFT"
+                    : account === ipfsData[5] &&
+                      account === nftSaleInfo[0] &&
+                      addressApprovedToSellNft !== marketContract
+                    ? "Approve NFT"
                     : account !== ipfsData[5] && deadAddress === nftSaleInfo[0]
                     ? "Not Listed"
                     : "Buy NFT"}
                 </div>
-                {account === ipfsData[5] && account === nftSaleInfo[0] && (
-                  <div className={styles.ownerActive}>
-                    <div
-                      onClick={updateListingModalPop}
-                      className={styles.ownerActiveUpdate}
-                    >
-                      Update Listing
-                    </div>
-                    {updateListingModal && (
-                      <div className={styles.createListingModal}>
-                        <div
-                          onClick={() => setUpdateListingModal(false)}
-                          className={styles.closeModal}
-                        >
-                          <IoIosCloseCircleOutline />
-                        </div>
-                        <div className={styles.actualModal}>
-                          <div className={styles.internalModal}>
-                            <input
-                              type="text"
-                              onChange={writeUpdatedValue}
-                              autoComplete="off"
-                              required=""
-                              className={styles.input}
-                              placeholder="Set New Price"
-                            />
-                            <div onClick={updateListing}>Update Price</div>
+                {account === ipfsData[5] &&
+                  account === nftSaleInfo[0] &&
+                  addressApprovedToSellNft === marketContract && (
+                    <div className={styles.ownerActive}>
+                      <div
+                        onClick={updateListingModalPop}
+                        className={styles.ownerActiveUpdate}
+                      >
+                        Update Listing
+                      </div>
+                      {updateListingModal && (
+                        <div className={styles.createListingModal}>
+                          <div
+                            onClick={() => setUpdateListingModal(false)}
+                            className={styles.closeModal}
+                          >
+                            <IoIosCloseCircleOutline />
+                          </div>
+                          <div className={styles.actualModal}>
+                            <div className={styles.internalModal}>
+                              <input
+                                type="text"
+                                onChange={writeUpdatedValue}
+                                autoComplete="off"
+                                required=""
+                                className={styles.input}
+                                placeholder="Set New Price"
+                              />
+                              <div onClick={updateListing}>Update Price</div>
+                            </div>
+                            <div className={styles.purchaseUSDT}>
+                              <p>Trades are executed in USDT</p>
+                            </div>
                           </div>
                         </div>
+                      )}
+                      <div
+                        onClick={cancelListing}
+                        className={styles.ownerActiveCancel}
+                      >
+                        Cancel Listing
                       </div>
-                    )}
-                    <div
-                      onClick={cancelListing}
-                      className={styles.ownerActiveCancel}
-                    >
-                      Cancel Listing
                     </div>
-                  </div>
-                )}
+                  )}
                 {createListing && (
                   <div className={styles.createListingModal}>
                     <div
@@ -542,6 +739,9 @@ export default function NftId({
                         />
                         <div onClick={sellNft}>List NFT</div>
                       </div>
+                    </div>
+                    <div className={styles.purchaseUSDT}>
+                      <p>Trades are executed in USDT</p>
                     </div>
                   </div>
                 )}
@@ -570,7 +770,7 @@ export default function NftId({
                         ? deadSwitch
                         : account === ipfsData[5] && highestOffer
                         ? () =>
-                            acceptOffer1(
+                            acceptHighestOffer(
                               highestOffer,
                               offer.map(
                                 (offer) =>
@@ -610,7 +810,7 @@ export default function NftId({
                     {account !== ipfsData[5] &&
                     deadAddress !== nftSaleInfo[0] &&
                     !offerer.some((addr) => addr === account)
-                      ? "Make Offer"
+                      ? "Make an Offer"
                       : account !== ipfsData[5] &&
                         offerer.some((addr) => addr === account)
                       ? "Cancel Offer"
@@ -641,7 +841,19 @@ export default function NftId({
                             className={styles.input}
                             placeholder="Set Offer Value"
                           />
-                          <div onClick={makeOffer}>Create Offer</div>
+                          <div onClick={makeOffer}>
+                            <span>Create Offer</span>
+                          </div>
+                        </div>
+                        <div className={styles.purchaseUSDT}>
+                          <Link href="https://app.mojitoswap.finance/swap">
+                            <a target="_blank" ref="noopener">
+                              <p>Purchase USDT on MojitoSwap </p>
+                              <span className={styles.arrow}>
+                                <CgArrowLongRight />
+                              </span>
+                            </a>
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -707,7 +919,11 @@ export default function NftId({
                               ? createUpdateOfferModalPop
                               : account === ipfsData[5] &&
                                 deadAddress !== nftSaleInfo[0]
-                              ? () => acceptOffer2(offers.value, offers.address)
+                              ? () =>
+                                  acceptAvailableOffer(
+                                    offers.value,
+                                    offers.address
+                                  )
                               : deadSwitch
                           }
                           style={{
@@ -781,9 +997,21 @@ export default function NftId({
                     autoComplete="off"
                     required=""
                     className={styles.input}
-                    placeholder="Set Offer Value"
+                    placeholder="Set New Offer Value"
                   />
-                  <div onClick={updateOffer}>Create Offer</div>
+                  <div onClick={updateOffer}>
+                    <span>Create New Offer</span>
+                  </div>
+                </div>
+                <div className={styles.purchaseUSDT}>
+                  <Link href="https://app.mojitoswap.finance/swap">
+                    <a target="_blank" ref="noopener">
+                      <p>Purchase USDT on MojitoSwap </p>
+                      <span className={styles.arrow}>
+                        <CgArrowLongRight />
+                      </span>
+                    </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -885,14 +1113,12 @@ export async function getServerSideProps({ params, res }) {
   );
   const nftID = params.nftId;
   const collection = params.collection;
-  const marketContract = contracts.marketplace;
-  const provider = new ethers.providers.JsonRpcProvider(contracts.mumbai);
-  const contract = new Contract(marketContract, marketplaceABI, provider);
+  const contract = contracts.contractInstance;
   const nftSaleInfo = await contract.sellNFT(collection, nftID);
   const offerInfo = await contract.availableOffers(collection, nftID);
   const threeListings = await contract.availableListings(collection);
   const collectionInfo = await contract.collection(collection);
-  const instance = new Contract(collection, nftABI, provider);
+  const instance = new Contract(collection, nftABI, contracts.provider);
   const nftListings = threeListings[0].slice(-2);
   const listingDetails = threeListings[1].slice(-2);
   const extraListings = [];

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { connectors } from "./connectors";
 import { BsBoxArrowUpRight } from "react-icons/bs";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { contracts } from "./ABIs";
 import { utils } from "ethers";
 import Image from "next/image";
 import styles from "../styles/Connect.module.css";
@@ -12,13 +13,17 @@ export default function Connect() {
     useWeb3React();
 
   const provider = library;
-  const [balanceOfAccount, setBal] = useState(null);
+  const [kcsBalance, setKcsBalance] = useState(null);
+  const [usdtBalance, setUsdtBalance] = useState(null);
   const bal = async () => {
     const balance = await provider.getBalance(account);
     const userBalance = utils.formatEther(balance);
-    const bal = userBalance.toString();
-    const kcs = bal.substring(0, 4);
-    setBal(kcs);
+    const kcs = userBalance.substring(0, 4);
+    setKcsBalance(kcs);
+    const balanceUsdt = await contracts.tokenInstance.balanceOf(account);
+    let usdtbalance = utils.formatEther(balanceUsdt);
+    const usdt = usdtbalance.substring(0, 6);
+    setUsdtBalance(usdt);
   };
   if (active) {
     bal();
@@ -210,8 +215,8 @@ export default function Connect() {
                   </p>
                 </a>
               </Link>
-              <p>KCS balance: {balanceOfAccount}</p>
-              {/* <p>WKCS balance: 35</p> */}
+              <p>KCS balance: {kcsBalance}</p>
+              <p>USDT balance: {usdtBalance}</p>
               <button onClick={disconnect}>Disconnect</button>
             </div>
           </div>

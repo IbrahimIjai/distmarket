@@ -138,13 +138,13 @@ export default function Profile({ profile }) {
                         className={styles.image}
                       />{" "}
                       <div className={styles.content}>
-                        <div className={styles.onSale}>
+                        {/* <div className={styles.onSale}>
                           {nft.offerTrue
                             ? "Offer Available"
                             : nft.listingTrue
                             ? "on Sale"
                             : ""}
-                        </div>
+                        </div> */}
                         <div className={styles.details}>
                           <h2 className={styles.name}>{nft.name}</h2>
                         </div>
@@ -163,7 +163,6 @@ export default function Profile({ profile }) {
 
 export async function getServerSideProps({ params }) {
   const profile = params.profile;
-  console.log(profile);
   return {
     props: { profile: profile },
   };

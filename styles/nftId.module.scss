@@ -247,6 +247,9 @@
               color: black;
               background: transparent;
               font-size: 22px;
+              svg {
+                cursor: pointer;
+              }
             }
           }
           .body {
@@ -434,7 +437,7 @@
   display: none;
 }
 
-@media (hover) or (print: fine) {
+@media (hover), (print: fine) {
   .cards::-webkit-scrollbar {
     height: 5px;
     display: block;
@@ -553,9 +556,9 @@
     opacity: 1;
     transform: none;
     outline: none;
-    border-radius: 24px;
+    border-radius: 16px;
     width: 100%;
-    max-width: 350px;
+    max-width: 500px;
     align-content: center;
     align-items: center;
     justify-content: center;
@@ -565,20 +568,47 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    .purchaseUSDT {
+      font-size: clamp(1.1rem, 1.3vw, 1.42rem);
+      padding: 1rem 0.4rem;
+      transition: all 300ms ease-in-out;
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-direction: row;
+      }
+      .arrow {
+        opacity: 0;
+        padding-left: 0.5rem;
+        transition: opacity 300ms ease-in-out;
+      }
+      &:hover {
+        .arrow {
+          opacity: 1;
+        }
+      }
+    }
     .internalModal {
-      padding: 50px;
+      padding: 10px;
+      padding-top: 50px;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       input {
         font-weight: 600;
         margin-bottom: 16px;
         text-align: center;
         font-size: 32px;
         letter-spacing: -0.02em;
-        width: 100%;
+        width: min(100%, 400px);
       }
       .input {
         border: solid 1.5px #9e9e9e;
-        border-radius: 1rem;
+        border-radius: 0.35rem;
         background: none;
         padding: 1rem;
         font-size: 1rem;
@@ -588,7 +618,7 @@
       div {
         border-radius: 8px;
         width: fit-content;
-        padding: 4px;
+        padding: 0.6rem 1rem;
         background: #000;
         border: 2px solid #000;
         color: white;
@@ -598,9 +628,8 @@
         transition: all 500ms ease-in-out;
         &:hover {
           background-color: #fff;
+          font-weight: 400;
           color: #000;
-          font-weight: 600;
-          transform: scale(1.1);
         }
       }
     }
@@ -661,5 +690,27 @@
     padding-top: 30px;
     color: #fff;
     overflow: hidden;
+  }
+}
+// Error modal
+.errorModalContainer {
+  width: 100%;
+  position: fixed;
+  bottom: 6%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .errorModal {
+    border-radius: 7px;
+    background-color: #292727;
+    color: #e6e6e6;
+    width: min(90%, 600px);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    .dexLink {
+      color: #2fc0db;
+    }
   }
 }

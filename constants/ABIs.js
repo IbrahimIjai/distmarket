@@ -4,140 +4,6 @@ const marketplaceABI = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_collection",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "_offerer",
-        type: "address",
-      },
-    ],
-    name: "acceptOffer",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_collection",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_collectionAddress",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_royaltyFees",
-        type: "uint256",
-      },
-    ],
-    name: "addCollection",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_collection",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_price",
-        type: "uint256",
-      },
-    ],
-    name: "buyNFT",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_collection",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "cancelListing",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_collection",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "cancelOffer",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_collection",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_value",
-        type: "uint256",
-      },
-    ],
-    name: "createOffer",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "uint8",
         name: "_tradeFee",
         type: "uint8",
@@ -149,7 +15,7 @@ const marketplaceABI = [
       },
       {
         internalType: "address",
-        name: "_WKCS",
+        name: "_USDT",
         type: "address",
       },
     ],
@@ -325,27 +191,23 @@ const marketplaceABI = [
     type: "event",
   },
   {
+    anonymous: false,
     inputs: [
       {
+        indexed: false,
         internalType: "address",
-        name: "_collection",
+        name: "collectionAddress",
         type: "address",
       },
       {
+        indexed: false,
         internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_price",
+        name: "tokenId",
         type: "uint256",
       },
     ],
-    name: "list",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    name: "NFTRecovery",
+    type: "event",
   },
   {
     anonymous: false,
@@ -477,6 +339,32 @@ const marketplaceABI = [
     inputs: [
       {
         indexed: false,
+        internalType: "string",
+        name: "reason",
+        type: "string",
+      },
+    ],
+    name: "Pause",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Paused",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
         internalType: "uint256",
         name: "fees",
         type: "uint256",
@@ -492,10 +380,498 @@ const marketplaceABI = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "tokenAddress",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "TokenRecovery",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "string",
+        name: "reason",
+        type: "string",
+      },
+    ],
+    name: "Unpause",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Unpaused",
+    type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_collection",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "_offerer",
+        type: "address",
+      },
+    ],
+    name: "acceptOffer",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_collection",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_collectionAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_royaltyFees",
+        type: "uint256",
+      },
+    ],
+    name: "addCollection",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_collection",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "allCreators",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "creators",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_collection",
+        type: "address",
+      },
+    ],
+    name: "availableListings",
+    outputs: [
+      {
+        internalType: "uint256[]",
+        name: "nfts",
+        type: "uint256[]",
+      },
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "seller",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "price",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct NFTMarketplace.Listing[]",
+        name: "nftInfo",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_collection",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "availableOffers",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "offerCount",
+        type: "address[]",
+      },
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "buyer",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "price",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct NFTMarketplace.Offer[]",
+        name: "offerInfo",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_collection",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_price",
+        type: "uint256",
+      },
+    ],
+    name: "buyNFT",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_collection",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "cancelListing",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_collection",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "cancelOffer",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "collection",
+    outputs: [
+      {
+        internalType: "address",
+        name: "collectionAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "royaltyFees",
+        type: "uint256",
+      },
+      {
+        internalType: "enum NFTMarketplace.Status",
+        name: "status",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_collection",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_value",
+        type: "uint256",
+      },
+    ],
+    name: "createOffer",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_collection",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_price",
+        type: "uint256",
+      },
+    ],
+    name: "list",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "maxFees",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "minFees",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "_reason",
+        type: "string",
+      },
+    ],
+    name: "pauseMarketplace",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "paused",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_collection",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "recoverNFT",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+    ],
+    name: "recoverToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "renounceOwnership",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "sellNFT",
+    outputs: [
+      {
+        internalType: "address",
+        name: "seller",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "price",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "supportedCollections",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "availableCollections",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "tradeFee",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -507,6 +883,19 @@ const marketplaceABI = [
       },
     ],
     name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "_reason",
+        type: "string",
+      },
+    ],
+    name: "unpauseMarketplace",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -624,213 +1013,6 @@ const marketplaceABI = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "withdrawRevenue",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_collection",
-        type: "address",
-      },
-    ],
-    name: "availableListings",
-    outputs: [
-      {
-        internalType: "uint256[]",
-        name: "nfts",
-        type: "uint256[]",
-      },
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "seller",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "price",
-            type: "uint256",
-          },
-        ],
-        internalType: "struct NFTMarketplace.Listing[]",
-        name: "nftInfo",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_collection",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "availableOffers",
-    outputs: [
-      {
-        internalType: "address[]",
-        name: "offerCount",
-        type: "address[]",
-      },
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "buyer",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "price",
-            type: "uint256",
-          },
-        ],
-        internalType: "struct NFTMarketplace.Offer[]",
-        name: "offerInfo",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "collection",
-    outputs: [
-      {
-        internalType: "address",
-        name: "collectionAddress",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "royaltyFees",
-        type: "uint256",
-      },
-      {
-        internalType: "enum NFTMarketplace.Status",
-        name: "status",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "maxFees",
-    outputs: [
-      {
-        internalType: "uint8",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "minFees",
-    outputs: [
-      {
-        internalType: "uint8",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "owner",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "sellNFT",
-    outputs: [
-      {
-        internalType: "address",
-        name: "seller",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "price",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "supportedCollections",
-    outputs: [
-      {
-        internalType: "address[]",
-        name: "availableCollections",
-        type: "address[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "tradeFee",
-    outputs: [
-      {
-        internalType: "uint8",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
       {
         internalType: "address",
@@ -847,6 +1029,13 @@ const marketplaceABI = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdrawRevenue",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];
@@ -1761,16 +1950,27 @@ const mumbai = "https://matic-testnet-archive-rpc.bwarelabs.com";
 const provider = new ethers.providers.JsonRpcProvider(mumbai);
 const contractInstance = new Contract(marketplace, marketplaceABI, provider);
 const tokenInstance = new Contract(token, tokenABI, provider);
+const collectionsHost =
+  "https://ipfsfiles.distant.finance/ipfs/Qmc6rfqRsswqzsJV9nDoLbvQy2yk8hCDQteaGt86iAs1Hy";
+const queryUrl = "https://api.thegraph.com/subgraphs/name/steffqing/721-clone";
+const deadAddress = "0x0000000000000000000000000000000000000000";
+
+const fetchCollection = async (address) => {
+  const link = collectionsHost + `/${address}.json`;
+  const data = await fetch(link).then((res) => res.json());
+  return data;
+};
 
 const contracts = {
-  marketplace: marketplace,
-  token: token,
-  mumbai: mumbai,
-  deadAddress: "0x0000000000000000000000000000000000000000",
-  queryUrl: "https://api.thegraph.com/subgraphs/name/steffqing/721-clone",
-  provider: provider,
-  contractInstance: contractInstance,
-  tokenInstance: tokenInstance,
+  marketplace,
+  token,
+  queryUrl,
+  mumbai,
+  deadAddress,
+  provider,
+  contractInstance,
+  tokenInstance,
+  fetchCollection,
 };
 
 export { marketplaceABI, nftABI, tokenABI, contracts };
