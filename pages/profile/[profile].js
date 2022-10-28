@@ -113,7 +113,9 @@ export default function Profile({ profile, objectData, indexValue }) {
                 Lets boost your Profile <i>🤩</i>
               </span>
               <span>
-                <a href="/collections">Purchase your first NFT</a>
+                <Link>
+                  <a href="/collections">Purchase your first NFT</a>
+                </Link>
               </span>
             </i>
           )}
