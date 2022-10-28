@@ -28,7 +28,12 @@ export default function Navbar() {
         <Link href="/">
           <a>
             <div className={styles.logoImage}>
-              <Image src="/logoL.png" objectFit="contain" layout="fill" />
+              <Image
+                src="/logoL.png"
+                objectFit="contain"
+                layout="fill"
+                alt="Logo Image"
+              />
             </div>{" "}
             <span>mART</span>
           </a>

@@ -11,7 +11,12 @@ export default function Collections({ coll }) {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.headerImage}>
-          <Image src={banner} objectFit="cover" layout="fill" alt="2818" />
+          <Image
+            src={banner}
+            objectFit="cover"
+            layout="fill"
+            alt="Banner Image"
+          />
         </div>
         <div className={styles.headerContent}>
           <h1 className={styles.headerHeader}>mART Collections</h1>
