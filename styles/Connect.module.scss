@@ -123,7 +123,7 @@
     transform: translateZ(0);
     will-change: opacity;
     backface-visibility: hidden;
-    backdrop-filter: blur(20px);
+    // backdrop-filter: blur(20px);
     perspective: 1000px;
     align-items: center;
     justify-content: center;
@@ -132,6 +132,7 @@
     left: 0;
     z-index: 2222;
     cursor: default;
+
     .closeModal {
       display: flex;
       position: fixed;

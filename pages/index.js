@@ -6,6 +6,7 @@ import Mint1 from "../Frontpage/Mint1";
 import Loader from "../components/Loader";
 import { contracts } from "../constants/ABIs";
 import { useState } from "react";
+
 export default function Home({ addresses }) {
   const [load, setLoad] = useState(false);
   setTimeout(() => {
