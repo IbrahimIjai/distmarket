@@ -5,6 +5,7 @@ import { DivArt_placeholder } from "./assets/DivArt_placeholder.png";
 import { VixenPunk_placeholder } from "./assets/VixenPunk_placeholder.png";
 import { VixenPups_placeholder } from "./assets/VixenPups_placeholder.png";
 
+
 export default [
   {
     collectionName: "Eyeballz",

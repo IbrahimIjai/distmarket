@@ -1,0 +1,48 @@
+.div {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 3rem;
+}
+.div .Addcollection {
+  padding: 2rem;
+  border-radius: 2rem;
+  border: 1.3px solid #2fc0db;
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+}
+.div .Addcollection input {
+  border: none;
+  background-color: black;
+  border-bottom: 1.2px solid #2fc0db;
+  color: aliceblue;
+  padding: 0.5rem;
+}
+.div .Addcollection button {
+  background-color: red;
+  border-radius: 7px;
+  transition: 1000ms;
+  cursor: pointer;
+}
+.div .Addcollection button:hover {
+  scale: 1.2;
+  color: aliceblue;
+}
+.div .upDateCollection {
+  padding: 2rem;
+  border-radius: 2rem;
+  border: 1.3px solid #2fc0db;
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+}
+.div .upDateCollection input {
+  border: none;
+  background-color: black;
+  border-bottom: 1.2px solid #2fc0db;
+  color: aliceblue;
+  padding: 0.5rem;
+}/*# sourceMappingURL=Admin.module.css.map */

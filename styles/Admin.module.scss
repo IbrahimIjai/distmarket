@@ -1,0 +1,51 @@
+.div{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 3rem;
+
+    .Addcollection{
+        padding: 2rem;
+        border-radius: 2rem;
+        border: 1.3px solid #2fc0db;
+        display: flex;
+        gap: 2rem;
+        flex-direction: column;
+        input{
+            border: none;
+            background-color: black;
+            border-bottom: 1.2px solid #2fc0db;
+            color: aliceblue;
+            padding: .5rem;
+            // transition: all 1500ms;
+        }
+        button{
+            background-color: red;
+            border-radius: 7px;
+            transition: 1000ms;
+            cursor: pointer;
+            &:hover{
+                scale: 1.2;
+                color: aliceblue;
+            }
+        }
+    }
+    .upDateCollection{
+        padding: 2rem;
+        border-radius: 2rem;
+        border: 1.3px solid #2fc0db;
+        display: flex;
+        gap: 2rem;
+        flex-direction: column;
+        input{
+            border: none;
+            background-color: black;
+            border-bottom: 1.2px solid #2fc0db;
+            color: aliceblue;
+            padding: .5rem;
+        }
+
+    }
+}
