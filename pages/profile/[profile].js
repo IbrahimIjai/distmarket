@@ -3,7 +3,6 @@ import Image from "next/image";
 import { contracts } from "../../constants/ABIs";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import banner from "../../assets/DivArt_banner.png";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
 const addressQuery = `
@@ -77,7 +76,7 @@ export default function Profile({ profile, objectData, indexValue }) {
           <div className={styles.profile}>
             <div className={styles.banner}>
               <Image
-                src={banner}
+                src="/bannerProfile.png"
                 objectFit="cover"
                 layout="fill"
                 alt="banner"

@@ -16,9 +16,8 @@
 }
 .container .modal {
   background-color: rgba(0, 0, 0, 0.7);
-  height: 100vh;
+  min-height: 100vh;
   inset: 0px;
-  overflow: auto;
   display: flex;
   transform: translateZ(0);
   will-change: opacity;
@@ -84,6 +83,16 @@
   font-size: 32px;
   letter-spacing: -0.02em;
 }
+.container .modal .modalMenu .modalInternal .tutorial {
+  color: blue;
+  opacity: 0.8;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.container .modal .modalMenu .modalInternal .tutorial:hover {
+  color: blue;
+  opacity: 0.7;
+}
 .container .modal .modalMenu .modalInternal .wallets {
   display: grid;
   gap: 32px;
@@ -118,9 +127,8 @@
 }
 .container .board {
   background-color: rgba(0, 0, 0, 0.7);
-  height: 100vh;
+  min-height: 100vh;
   inset: 0px;
-  overflow: auto;
   color: black;
   display: flex;
   transform: translateZ(0);
@@ -163,8 +171,7 @@
   transform: none;
   outline: none;
   border-radius: 24px;
-  width: 100%;
-  max-width: 350px;
+  width: min(100%, 350px);
   align-content: center;
   align-items: center;
   justify-content: center;
@@ -181,13 +188,15 @@
 }
 .container .board .smallBoard button {
   border: none;
-  color: black;
-  background: transparent;
+  color: white;
+  background: black;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
   font-size: 22px;
   margin-top: 5px;
   cursor: pointer;
   transition: all 120ms ease-in-out;
 }
 .container .board .smallBoard button:hover {
-  transform: scale(1.05);
+  background: #333;
 }/*# sourceMappingURL=Connect.module.css.map */

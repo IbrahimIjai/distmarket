@@ -1,51 +1,56 @@
-.div{
-    height: 100vh;
+.div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .link {
+    margin: 1.4rem 0;
+  }
+  .Addcollection {
+    padding: 2rem;
+    margin: 3rem auto;
+    border-radius: 10px;
+    border: 1px solid #2fc0db;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    gap: 2rem;
     flex-direction: column;
-    gap: 3rem;
-
-    .Addcollection{
-        padding: 2rem;
-        border-radius: 2rem;
-        border: 1.3px solid #2fc0db;
-        display: flex;
-        gap: 2rem;
-        flex-direction: column;
-        input{
-            border: none;
-            background-color: black;
-            border-bottom: 1.2px solid #2fc0db;
-            color: aliceblue;
-            padding: .5rem;
-            // transition: all 1500ms;
-        }
-        button{
-            background-color: red;
-            border-radius: 7px;
-            transition: 1000ms;
-            cursor: pointer;
-            &:hover{
-                scale: 1.2;
-                color: aliceblue;
-            }
-        }
+    h2 {
+      font-size: clamp(1.5rem, 2vw, 2rem);
+      font-family: Arial, Helvetica, sans-serif;
     }
-    .upDateCollection{
-        padding: 2rem;
-        border-radius: 2rem;
-        border: 1.3px solid #2fc0db;
-        display: flex;
-        gap: 2rem;
-        flex-direction: column;
-        input{
-            border: none;
-            background-color: black;
-            border-bottom: 1.2px solid #2fc0db;
-            color: aliceblue;
-            padding: .5rem;
-        }
-
+    input {
+      border: none;
+      background-color: black;
+      border-bottom: 1.2px solid #2fc0db;
+      color: aliceblue;
+      padding: 0.5rem;
     }
+    button {
+      background-color: white;
+      color: black;
+      border-radius: 7px;
+      border: none;
+      padding: 0.7rem 1rem;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+      &:hover {
+        color: aliceblue;
+        background-color: #2fc0db;
+      }
+    }
+  }
+  .rev {
+    width: fit-content;
+    padding: 0.64rem 1rem;
+    border-radius: 6px;
+    background-color: #2fc0db;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      background-color: white;
+      color: #000;
+      border: none;
+    }
+  }
 }

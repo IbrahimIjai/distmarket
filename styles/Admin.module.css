@@ -1,18 +1,24 @@
 .div {
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 3rem;
+}
+.div .link {
+  margin: 1.4rem 0;
 }
 .div .Addcollection {
   padding: 2rem;
-  border-radius: 2rem;
-  border: 1.3px solid #2fc0db;
+  margin: 3rem auto;
+  border-radius: 10px;
+  border: 1px solid #2fc0db;
   display: flex;
   gap: 2rem;
   flex-direction: column;
+}
+.div .Addcollection h2 {
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-family: Arial, Helvetica, sans-serif;
 }
 .div .Addcollection input {
   border: none;
@@ -22,27 +28,31 @@
   padding: 0.5rem;
 }
 .div .Addcollection button {
-  background-color: red;
+  background-color: white;
+  color: black;
   border-radius: 7px;
-  transition: 1000ms;
+  border: none;
+  padding: 0.7rem 1rem;
+  transition: all 0.3s ease-in-out;
   cursor: pointer;
 }
 .div .Addcollection button:hover {
-  scale: 1.2;
   color: aliceblue;
+  background-color: #2fc0db;
 }
-.div .upDateCollection {
-  padding: 2rem;
-  border-radius: 2rem;
-  border: 1.3px solid #2fc0db;
-  display: flex;
-  gap: 2rem;
-  flex-direction: column;
+.div .rev {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 0.64rem 1rem;
+  border-radius: 6px;
+  background-color: #2fc0db;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
-.div .upDateCollection input {
+.div .rev:hover {
+  background-color: white;
+  color: #000;
   border: none;
-  background-color: black;
-  border-bottom: 1.2px solid #2fc0db;
-  color: aliceblue;
-  padding: 0.5rem;
 }/*# sourceMappingURL=Admin.module.css.map */

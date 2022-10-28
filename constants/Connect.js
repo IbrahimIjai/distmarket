@@ -126,8 +126,8 @@ export default function Connect() {
   useEffect(() => {
     const docCheck = () =>
       typeof window !== "undefined" && connectModal
-        ? (document.body.style.overflow = "hidden !important")
-        : (document.body.style.overflow = "unset");
+        ? (document.body.style.overflowY = "hidden !important")
+        : (document.body.style.overflowX = "hidden");
     docCheck();
   }, [connectModal, disconnectModal]);
 
@@ -197,6 +197,11 @@ export default function Connect() {
                       <span>KuWallet</span>
                     </div>
                   </div>
+                </div>
+                <div className={styles.tutorial}>
+                  <Link href="https://docs.distant.finance">
+                    <a>Setting up a wallet for the first time?</a>
+                  </Link>
                 </div>
               </div>
             </div>

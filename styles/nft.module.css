@@ -53,7 +53,7 @@
   border: 6px solid rgb(255, 255, 255);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
   border-radius: 8px;
 }
 .banner .bannerImage .bannerContent .bannerContentDetails {
@@ -115,9 +115,9 @@
   will-change: opacity;
   color: black;
   -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+          backface-visibility: hidden;
   -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
   perspective: 1000px;
   align-items: center;
   justify-content: center;
@@ -172,8 +172,7 @@
   flex: 1 1 auto;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 2px, rgba(0, 0, 0, 0.05) 0px 2px 5px,
-    rgba(0, 0, 0, 0.04) 0px 8px 40px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 2px, rgba(0, 0, 0, 0.05) 0px 2px 5px, rgba(0, 0, 0, 0.04) 0px 8px 40px;
 }
 .nfts .nftFlex .card .nftCard .nft {
   display: flex;
@@ -198,11 +197,7 @@
   background: rgba(23, 20, 20, 0.76) !important;
 }
 .nfts .nftFlex .card .nftCard .nft .holster > span {
-  background: linear-gradient(
-    to bottom,
-    transparent 60%,
-    rgba(0, 0, 0, 0.438)
-  ) !important;
+  background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.438)) !important;
 }
 .nfts .nftFlex .card .nftCard .nft .holster .image {
   position: relative;
@@ -223,8 +218,8 @@
 }
 .nfts .nftFlex .card .nftCard .nft .holster .overlay {
   -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+     -moz-appearance: none;
+          appearance: none;
   position: absolute;
   height: 100%;
   top: 0;
@@ -250,15 +245,7 @@
   gap: 20px;
   opacity: 0.07;
 }
-.nfts
-  .nftFlex
-  .card
-  .nftCard
-  .nft
-  .holster
-  .overlay
-  .topOverlay
-  .approvalClass {
+.nfts .nftFlex .card .nftCard .nft .holster .overlay .topOverlay .approvalClass {
   border-radius: 50%;
   background: rgb(77, 226, 77);
   padding: 8px;
@@ -272,16 +259,7 @@
   display: flex;
   align-items: center;
 }
-.nfts
-  .nftFlex
-  .card
-  .nftCard
-  .nft
-  .holster
-  .overlay
-  .topOverlay
-  .approvalText
-  p {
+.nfts .nftFlex .card .nftCard .nft .holster .overlay .topOverlay .approvalText p {
   letter-spacing: 1px;
 }
 .nfts .nftFlex .card .nftCard .nft .holster .overlay .bottomOverlay h1 {
@@ -330,7 +308,7 @@
 }
 .nfts .nftFlex .card .nftCard:hover .nft .holster .overlay .topOverlay {
   -webkit-animation: display 1000ms ease-in-out forwards;
-  animation: display 1000ms ease-in-out forwards;
+          animation: display 1000ms ease-in-out forwards;
 }
 .nfts .nftFlex .card .nftCard .content {
   display: flex;
@@ -397,4 +375,4 @@
 .skeletonNftCard {
   display: flex;
   gap: 12px;
-} /*# sourceMappingURL=nft.module.css.map */
+}/*# sourceMappingURL=nft.module.css.map */
