@@ -22,7 +22,8 @@ account(id: $address){
 }
 `;
 
-export default function Profile({ profile }) {
+export default function Profile({ profile, objectData, indexValue }) {
+  console.log(indexValue);
   const router = useRouter();
   const [runEffect, setRunEffect] = useState(0);
   const init = setTimeout(() => {
@@ -35,7 +36,7 @@ export default function Profile({ profile }) {
     clearTimeout(init);
   }
   const [allData, setAllData] = useState([]);
-  const [graphData, setGraphData] = useState([]);
+  const [objectData1, setobjectData] = useState([]);
   useEffect(() => {
     const main = async () => {
       const array = [];
@@ -51,16 +52,16 @@ export default function Profile({ profile }) {
           },
         })
         .then((data) => {
-          setGraphData(data.data.account.tokens);
+          setobjectData(data.data.account.tokens);
         })
         .catch((err) => console.log("Error fetching data: ", err));
-      for (let i = 0; i < graphData.length; i++) {
-        const url = graphData[i].tokenURI.includes("ipfs://", 0)
-          ? graphData[i].tokenURI.replace(
+      for (let i = 0; i < objectData.length; i++) {
+        const url = objectData[i].tokenURI.includes("ipfs://", 0)
+          ? objectData[i].tokenURI.replace(
               "ipfs://",
               "https://ipfsfiles.distant.finance/ipfs/"
             )
-          : graphData[i].tokenURI;
+          : objectData[i].tokenURI;
         const content = await fetch(url);
         const link = await content.json();
         const image = link.image.includes("ipfs://", 0)
@@ -70,12 +71,12 @@ export default function Profile({ profile }) {
             )
           : link.image;
         // const listingExists = await contracts.contractInstance.sellNFT(
-        //   graphData[i].collection.id,
-        //   graphData[i].identifier
+        //   objectData[i].collection.id,
+        //   objectData[i].identifier
         // );
         // const offersExists = await contracts.contractInstance.availableOffers(
-        //   graphData[i].collection.id,
-        //   graphData[i].identifier
+        //   objectData[i].collection.id,
+        //   objectData[i].identifier
         // );
         // const listingTrue =
         //   listingExists[0] === contracts.deadAddress ? false : true;
@@ -83,8 +84,8 @@ export default function Profile({ profile }) {
         const obj = {
           name: link.name,
           image: image,
-          tokenId: graphData[i].identifier,
-          collection: graphData[i].collection.id,
+          tokenId: objectData[i].identifier,
+          collection: objectData[i].collection.id,
           // listingTrue: listingTrue,
           // offerTrue: offerTrue,
         };
@@ -93,19 +94,30 @@ export default function Profile({ profile }) {
       }
     };
     main();
-  }, [runEffect]);
+  }, []);
   return (
     <main className={styles.main}>
       <div className={styles.container}>
         <div className={styles.user}>
           <div className={styles.profile}>
             <div className={styles.banner}>
-              <Image src={banner} objectFit="cover" layout="fill" />
+              <Image
+                src={banner}
+                objectFit="cover"
+                layout="fill"
+                alt="banner"
+              />
             </div>
             <div className={styles.profileImage}>
               <Image
-                src={allData.length > 0 ? allData[0].image : "/1960.jpeg"}
+                // src={allData.length > 0 ? allData[0].image : "/1960.jpeg"}
+                src={
+                  allData[indexValue] !== undefined
+                    ? allData[indexValue].image
+                    : "/1960.jpeg"
+                }
                 objectFit="cover"
+                alt="profile"
                 layout="fill"
               />
             </div>
@@ -163,7 +175,38 @@ export default function Profile({ profile }) {
 
 export async function getServerSideProps({ params }) {
   const profile = params.profile;
+  let objectData = {};
+  const contentData = [];
+  const client = new ApolloClient({
+    uri: contracts.queryUrl,
+    cache: new InMemoryCache(),
+  });
+  client
+    .query({
+      query: gql(addressQuery),
+      variables: {
+        address: profile.toLowerCase(),
+      },
+    })
+    .then((data) => {
+      let temp = data.data.account.tokens;
+      objectData = temp;
+    })
+    .catch((err) => console.log("Error fetching data: ", err));
+  const Host = await contracts.contractInstance.supportedCollections();
+  contentData.push(Host);
+  let indexValue;
+  if (objectData.length > 1) {
+    const index = Math.floor(Math.random() * objectData.length);
+    console.log(index);
+    indexValue = index;
+  }
   return {
-    props: { profile: profile },
+    props: {
+      profile: profile,
+      objectData: objectData,
+      contentData: contentData,
+      indexValue: indexValue,
+    },
   };
 }
