@@ -44,7 +44,7 @@ export default function Collections({ arrayData }) {
       setCollections(data);
     };
     main();
-  }, [arrayData]);
+  }, [collections]);
   return (
     <div className={styles.container}>
       <div className={styles.header}>
