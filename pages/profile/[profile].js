@@ -157,7 +157,7 @@ export default function Profile({ profile, objectData, indexValue, code }) {
         ) : (
           <h2 className={styles.notAddress}>
             Address is a Contract Address
-            <span>Can't fetch NFT Data</span>
+            <span>Cannot fetch NFT Data</span>
           </h2>
         )}
       </div>

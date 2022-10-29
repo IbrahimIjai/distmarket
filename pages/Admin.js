@@ -113,7 +113,7 @@ export default function Admin() {
         </div>
       ) : (
         <div className={styles.notActive}>
-          <h2>You're not supposed to be here 🥶</h2>{" "}
+          <h2>You are not supposed to be here 🥶</h2>{" "}
           <h4>
             <Link href="/">
               <a>Return Home</a>
