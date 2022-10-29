@@ -92,7 +92,7 @@ export default function Collections({ data }) {
 }
 
 export async function getServerSideProps() {
-  const Kontract = contracts.contractInstance
+  const Kontract = contracts.contractInstance;
   const collections = await Kontract.supportedCollections();
   const arrayData = [];
   const arr = collections.map((coll) => coll.toLowerCase());
@@ -135,10 +135,9 @@ export async function getServerSideProps() {
     };
     data.push(obj);
   }
-  console.log(data);
   return {
     props: {
       data: data,
     },
   };
-} 
+}

@@ -37,14 +37,17 @@ export default function Profile({ profile, objectData, indexValue, code }) {
                 "https://ipfsfiles.distant.finance/ipfs/"
               )
             : objectData[i].tokenURI;
-          const content = await fetch(url);
-          const link = await content.json();
-          const image = link.image.includes("ipfs://", 0)
-            ? link.image.replace(
-                "ipfs://",
-                "https://ipfsfiles.distant.finance/ipfs/"
-              )
-            : link.image;
+          const link = await fetch(url)
+            .then((res) => res.json())
+            .catch((err) => console.log(err));
+          // const link = await content.json();
+          const image =
+            link && link.image.includes("ipfs://", 0)
+              ? link.image.replace(
+                  "ipfs://",
+                  "https://ipfsfiles.distant.finance/ipfs/"
+                )
+              : link && link.image;
           // const listingExists = await contracts.contractInstance.sellNFT(
           //   objectData[i].collection.id,
           //   objectData[i].identifier
@@ -57,8 +60,8 @@ export default function Profile({ profile, objectData, indexValue, code }) {
           //   listingExists[0] === contracts.deadAddress ? false : true;
           // const offerTrue = offersExists[0].length > 0 ? true : false;
           const obj = {
-            name: link.name,
-            image: image,
+            name: link ? link.name : "NFT",
+            image: link ? image : "/1960.jpeg",
             tokenId: objectData[i].identifier,
             collection: objectData[i].collection.id,
             // listingTrue: listingTrue,
@@ -191,7 +194,6 @@ export async function getServerSideProps({ params }) {
   }
   const Host = await contracts.contractInstance.supportedCollections();
   await objectData;
-  console.log(objectData);
   let indexValue = null;
   if (Object.keys(objectData).length > 0) {
     const index = Math.floor(Math.random() * objectData.length);

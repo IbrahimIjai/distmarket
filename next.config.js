@@ -11,6 +11,8 @@ const nextConfig = {
       "distant.mypinata.cloud",
       "ipfsfiles.distant.finance",
       "cdn.pixabay.com",
+      "ipfs.kcc.network",
+      "playkardia.mypinata.cloud",
     ],
     formats: ["image/avif", "image/webp"],
   },

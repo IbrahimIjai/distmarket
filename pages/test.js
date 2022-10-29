@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { contracts, marketplaceABI, nftABI } from "../constants/ABIs";
+import axios from "axios";
 
 const PopularCollection = () => {
   const [data, setData] = useState(null);
@@ -12,13 +13,14 @@ const PopularCollection = () => {
   };
   useEffect(() => {
     let a =
-      "https://ipfs.io/ipfs/bafybeibzvqkmn2nqoqpigsayvkzpa7n3ldsonzchqicevdjankrzcpgrfu/1264";
-    let b =
-      "ipfs://bafybeibzvqkmn2nqoqpigsayvkzpa7n3ldsonzchqicevdjankrzcpgrfu/1264";
+      "https://ipfsfiles.distant.finance/ipfs/QmRm5kHerq98FkfJuZzk4ysFFnsvN8SPpmQnozdZGbM8KD/10741.json";
+    let b = "https://jsonplaceholder.typicode.com/users/1";
     let c =
       "https://ipfsfiles.distant.finance/ipfs/bafybeibzvqkmn2nqoqpigsayvkzpa7n3ldsonzchqicevdjankrzcpgrfu/1264";
+    let d = "https://cdn2.kuswap.finance/ipfs/metadata/kuorks/2.json";
     const uri = async () => {
-      const uri = await fetch(c).then((res) => res.json());
+      // const uri = await fetch(d);
+      const uri = await axios.get(a).then((res) => res.data);
       console.log(uri);
     };
     uri();
