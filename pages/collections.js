@@ -92,7 +92,8 @@ export default function Collections({ data }) {
 }
 
 export async function getServerSideProps() {
-  const collections = await contracts.contractInstance.supportedCollections();
+  const Kontract = contracts.contractInstance
+  const collections = await Kontract.supportedCollections();
   const arrayData = [];
   const arr = collections.map((coll) => coll.toLowerCase());
   for (let i = 0; i < arr.length; i++) {
@@ -140,4 +141,4 @@ export async function getServerSideProps() {
       data: data,
     },
   };
-}
+} 
