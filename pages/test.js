@@ -1,8 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { contracts, marketplaceABI, nftABI } from "../constants/ABIs";
-import Link from "next/link";
-import { useWeb3React } from "@web3-react/core";
-import { Contract } from "ethers";
 
 const PopularCollection = () => {
   const [data, setData] = useState(null);
@@ -14,11 +11,11 @@ const PopularCollection = () => {
     alert("Text copied");
   };
   const owner = async () => {
-    let arr = []
+    let arr = [];
     const res = await contracts.contractInstance.supportedCollections();
-    for(let i = 0; i < res.length; i++){
-      let content = await contracts.contractInstance.collection(res[i])
-      arr.push(content)
+    for (let i = 0; i < res.length; i++) {
+      let content = await contracts.contractInstance.collection(res[i]);
+      arr.push(content);
     }
     setData(res);
     setDisplay(true);
@@ -46,13 +43,7 @@ const PopularCollection = () => {
   return (
     <div>
       <div onClick={owner}>Call Contract</div>
-      {display && (
-        <div>
-          {data && data.map(content => <div>
-            <Link href={`https://explorer.kcc.io/en/address/${content}`}><a>Link to Contract Address</a></Link>
-          </div>)}
-        </div>
-      )}
+
       <div onClick={contract}>Check Address</div>
     </div>
   );
