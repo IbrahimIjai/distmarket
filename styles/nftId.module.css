@@ -539,7 +539,7 @@
   display: flex;
   position: fixed;
   color: white;
-  top: 32px;
+  top: 62px;
   right: 24px;
   background-color: black;
   transform: none;
@@ -556,6 +556,12 @@
 }
 .createListingModal .closeModal:hover {
   transform: scale(1.1);
+}
+@media (max-width: 580px) {
+  .createListingModal .closeModal {
+    top: 92px;
+    right: 4px;
+  }
 }
 .createListingModal .actualModal {
   opacity: 1;
@@ -578,6 +584,7 @@
   font-size: clamp(1.1rem, 1.3vw, 1.42rem);
   padding: 1rem 0.4rem;
   transition: all 300ms ease-in-out;
+  margin: 10px 0;
 }
 .createListingModal .actualModal .purchaseUSDT a {
   display: flex;
@@ -596,7 +603,7 @@
 }
 .createListingModal .actualModal .internalModal {
   padding: 10px;
-  padding-top: 50px;
+  padding-top: 30px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -620,7 +627,7 @@
   color: #000;
   transition: border 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
-.createListingModal .actualModal .internalModal div {
+.createListingModal .actualModal .internalModal .cta {
   border-radius: 8px;
   width: -webkit-fit-content;
   width: -moz-fit-content;
@@ -634,7 +641,7 @@
   font-size: clamp(16px, 1.2rem, 2.1vw);
   transition: all 500ms ease-in-out;
 }
-.createListingModal .actualModal .internalModal div:hover {
+.createListingModal .actualModal .internalModal .cta:hover {
   background-color: #fff;
   font-weight: 400;
   color: #000;

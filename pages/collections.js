@@ -18,33 +18,7 @@ const nftData = `
   }
 `;
 
-export default function Collections({ arrayData }) {
-  const [collections, setCollections] = useState([]);
-  useEffect(() => {
-    const main = async () => {
-      const data = [];
-      for (let i = 0; i < arrayData.length; i++) {
-        const links = await contracts.fetchCollection(arrayData[i].id);
-        const { placeholder, small } = links;
-        const placeholderImage = placeholder.replace(
-          "ipfs://",
-          "https://ipfsfiles.distant.finance/ipfs/"
-        );
-        const smallImage = small.replace(
-          "ipfs://",
-          "https://ipfsfiles.distant.finance/ipfs/"
-        );
-        const obj = {
-          ...arrayData[i],
-          placeholderImage,
-          smallImage,
-        };
-        data.push(obj);
-      }
-      setCollections(data);
-    };
-    main();
-  }, [collections]);
+export default function Collections({ data }) {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -64,64 +38,54 @@ export default function Collections({ arrayData }) {
           </p>
         </div>
       </div>
-      <div className={styles.collectionContainer}>
-        <div className={styles.collections}>
-          {collections.length > 0 ? (
-            collections.map((collection, i) => (
-              <div className={styles.collection} key={i}>
-                <Link
-                  href={`/collection/${collection.id}`}
-                  passHref
-                  prefetch={false}
-                >
-                  <a>
-                    <div className={styles.imageHolster}>
-                      <Image
-                        src={collection.placeholderImage}
-                        layout="fill"
-                        alt={`Placeholder image for ${collection.name}`}
-                        objectFit="cover"
-                        className={styles.image}
-                      />
-                      <div className={styles.content}>
-                        <div className={styles.topContent}>
-                          <div className={styles.topContentImage}>
-                            <div className={styles.image}>
-                              <Image
-                                src={collection.smallImage}
-                                layout="fill"
-                                alt={`Image holster for ${collection.name}`}
-                                objectFit="cover"
-                              />
-                            </div>
-                          </div>
-                          <div className={styles.topContentName}>
-                            <div className={styles.name}>
-                              <span>{collection.symbol}</span>
-                            </div>
+      <div className={styles.collections}>
+        {data.length > 0 &&
+          data.map((collection, i) => (
+            <div className={styles.collection} key={i}>
+              <Link
+                href={`/collection/${collection.id}`}
+                passHref
+                prefetch={false}
+              >
+                <a>
+                  <div className={styles.imageHolster}>
+                    <Image
+                      src={collection.placeholderImage}
+                      layout="fill"
+                      alt={`Placeholder image for ${collection.name}`}
+                      objectFit="cover"
+                      className={styles.image}
+                    />
+                    <div className={styles.content}>
+                      <div className={styles.topContent}>
+                        <div className={styles.topContentImage}>
+                          <div className={styles.image}>
+                            <Image
+                              src={collection.smallImage}
+                              layout="fill"
+                              alt={`Image holster for ${collection.name}`}
+                              objectFit="cover"
+                            />
                           </div>
                         </div>
-                        <div className={styles.bottomContent}>
-                          <div className={styles.bottomHeader}>
-                            <h1>{collection.name}</h1>
-                            <div>{collection.totalSupply} Supply</div>
+                        <div className={styles.topContentName}>
+                          <div className={styles.name}>
+                            <span>{collection.symbol}</span>
                           </div>
                         </div>
                       </div>
+                      <div className={styles.bottomContent}>
+                        <div className={styles.bottomHeader}>
+                          <h1>{collection.name}</h1>
+                          <div>{collection.totalSupply} Supply</div>
+                        </div>
+                      </div>
                     </div>
-                  </a>
-                </Link>
-              </div>
-            ))
-          ) : (
-            <h2 className={styles.notActive}>
-              Graph Data not loaded.{" "}
-              <Link href="/collections" as={`/collections`}>
-                <a>Refresh site</a>
+                  </div>
+                </a>
               </Link>
-            </h2>
-          )}
-        </div>
+            </div>
+          ))}
       </div>
     </div>
   );
@@ -151,9 +115,29 @@ export async function getServerSideProps() {
   }
   const res = await contracts.contractInstance.maxFees();
   await arrayData;
+  const data = [];
+  for (let i = 0; i < arrayData.length; i++) {
+    const links = await contracts.fetchCollection(arrayData[i].id);
+    const { placeholder, small } = links;
+    const placeholderImage = placeholder.replace(
+      "ipfs://",
+      "https://ipfsfiles.distant.finance/ipfs/"
+    );
+    const smallImage = small.replace(
+      "ipfs://",
+      "https://ipfsfiles.distant.finance/ipfs/"
+    );
+    const obj = {
+      ...arrayData[i],
+      placeholderImage,
+      smallImage,
+    };
+    data.push(obj);
+  }
+  console.log(data);
   return {
     props: {
-      arrayData: arrayData,
+      data: data,
     },
   };
 }

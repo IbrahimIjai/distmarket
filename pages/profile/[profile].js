@@ -30,41 +30,43 @@ export default function Profile({ profile, objectData, indexValue, code }) {
     const main = async () => {
       const array = [];
       for (let i = 0; i < objectData.length; i++) {
-        const url = objectData[i].tokenURI.includes("ipfs://", 0)
-          ? objectData[i].tokenURI.replace(
-              "ipfs://",
-              "https://ipfsfiles.distant.finance/ipfs/"
-            )
-          : objectData[i].tokenURI;
-        const content = await fetch(url);
-        const link = await content.json();
-        const image = link.image.includes("ipfs://", 0)
-          ? link.image.replace(
-              "ipfs://",
-              "https://ipfsfiles.distant.finance/ipfs/"
-            )
-          : link.image;
-        // const listingExists = await contracts.contractInstance.sellNFT(
-        //   objectData[i].collection.id,
-        //   objectData[i].identifier
-        // );
-        // const offersExists = await contracts.contractInstance.availableOffers(
-        //   objectData[i].collection.id,
-        //   objectData[i].identifier
-        // );
-        // const listingTrue =
-        //   listingExists[0] === contracts.deadAddress ? false : true;
-        // const offerTrue = offersExists[0].length > 0 ? true : false;
-        const obj = {
-          name: link.name,
-          image: image,
-          tokenId: objectData[i].identifier,
-          collection: objectData[i].collection.id,
-          // listingTrue: listingTrue,
-          // offerTrue: offerTrue,
-        };
-        array.push(obj);
-        setAllData(array);
+        if (objectData[i].tokenURI !== null) {
+          const url = objectData[i].tokenURI.includes("ipfs://", 0)
+            ? objectData[i].tokenURI.replace(
+                "ipfs://",
+                "https://ipfsfiles.distant.finance/ipfs/"
+              )
+            : objectData[i].tokenURI;
+          const content = await fetch(url);
+          const link = await content.json();
+          const image = link.image.includes("ipfs://", 0)
+            ? link.image.replace(
+                "ipfs://",
+                "https://ipfsfiles.distant.finance/ipfs/"
+              )
+            : link.image;
+          // const listingExists = await contracts.contractInstance.sellNFT(
+          //   objectData[i].collection.id,
+          //   objectData[i].identifier
+          // );
+          // const offersExists = await contracts.contractInstance.availableOffers(
+          //   objectData[i].collection.id,
+          //   objectData[i].identifier
+          // );
+          // const listingTrue =
+          //   listingExists[0] === contracts.deadAddress ? false : true;
+          // const offerTrue = offersExists[0].length > 0 ? true : false;
+          const obj = {
+            name: link.name,
+            image: image,
+            tokenId: objectData[i].identifier,
+            collection: objectData[i].collection.id,
+            // listingTrue: listingTrue,
+            // offerTrue: offerTrue,
+          };
+          array.push(obj);
+          setAllData(array);
+        }
       }
     };
     indexValue !== null && main();
@@ -188,6 +190,8 @@ export async function getServerSideProps({ params }) {
       .catch((err) => console.log("Error fetching data: ", err));
   }
   const Host = await contracts.contractInstance.supportedCollections();
+  await objectData;
+  console.log(objectData);
   let indexValue = null;
   if (Object.keys(objectData).length > 0) {
     const index = Math.floor(Math.random() * objectData.length);

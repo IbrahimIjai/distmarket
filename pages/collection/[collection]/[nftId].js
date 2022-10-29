@@ -288,7 +288,7 @@ export default function NftId({
         setErrorModal(false);
       }, 2000);
       setCreateListing(false);
-      setErrorMessage("An unknown error occured. Try again: Sell");
+      setErrorMessage("An unknown error occured. Try again");
       console.log(error);
     }
   };
@@ -697,6 +697,9 @@ export default function NftId({
                           </div>
                           <div className={styles.actualModal}>
                             <div className={styles.internalModal}>
+                              <div className={styles.purchaseUSDT}>
+                                <p>Trades are executed in USDT</p>
+                              </div>
                               <input
                                 type="text"
                                 onChange={writeUpdatedValue}
@@ -705,10 +708,12 @@ export default function NftId({
                                 className={styles.input}
                                 placeholder="Set New Price"
                               />
-                              <div onClick={updateListing}>Update Price</div>
-                            </div>
-                            <div className={styles.purchaseUSDT}>
-                              <p>Trades are executed in USDT</p>
+                              <div
+                                className={styles.cta}
+                                onClick={updateListing}
+                              >
+                                Update Price
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -731,6 +736,9 @@ export default function NftId({
                     </div>
                     <div className={styles.actualModal}>
                       <div className={styles.internalModal}>
+                        <div className={styles.purchaseUSDT}>
+                          <p>Trades are executed in USDT</p>
+                        </div>
                         <input
                           type="text"
                           onChange={writeValue}
@@ -739,11 +747,10 @@ export default function NftId({
                           className={styles.input}
                           placeholder="Set Listing Price"
                         />
-                        <div onClick={sellNft}>List NFT</div>
+                        <div className={styles.cta} onClick={sellNft}>
+                          List NFT
+                        </div>
                       </div>
-                    </div>
-                    <div className={styles.purchaseUSDT}>
-                      <p>Trades are executed in USDT</p>
                     </div>
                   </div>
                 )}
