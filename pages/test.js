@@ -10,6 +10,19 @@ const PopularCollection = () => {
     await navigator.clipboard.writeText(addr);
     alert("Text copied");
   };
+  useEffect(() => {
+    let a =
+      "https://ipfs.io/ipfs/bafybeibzvqkmn2nqoqpigsayvkzpa7n3ldsonzchqicevdjankrzcpgrfu/1264";
+    let b =
+      "ipfs://bafybeibzvqkmn2nqoqpigsayvkzpa7n3ldsonzchqicevdjankrzcpgrfu/1264";
+    let c =
+      "https://ipfsfiles.distant.finance/ipfs/bafybeibzvqkmn2nqoqpigsayvkzpa7n3ldsonzchqicevdjankrzcpgrfu/1264";
+    const uri = async () => {
+      const uri = await fetch(c).then((res) => res.json());
+      console.log(uri);
+    };
+    uri();
+  }, []);
   const owner = async () => {
     let arr = [];
     const res = await contracts.contractInstance.supportedCollections();

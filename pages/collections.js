@@ -65,56 +65,63 @@ export default function Collections({ arrayData }) {
         </div>
       </div>
       <div className={styles.collectionContainer}>
-      <div className={styles.collections}>
-        {arrayData.length > 0 ?
-          collections.map((collection, i) => (
-            <div className={styles.collection} key={i}>
-              <Link
-                href={`/collection/${collection.id}`}
-                passHref
-                prefetch={false}
-              >
-                <a>
-                  <div className={styles.imageHolster}>
-                    <Image
-                      src={collection.placeholderImage}
-                      layout="fill"
-                      alt={`Placeholder image for ${collection.name}`}
-                      objectFit="cover"
-                      className={styles.image}
-                    />
-                    <div className={styles.content}>
-                      <div className={styles.topContent}>
-                        <div className={styles.topContentImage}>
-                          <div className={styles.image}>
-                            <Image
-                              src={collection.smallImage}
-                              layout="fill"
-                              alt={`Image holster for ${collection.name}`}
-                              objectFit="cover"
-                            />
+        <div className={styles.collections}>
+          {collections.length > 0 ? (
+            collections.map((collection, i) => (
+              <div className={styles.collection} key={i}>
+                <Link
+                  href={`/collection/${collection.id}`}
+                  passHref
+                  prefetch={false}
+                >
+                  <a>
+                    <div className={styles.imageHolster}>
+                      <Image
+                        src={collection.placeholderImage}
+                        layout="fill"
+                        alt={`Placeholder image for ${collection.name}`}
+                        objectFit="cover"
+                        className={styles.image}
+                      />
+                      <div className={styles.content}>
+                        <div className={styles.topContent}>
+                          <div className={styles.topContentImage}>
+                            <div className={styles.image}>
+                              <Image
+                                src={collection.smallImage}
+                                layout="fill"
+                                alt={`Image holster for ${collection.name}`}
+                                objectFit="cover"
+                              />
+                            </div>
+                          </div>
+                          <div className={styles.topContentName}>
+                            <div className={styles.name}>
+                              <span>{collection.symbol}</span>
+                            </div>
                           </div>
                         </div>
-                        <div className={styles.topContentName}>
-                          <div className={styles.name}>
-                            <span>{collection.symbol}</span>
+                        <div className={styles.bottomContent}>
+                          <div className={styles.bottomHeader}>
+                            <h1>{collection.name}</h1>
+                            <div>{collection.totalSupply} Supply</div>
                           </div>
-                        </div>
-                      </div>
-                      <div className={styles.bottomContent}>
-                        <div className={styles.bottomHeader}>
-                          <h1>{collection.name}</h1>
-                          <div>{collection.totalSupply} Supply</div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </a>
+                  </a>
+                </Link>
+              </div>
+            ))
+          ) : (
+            <h2 className={styles.notActive}>
+              Graph Data not loaded.{" "}
+              <Link href="/collections" as={`/collections`}>
+                <a>Refresh site</a>
               </Link>
-            </div>
-          )) : <h2 className={styles.notActive}>Graph Data not loaded. <Link href='/collections' as={`/collections`}><a>Refresh site</a></Link></h2>}
-      </div>
-
+            </h2>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -123,7 +130,7 @@ export default function Collections({ arrayData }) {
 export async function getServerSideProps() {
   const collections = await contracts.contractInstance.supportedCollections();
   const arrayData = [];
-  const arr = collections.map(coll => coll.toLowerCase());
+  const arr = collections.map((coll) => coll.toLowerCase());
   for (let i = 0; i < arr.length; i++) {
     const client = new ApolloClient({
       uri: contracts.queryUrl,
