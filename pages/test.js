@@ -1,21 +1,26 @@
 import { useState, useEffect, useMemo } from "react";
 import { contracts, marketplaceABI, nftABI } from "../constants/ABIs";
+import Link from "next/link";
 import { useWeb3React } from "@web3-react/core";
 import { Contract } from "ethers";
 
 const PopularCollection = () => {
   const [data, setData] = useState(null);
   const [data2, setData2] = useState(null);
-  const [display, setDisplay] = useState(false);
+  const [display, setDisplay] = useState(true);
   let addr = "0x3b12cd8b30dcf4fd9db69ce125183ac7ca567472";
   const copy = async () => {
     await navigator.clipboard.writeText(addr);
     alert("Text copied");
   };
   const owner = async () => {
+    let arr = []
     const res = await contracts.contractInstance.supportedCollections();
-    console.log(res);
-    setData(JSON.stringify(res));
+    for(let i = 0; i < res.length; i++){
+      let content = await contracts.contractInstance.collection(res[i])
+      arr.push(content)
+    }
+    setData(res);
     setDisplay(true);
   };
   const collectionDetails = async () => {
@@ -37,19 +42,15 @@ const PopularCollection = () => {
     data2 === "0x" ? console.log("Wallet") : console.log("Contract");
     data === "0x" && console.log("Wallet");
   };
+  console.log(data);
   return (
     <div>
       <div onClick={owner}>Call Contract</div>
       {display && (
         <div>
-          <div>
-            My wallet address: 0xDB9B936373f859Ce8C580Bbc35b0Eab89cA9fd70
-            returns {data}
-          </div>
-          <div>
-            The contract address: 0x5b41b4ce7497f703e09f4ac381b487658a8321e3
-            returns {data2}
-          </div>
+          {data && data.map(content => <div>
+            <Link href={`https://explorer.kcc.io/en/address/${content}`}><a>Link to Contract Address</a></Link>
+          </div>)}
         </div>
       )}
       <div onClick={contract}>Check Address</div>

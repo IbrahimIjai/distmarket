@@ -25,7 +25,6 @@ const collectionDataQuery = `
 `;
 
 export default function Home({ nftId, listings, obj }) {
-  console.log(obj);
   // States
   const [listedNFTs, setListedNFTs] = useState([]);
   const [linkShow, setLinkShow] = useState(false);
@@ -238,7 +237,7 @@ export default function Home({ nftId, listings, obj }) {
               {linkShow && (
                 <ul>
                   <Link
-                    href={`https://scan-testnet.kcc.network/address/${collection}`}
+                    href={`https://explorer.kcc.io/en/address/${collection}`}
                   >
                     <a target="_blank" rel="noopener noreferrer">
                       <li>

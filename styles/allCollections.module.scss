@@ -186,4 +186,22 @@
       }
     }
   }
+  .notActive {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    font-size: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: 500;
+    color: gray;
+  }
+  .collectionContainer{
+    position: relative;
+    min-height: 50vh;
+  }
 }

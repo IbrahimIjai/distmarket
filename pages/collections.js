@@ -18,13 +18,13 @@ const nftData = `
   }
 `;
 
-export default function Collections({ coll, arrayData }) {
+export default function Collections({ arrayData }) {
   const [collections, setCollections] = useState([]);
   useEffect(() => {
     const main = async () => {
       const data = [];
-      for (let i = 0; i < coll.length; i++) {
-        const links = await contracts.fetchCollection(coll[i].toLowerCase());
+      for (let i = 0; i < arrayData.length; i++) {
+        const links = await contracts.fetchCollection(arrayData[i].id);
         const { placeholder, small } = links;
         const placeholderImage = placeholder.replace(
           "ipfs://",
@@ -44,7 +44,7 @@ export default function Collections({ coll, arrayData }) {
       setCollections(data);
     };
     main();
-  }, [coll]);
+  }, [arrayData]);
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -64,8 +64,9 @@ export default function Collections({ coll, arrayData }) {
           </p>
         </div>
       </div>
+      <div className={styles.collectionContainer}>
       <div className={styles.collections}>
-        {coll.length > 0 &&
+        {arrayData.length > 0 ?
           collections.map((collection, i) => (
             <div className={styles.collection} key={i}>
               <Link
@@ -78,7 +79,7 @@ export default function Collections({ coll, arrayData }) {
                     <Image
                       src={collection.placeholderImage}
                       layout="fill"
-                      alt="2818.jpeg"
+                      alt={`Placeholder image for ${collection.name}`}
                       objectFit="cover"
                       className={styles.image}
                     />
@@ -89,7 +90,7 @@ export default function Collections({ coll, arrayData }) {
                             <Image
                               src={collection.smallImage}
                               layout="fill"
-                              alt="2818"
+                              alt={`Image holster for ${collection.name}`}
                               objectFit="cover"
                             />
                           </div>
@@ -111,7 +112,9 @@ export default function Collections({ coll, arrayData }) {
                 </a>
               </Link>
             </div>
-          ))}
+          )) : <h2 className={styles.notActive}>Graph Data not loaded. <Link href='/collections' as={`/collections`}><a>Refresh site</a></Link></h2>}
+      </div>
+
       </div>
     </div>
   );
@@ -120,7 +123,7 @@ export default function Collections({ coll, arrayData }) {
 export async function getServerSideProps() {
   const collections = await contracts.contractInstance.supportedCollections();
   const arrayData = [];
-  const arr = collections;
+  const arr = collections.map(coll => coll.toLowerCase());
   for (let i = 0; i < arr.length; i++) {
     const client = new ApolloClient({
       uri: contracts.queryUrl,
@@ -130,7 +133,7 @@ export async function getServerSideProps() {
       .query({
         query: gql(nftData),
         variables: {
-          address: arr[i].toLowerCase(),
+          address: arr[i],
         },
       })
       .then((data) => {
@@ -143,7 +146,6 @@ export async function getServerSideProps() {
   await arrayData;
   return {
     props: {
-      coll: JSON.parse(JSON.stringify(arr)),
       arrayData: arrayData,
     },
   };
