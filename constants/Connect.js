@@ -11,7 +11,6 @@ import styles from "../styles/Connect.module.css";
 export default function Connect() {
   const { active, account, chainId, library, activate, deactivate } =
     useWeb3React();
-
   const provider = library;
   const [kcsBalance, setKcsBalance] = useState(null);
   const [usdtBalance, setUsdtBalance] = useState(null);
@@ -36,13 +35,13 @@ export default function Connect() {
       );
       return false;
     }
-    if (chainId === "0x13881") {
+    if (chainId === "0x141") {
       return true;
     }
     try {
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x13881" }],
+        params: [{ chainId: "0x141" }],
       });
       return true;
     } catch (switchError) {
@@ -55,15 +54,15 @@ export default function Connect() {
             method: "wallet_addEthereumChain",
             params: [
               {
-                chainId: "0x13881",
-                chainName: "Mumbai Network",
-                rpcUrls: ["https://matic-testnet-archive-rpc.bwarelabs.com"],
+                chainId: "0x141",
+                chainName: "KCC-MAINNET",
+                rpcUrls: ["https://rpc-mainnet.kcc.network"],
                 nativeCurrency: {
-                  name: "Polygon Matic",
-                  symbol: "MATIC",
+                  name: "KCS Token",
+                  symbol: "KCS",
                   decimals: 18,
                 },
-                blockExplorerUrls: ["https://mumbai.polygonscan.com"],
+                blockExplorerUrls: ["https://explorer.kcc.io/en"],
               },
             ],
           });

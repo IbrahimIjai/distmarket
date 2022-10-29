@@ -25,6 +25,7 @@ const collectionDataQuery = `
 `;
 
 export default function Home({ nftId, listings, obj }) {
+  console.log(obj);
   // States
   const [listedNFTs, setListedNFTs] = useState([]);
   const [linkShow, setLinkShow] = useState(false);
@@ -168,10 +169,10 @@ export default function Home({ nftId, listings, obj }) {
           <div className={styles.banner}>
             <div className={styles.bannerImage}>
               <Image
-                src="/defaultBanner.png"
+                src={obj.bannerImage}
                 objectFit="cover"
                 layout="fill"
-                alt="2818"
+                alt={`Banner image for ${obj.name}`}
               />
               <div className={styles.bannerContent}>
                 <div className={styles.bannerContentImage}>
@@ -179,7 +180,7 @@ export default function Home({ nftId, listings, obj }) {
                     src={obj.smallImage}
                     objectFit="cover"
                     layout="fill"
-                    alt={obj.description}
+                    alt={`Placeholder image for ${obj.name}`}
                   />
                 </div>
                 <div className={styles.bannerContentDetails}>
@@ -245,14 +246,14 @@ export default function Home({ nftId, listings, obj }) {
                       </li>
                     </a>
                   </Link>
-                  <Link href="https://twitter.com/Distant_Finance">
+                  <Link href={obj.twitter}>
                     <a target="_blank">
                       <li>
                         <BsTwitter />
                       </li>
                     </a>
                   </Link>
-                  <Link href="https://t.me/Distant_Finance">
+                  <Link href={obj.telegram}>
                     <a target="_blank">
                       <li>
                         <BsTelegram />
@@ -263,86 +264,93 @@ export default function Home({ nftId, listings, obj }) {
               )}
             </div>
           </div>
-          <div className={styles.nfts}>
-            <div className={styles["nftFlex"] + " " + styles["nftGrid"]}>
-              {listedNFTs.length > 0 &&
-                listedNFTs.map((nft) => {
-                  return (
-                    <div className={styles.card} key={nft.tokenId}>
-                      <Link
-                        href={`/collection/${collection}/${nft.tokenId}`}
-                        prefetch={false}
-                      >
-                        <a>
-                          <div className={styles.nftCard}>
-                            <div className={styles.nft}>
-                              <div className={styles.holster}>
-                                {" "}
-                                <Image
-                                  src={nft.image}
-                                  alt={nft.tokenId}
-                                  layout="fill"
-                                  objectFit="cover"
-                                  className={styles.image}
-                                />
-                                <div className={styles.overlay}>
-                                  <div className={styles.topOverlay}>
-                                    <div className={styles.approvalClass}>
-                                      {/* <AiOutlineCheckCircle />{" "}
+
+          {nftId === null ? (
+            <div className={styles.notActive} style={{ height: "50vh" }}>
+              No Listed Item found
+            </div>
+          ) : (
+            <div className={styles.nfts}>
+              <div className={styles["nftFlex"] + " " + styles["nftGrid"]}>
+                {listedNFTs.length > 0 &&
+                  listedNFTs.map((nft) => {
+                    return (
+                      <div className={styles.card} key={nft.tokenId}>
+                        <Link
+                          href={`/collection/${collection}/${nft.tokenId}`}
+                          prefetch={false}
+                        >
+                          <a>
+                            <div className={styles.nftCard}>
+                              <div className={styles.nft}>
+                                <div className={styles.holster}>
+                                  {" "}
+                                  <Image
+                                    src={nft.image}
+                                    alt={nft.tokenId}
+                                    layout="fill"
+                                    objectFit="cover"
+                                    className={styles.image}
+                                  />
+                                  <div className={styles.overlay}>
+                                    <div className={styles.topOverlay}>
+                                      <div className={styles.approvalClass}>
+                                        {/* <AiOutlineCheckCircle />{" "}
                                   <AiOutlineExclamationCircle /> */}
-                                      <div className={styles.indicator}></div>
+                                        <div className={styles.indicator}></div>
+                                      </div>
+                                      <div className={styles.approvalText}>
+                                        {" "}
+                                        <p>Active</p>
+                                      </div>
                                     </div>
-                                    <div className={styles.approvalText}>
-                                      {" "}
-                                      <p>Active</p>
+                                    <div className={styles.bottomOverlay}>
+                                      <h1>{nft.name}</h1>
                                     </div>
-                                  </div>
-                                  <div className={styles.bottomOverlay}>
-                                    <h1>{nft.name}</h1>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            <div className={styles.content}>
-                              <div className={styles.contentPrice}>
-                                <p>
-                                  List Price: <span>{`$${nft.price}`}</span>
-                                </p>
-                                {nft.bestOffer.length > 0 && (
+                              <div className={styles.content}>
+                                <div className={styles.contentPrice}>
                                   <p>
-                                    Best Offer:{" "}
-                                    <span>{`$${nft.bestOffer}`}</span>
+                                    List Price: <span>{`$${nft.price}`}</span>
                                   </p>
-                                )}
-                              </div>
-                              <div className={styles.contentSeller}>
-                                {nft.seller.slice(0, 4)}...
-                                {nft.seller.slice(35, 39)}{" "}
+                                  {nft.bestOffer.length > 0 && (
+                                    <p>
+                                      Best Offer:{" "}
+                                      <span>{`$${nft.bestOffer}`}</span>
+                                    </p>
+                                  )}
+                                </div>
+                                <div className={styles.contentSeller}>
+                                  {nft.seller.slice(0, 4)}...
+                                  {nft.seller.slice(35, 39)}{" "}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </a>
-                      </Link>
+                          </a>
+                        </Link>
+                      </div>
+                    );
+                  })}
+              </div>
+              <div>
+                {listedNFTs.length < 1 && (
+                  <div className={styles.skeletonCard}>
+                    <div className={styles.skeletonNftCard}>
+                      <MyLoader type="avatar" />
+                      <MyLoader type="avatar" />
+                      <MyLoader type="avatar" />
+                      <MyLoader type="avatar" />
+                      <MyLoader type="avatar" />
+                      <MyLoader type="avatar" />
                     </div>
-                  );
-                })}
-            </div>
-            <div>
-              {listedNFTs.length < 1 && (
-                <div className={styles.skeletonCard}>
-                  <div className={styles.skeletonNftCard}>
-                    <MyLoader type="avatar" />
-                    <MyLoader type="avatar" />
-                    <MyLoader type="avatar" />
-                    <MyLoader type="avatar" />
-                    <MyLoader type="avatar" />
-                    <MyLoader type="avatar" />
+                    <Shimmer />
                   </div>
-                  <Shimmer />
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
+          )}
           {"  "}
         </>
       )}
@@ -375,29 +383,36 @@ export async function getServerSideProps({ params, res }) {
     })
     .catch((err) => console.log("Error fetching data: ", err));
   const results = await contract.availableListings(collection);
-  const nftId = results[0];
-  const listingInfo = results[1];
-  const { totalSupply, tokens, totalVolume, name } = objectData;
-  const url = tokens[1].tokenURI.includes("ipfs://", 0)
-    ? tokens[1].tokenURI.replace(
-        "ipfs://",
-        "https://distant.mypinata.cloud/ipfs/"
-      )
-    : tokens[1].tokenURI;
-  const image_attributes = await fetch(url).then((res) => res.json());
-  const imageUrl = image_attributes.image.includes("ipfs://", 0)
-    ? image_attributes.image.replace(
-        "ipfs://",
-        "https://distant.mypinata.cloud/ipfs/"
-      )
-    : image_attributes.image;
-  const obj = {
+  let nftId = null;
+  let listingInfo = null;
+  let obj = null;
+  if (results[0].length > 0) {
+    nftId = results[0];
+    listingInfo = results[1];
+  }
+  const { totalSupply, totalVolume } = objectData;
+  const data = await contracts.fetchCollection(collection);
+  const { name, description, banner, small, twitter, telegram, discord } = data;
+  const bannerImage = banner.replace(
+    "ipfs://",
+    "https://ipfsfiles.distant.finance/ipfs/"
+  );
+  const smallImage = small.replace(
+    "ipfs://",
+    "https://ipfsfiles.distant.finance/ipfs/"
+  );
+  obj = {
     totalSupply: totalSupply,
     tradeVolume: totalVolume,
-    smallImage: imageUrl,
-    description: image_attributes.description,
     name: name,
+    description: description,
+    bannerImage: bannerImage,
+    smallImage: smallImage,
+    twitter: twitter,
+    telegram: telegram,
+    discord: discord,
   };
+
   return {
     props: {
       nftId: JSON.parse(JSON.stringify(nftId)),

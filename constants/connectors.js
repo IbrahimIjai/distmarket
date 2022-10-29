@@ -2,12 +2,12 @@ import { InjectedConnector } from "@web3-react/injected-connector";
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
 
 const injected = new InjectedConnector({
-  supportedChainIds: [80001],
+  supportedChainIds: [321],
 });
 
 const walletconnect = new WalletConnectConnector({
   rpc: {
-    80001: "https://matic-testnet-archive-rpc.bwarelabs.com",
+    321: "https://rpc-mainnet.kcc.network",
   },
   bridge: "https://bridge.walletconnect.org",
   qrcode: true,

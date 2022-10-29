@@ -5,6 +5,7 @@ import { Contract } from "ethers";
 
 const PopularCollection = () => {
   const [data, setData] = useState(null);
+  const [data2, setData2] = useState(null);
   const [display, setDisplay] = useState(false);
   let addr = "0x3b12cd8b30dcf4fd9db69ce125183ac7ca567472";
   const copy = async () => {
@@ -23,11 +24,35 @@ const PopularCollection = () => {
     );
     console.log(res);
   };
+  const contract = async () => {
+    const code = await contracts.provider.getCode(
+      "0xdb9b936373f859ce8c580bbc35b0eab89ca9fd70"
+    );
+    const code2 = await contracts.provider.getCode(
+      "0x5b41b4ce7497f703e09f4ac381b487658a8321e3"
+    );
+    setData(code);
+    setData2(code2);
+    setDisplay(true);
+    data2 === "0x" ? console.log("Wallet") : console.log("Contract");
+    data === "0x" && console.log("Wallet");
+  };
   return (
     <div>
       <div onClick={owner}>Call Contract</div>
-      {display && <div>{data}</div>}
-      <div onClick={collectionDetails}>Check Address</div>
+      {display && (
+        <div>
+          <div>
+            My wallet address: 0xDB9B936373f859Ce8C580Bbc35b0Eab89cA9fd70
+            returns {data}
+          </div>
+          <div>
+            The contract address: 0x5b41b4ce7497f703e09f4ac381b487658a8321e3
+            returns {data2}
+          </div>
+        </div>
+      )}
+      <div onClick={contract}>Check Address</div>
     </div>
   );
 };

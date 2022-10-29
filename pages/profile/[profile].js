@@ -20,7 +20,7 @@ account(id: $address){
 }
 `;
 
-export default function Profile({ profile, objectData, indexValue }) {
+export default function Profile({ profile, objectData, indexValue, code }) {
   let nftCount = null;
   Object.keys(objectData).length === 0
     ? (nftCount = null)
@@ -67,7 +67,7 @@ export default function Profile({ profile, objectData, indexValue }) {
         setAllData(array);
       }
     };
-    main();
+    indexValue !== null && main();
   }, []);
   return (
     <main className={styles.main}>
@@ -84,7 +84,6 @@ export default function Profile({ profile, objectData, indexValue }) {
             </div>
             <div className={styles.profileImage}>
               <Image
-                // src={allData.length > 0 ? allData[0].image : "/1960.jpeg"}
                 src={
                   allData[indexValue] !== undefined
                     ? allData[indexValue].image
@@ -103,10 +102,11 @@ export default function Profile({ profile, objectData, indexValue }) {
               </a>
             </Link>
           )}
+
           <p>
             Total NFTs owned: <span>{nftCount ? nftCount : "0"}</span>
           </p>
-          {!nftCount && (
+          {code === "0x" && !nftCount && (
             <i className={styles.promptBuy}>
               <span>
                 Lets boost your Profile <i>🤩</i>
@@ -119,40 +119,47 @@ export default function Profile({ profile, objectData, indexValue }) {
             </i>
           )}
         </div>
-        <div className={styles.ownedItems}>
-          {allData?.map((nft, i) => {
-            return (
-              <div className={styles.nft} key={i}>
-                <Link href={`/collection/${nft.collection}/${nft.tokenId}`}>
-                  <a>
-                    <div>
-                      {" "}
-                      <Image
-                        src={nft.image ? nft.image : "/2818"}
-                        alt={nft.name}
-                        layout="fill"
-                        objectFit="cover"
-                        className={styles.image}
-                      />{" "}
-                      <div className={styles.content}>
-                        {/* <div className={styles.onSale}>
+        {code === "0x" ? (
+          <div className={styles.ownedItems}>
+            {allData?.map((nft, i) => {
+              return (
+                <div className={styles.nft} key={i}>
+                  <Link href={`/collection/${nft.collection}/${nft.tokenId}`}>
+                    <a>
+                      <div>
+                        {" "}
+                        <Image
+                          src={nft.image ? nft.image : "/2818"}
+                          alt={nft.name}
+                          layout="fill"
+                          objectFit="cover"
+                          className={styles.image}
+                        />{" "}
+                        <div className={styles.content}>
+                          {/* <div className={styles.onSale}>
                           {nft.offerTrue
                             ? "Offer Available"
                             : nft.listingTrue
                             ? "on Sale"
                             : ""}
                         </div> */}
-                        <div className={styles.details}>
-                          <h2 className={styles.name}>{nft.name}</h2>
+                          <div className={styles.details}>
+                            <h2 className={styles.name}>{nft.name}</h2>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </a>
-                </Link>
-              </div>
-            );
-          })}
-        </div>
+                    </a>
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <h2 className={styles.notAddress}>
+            Address is a Contract Address
+            <span>Can't fetch NFT Data</span>
+          </h2>
+        )}
       </div>
     </main>
   );
@@ -160,40 +167,38 @@ export default function Profile({ profile, objectData, indexValue }) {
 
 export async function getServerSideProps({ params }) {
   const profile = params.profile;
+  const code = await contracts.provider.getCode(profile);
   let objectData = {};
-  const contentData = [];
-  const client = new ApolloClient({
-    uri: contracts.queryUrl,
-    cache: new InMemoryCache(),
-  });
-  client
-    .query({
-      query: gql(addressQuery),
-      variables: {
-        address: profile.toLowerCase(),
-      },
-    })
-    .then((data) => {
-      console.log(data);
-      let temp = data.data.account.tokens;
-      objectData = temp;
-    })
-    .catch((err) => console.log("Error fetching data: ", err));
+  if (code === "0x") {
+    const client = new ApolloClient({
+      uri: contracts.queryUrl,
+      cache: new InMemoryCache(),
+    });
+    client
+      .query({
+        query: gql(addressQuery),
+        variables: {
+          address: profile.toLowerCase(),
+        },
+      })
+      .then((data) => {
+        let temp = data.data.account.tokens;
+        objectData = temp;
+      })
+      .catch((err) => console.log("Error fetching data: ", err));
+  }
   const Host = await contracts.contractInstance.supportedCollections();
-  contentData.push(Host);
   let indexValue = null;
-  if (objectData.length > 1) {
+  if (Object.keys(objectData).length > 0) {
     const index = Math.floor(Math.random() * objectData.length);
-    console.log(index);
     indexValue = index;
   }
-  console.log(indexValue, objectData);
   return {
     props: {
       profile: profile,
       objectData: objectData,
-      contentData: contentData,
       indexValue: indexValue,
+      code: code,
     },
   };
 }

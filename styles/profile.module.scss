@@ -140,3 +140,15 @@
     }
   }
 }
+.notAddress {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 500;
+  color: gray;
+  text-align: center;
+  flex-direction: column;
+}

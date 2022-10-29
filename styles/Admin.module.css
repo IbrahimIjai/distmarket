@@ -55,4 +55,30 @@
   background-color: white;
   color: #000;
   border: none;
+}
+
+.notActive {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  width: 100%;
+  flex-direction: column;
+  font-size: 20px;
+  font-weight: 500;
+  color: gray;
+}
+.notActive h4 {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  background-color: #2fc0db;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin-top: 1rem;
+}
+.notActive h4:hover {
+  background-color: white;
+  color: #000;
+  border: none;
 }/*# sourceMappingURL=Admin.module.css.map */

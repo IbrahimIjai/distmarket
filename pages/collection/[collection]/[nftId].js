@@ -581,13 +581,15 @@ export default function NftId({
                     onMouseOver={() => setVerificationDisplay(true)}
                     onMouseOut={() => setVerificationDisplay(false)}
                   >
-                    {collectionInfo === 0 ? (
+                    {deadAddress !== collectionInfo[0] &&
+                    collectionInfo[2] === 0 ? (
                       <MdOutlineVerifiedUser />
                     ) : (
                       <CgDanger />
                     )}{" "}
                     {verificationDisplay ? (
-                      collectionInfo === 0 ? (
+                      deadAddress !== collectionInfo[0] &&
+                      collectionInfo[2] === 0 ? (
                         <span>Collection Verified</span>
                       ) : (
                         <span>Unverified!</span>
@@ -1172,7 +1174,7 @@ export async function getServerSideProps({ params, res }) {
       ipfsData: ipfsData,
       nftSaleInfo: JSON.parse(JSON.stringify(nftSaleInfo)),
       offerInfo: JSON.parse(JSON.stringify(offerInfo[1])),
-      collectionInfo: JSON.parse(JSON.stringify(collectionInfo[2])),
+      collectionInfo: JSON.parse(JSON.stringify(collectionInfo)),
       extraListings: JSON.parse(JSON.stringify(extraListings)),
     },
   };

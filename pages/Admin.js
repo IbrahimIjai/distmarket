@@ -7,7 +7,7 @@ import Error from "../components/error/Error";
 import Link from "next/link";
 
 export default function Admin() {
-  const { library } = useWeb3React();
+  const { library, account } = useWeb3React();
   const [collectionAddress, setCollectionAddresss] = useState("");
   const [royaltyFeesAddress, setRoyaltyFeesAddress] = useState("");
   const [royaltyFees, setRoyaltyfees] = useState("");
@@ -50,7 +50,7 @@ export default function Admin() {
       const tx = await contract.addCollection(
         collectionAddress,
         royaltyFeesAddress,
-        tradeFees.toString()
+        tradeFees
       );
       updateCollection(contract, tradeFees);
       await tx.wait();
@@ -58,6 +58,7 @@ export default function Admin() {
       setTxLink(tx.hash);
     } catch (error) {
       console.log(error.message);
+      console.log(error);
       setError(true);
     }
   };
@@ -76,37 +77,50 @@ export default function Admin() {
   };
 
   return (
-    <div className={styles.div}>
-      {displayTxn && (
-        <div className={styles.link}>
-          <Link href={`https://mumbai.polygonscan.com/tx/${txLink}`}>
-            <a>Link to add Collection transaction</a>
-          </Link>{" "}
-          <br />
-          <Link href={`https://mumbai.polygonscan.com/tx/${txuLink}`}>
-            <a>Link to update Collection transaction</a>
-          </Link>
+    <>
+      {account == "0x169a22652Bb25dCDDe884fe4C890c01D92a40A96" ? (
+        <div className={styles.div}>
+          {displayTxn && (
+            <div className={styles.link}>
+              <Link href={`https://explorer.kcc.io/en/tx/${txLink}`}>
+                <a>Link to add Collection transaction</a>
+              </Link>{" "}
+              <br />
+              <Link href={`https://explorer.kcc.io/en/tx/${txuLink}`}>
+                <a>Link to update Collection transaction</a>
+              </Link>
+            </div>
+          )}
+          <div className={styles.Addcollection}>
+            <h2>Add and Verify Collection</h2>
+            <input
+              type="text"
+              onChange={setColAddress}
+              placeholder="Collection address"
+            />
+            <input type="text" onChange={setFees} placeholder="Royalty fees" />
+            <input
+              type="text"
+              onChange={setFeeCollector}
+              placeholder="fee Collector address"
+            />
+            <button onClick={Addcollection}>Add Collection</button>
+          </div>
+          {error && <Error />}
+          <div onClick={withdraw} className={styles.rev}>
+            Withdraw Revenue
+          </div>
+        </div>
+      ) : (
+        <div className={styles.notActive}>
+          <h2>You're not supposed to be here 🥶</h2>{" "}
+          <h4>
+            <Link href="/">
+              <a>Return Home</a>
+            </Link>
+          </h4>
         </div>
       )}
-      <div className={styles.Addcollection}>
-        <h2>Add and Verify Collection</h2>
-        <input
-          type="text"
-          onChange={setColAddress}
-          placeholder="Collection address"
-        />
-        <input type="text" onChange={setFees} placeholder="Royalty fees" />
-        <input
-          type="text"
-          onChange={setFeeCollector}
-          placeholder="fee Collector address"
-        />
-        <button onClick={Addcollection}>Add Collection</button>
-      </div>
-      {error && <Error />}
-      <div onClick={withdraw} className={styles.rev}>
-        Withdraw Revenue
-      </div>
-    </div>
+    </>
   );
 }

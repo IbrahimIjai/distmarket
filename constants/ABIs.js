@@ -1944,15 +1944,15 @@ const tokenABI = [
   },
 ];
 
-const marketplace = "0xa9EBa0cc148FC3Ab7E9863Cdb6907cEcBD8B1dAD";
-const token = "0xf75150d730ce97c1551e97df39c0a049024e4c25";
-const mumbai = "https://matic-testnet-archive-rpc.bwarelabs.com";
+const marketplace = "0xa3c32c5f83d1669038baada2b17db84c7bb15cef";
+const token = "0x0039f574ee5cc39bdd162e9a88e3eb1f111baf48";
+const mumbai = "https://rpc-mainnet.kcc.network";
 const provider = new ethers.providers.JsonRpcProvider(mumbai);
 const contractInstance = new Contract(marketplace, marketplaceABI, provider);
 const tokenInstance = new Contract(token, tokenABI, provider);
 const collectionsHost =
   "https://ipfsfiles.distant.finance/ipfs/Qmc6rfqRsswqzsJV9nDoLbvQy2yk8hCDQteaGt86iAs1Hy";
-const queryUrl = "https://api.thegraph.com/subgraphs/name/steffqing/721-clone";
+const queryUrl = "https://thegraph.kcc.network/subgraphs/name/mart";
 const deadAddress = "0x0000000000000000000000000000000000000000";
 
 const fetchCollection = async (address) => {
