@@ -15,6 +15,7 @@
     border-radius: 5rem;
     font-size: 15px;
   }
+
   .modal {
     background-color: rgba(0, 0, 0, 0.7);
     min-height: 100vh;
@@ -35,16 +36,15 @@
     cursor: default;
     .closeModal {
       display: flex;
-      position: fixed;
-      color: white;
-      top: 32px;
-      right: 24px;
-      background-color: black;
+      position: absolute;
+      color: black;
+      top: 15px;
+      right: 15px;
       transform: none;
-      width: 50px;
-      height: 50px;
+      width: 25px;
+      height: 25px;
       align-items: center;
-      font-size: 30px;
+      font-size: 20px;
       justify-content: center;
       border-radius: 99999px;
       cursor: pointer;
@@ -57,6 +57,7 @@
     }
     .modalMenu {
       opacity: 1;
+      position: relative;
       transform: none;
       outline: none;
       border-radius: 24px;
@@ -71,17 +72,18 @@
       justify-content: center;
       box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
       .modalInternal {
-        padding: 50px;
+        padding: 20px 50px;
         h1 {
+          font-size: clamp(1.75rem, 2.2vw, 2.2rem);
           font-weight: 600;
           margin-bottom: 16px;
           text-align: center;
-          font-size: 32px;
           letter-spacing: -0.02em;
         }
         .tutorial {
           color: blue;
           opacity: 0.8;
+          margin-bottom: 10px;
           text-align: center;
           transition: all 0.3s ease;
           &:hover {
@@ -92,13 +94,17 @@
         .wallets {
           display: grid;
           gap: 32px;
-          margin-bottom: 32px;
+          margin-bottom: 22px;
           p {
             text-align: center;
           }
           .walletLists {
             display: grid;
             gap: 12px;
+            padding: 0 clamp(20px, 10px, 0px);
+            @media (max-width: 370px) {
+              padding: 0;
+            }
             .walletList {
               display: flex;
               align-items: center;
@@ -143,16 +149,15 @@
 
     .closeModal {
       display: flex;
-      position: fixed;
-      color: white;
-      top: 32px;
-      right: 24px;
-      background-color: black;
+      position: absolute;
+      color: black;
+      top: 15px;
+      right: 15px;
       transform: none;
-      width: 50px;
-      height: 50px;
+      width: 25px;
+      height: 25px;
       align-items: center;
-      font-size: 30px;
+      font-size: 20px;
       justify-content: center;
       border-radius: 99999px;
       cursor: pointer;
@@ -164,10 +169,11 @@
       }
     }
     .smallBoard {
+      position: relative;
       opacity: 1;
       transform: none;
       outline: none;
-      border-radius: 24px;
+      border-radius: 7px;
       width: min(100%, 350px);
       align-content: center;
       align-items: center;
@@ -179,16 +185,78 @@
       justify-content: center;
       box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
       padding: 50px;
-      p {
-        margin: 20px;
+      padding-top: 17px;
+      .head {
+        font-size: clamp(1.5rem, 2vw, 2rem);
+        font-weight: 600;
+        margin-bottom: 16px;
+        text-align: center;
+        letter-spacing: -0.02em;
+      }
+      .text {
+        font-size: clamp(1rem, 1.5vw, 1.5rem);
+        font-weight: 400;
+        margin-bottom: 30px;
+        text-align: center;
+        letter-spacing: -0.02em;
+        opacity: 0.8;
+      }
+      .userDetails {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin: 20px 0;
+        .address,
+        p {
+          width: 100%;
+          text-align: center;
+          font-size: clamp(1.2rem, 1.75vw, 1.75rem);
+          font-weight: 600;
+          letter-spacing: -0.02em;
+          opacity: 0.8;
+        }
+        .address,
+        .balance {
+          border-bottom: 1px solid grey;
+        }
+        .address {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 10px;
+          padding-bottom: 10px;
+          .icons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-left: 10px;
+            .clipboard {
+              cursor: pointer;
+            }
+          }
+        }
+        .balance {
+          padding-bottom: 10px;
+        }
+        .balances {
+          margin-top: 10px;
+        }
+        p {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
       }
       button {
         border: none;
         color: white;
         background: black;
-        padding: 0.5rem 1rem;
+        padding: 0.65rem 2rem;
         border-radius: 5px;
-        font-size: 22px;
+        font-size: 18px;
         margin-top: 5px;
         cursor: pointer;
         transition: all 120ms ease-in-out;

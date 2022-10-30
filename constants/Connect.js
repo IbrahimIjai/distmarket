@@ -2,8 +2,8 @@ import { useWeb3React } from "@web3-react/core";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { connectors } from "./connectors";
-import { BsBoxArrowUpRight } from "react-icons/bs";
-import { IoIosCloseCircleOutline } from "react-icons/io";
+import { BsBoxArrowUpRight, BsClipboard } from "react-icons/bs";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 import { contracts } from "./ABIs";
 import { utils } from "ethers";
 import Image from "next/image";
@@ -122,6 +122,11 @@ export default function Connect() {
   const [connectModal, setConnectModal] = useState(false);
   const [disconnectModal, setDisconnectModal] = useState(false);
 
+  const copy = async () => {
+    await navigator.clipboard.writeText(account);
+    alert("Address copied");
+  };
+
   useEffect(() => {
     const docCheck = () =>
       typeof window !== "undefined" && connectModal
@@ -143,65 +148,61 @@ export default function Connect() {
         </div>
       )}
       {connectModal && (
-        <div className={styles.modalContainer}>
-          <div className={styles.modal}>
-            <div
-              className={styles.closeModal}
-              onClick={() => setConnectModal(false)}
-            >
-              <IoIosCloseCircleOutline />
-            </div>
-            <div className={styles.modalMenu}>
-              <div className={styles.modalInternal}>
-                <h1>Connect Wallet</h1>
-                <div className={styles.wallets}>
-                  <p>
-                    Select an option to connect your wallet to the Marketplace
-                  </p>
-                  <div className={styles.walletLists}>
-                    <div className={styles.walletList} onClick={connect}>
-                      <Image
-                        src="/metamask.png"
-                        width={40}
-                        height={40}
-                        alt="imagelogo"
-                      />
-                      <span>Metamask</span>
-                    </div>
-                    <div className={styles.walletList} onClick={connect}>
-                      <Image
-                        src="/tokenpock.png"
-                        width={40}
-                        height={40}
-                        alt="imagelogo"
-                      />
-                      <span>TokenPocket</span>
-                    </div>
-                    <div className={styles.walletList} onClick={connectWC}>
-                      <Image
-                        src="/walletcon2.png"
-                        width={40}
-                        height={40}
-                        alt="imagelogo"
-                      />
-                      <span>WalletConnect</span>
-                    </div>
-                    <div className={styles.walletList} onClick={connect}>
-                      <Image
-                        src="/ku.jpg"
-                        width={40}
-                        height={40}
-                        alt="imagelogo"
-                      />
-                      <span>KuWallet</span>
-                    </div>
+        <div className={styles.modal}>
+          <div className={styles.modalMenu}>
+            <div className={styles.modalInternal}>
+              <h1>Connect Wallet</h1>
+              <div
+                className={styles.closeModal}
+                onClick={() => setConnectModal(false)}
+              >
+                <AiOutlineCloseCircle />
+              </div>
+              <div className={styles.wallets}>
+                <p>Select to connect to your available provider</p>
+                <div className={styles.walletLists}>
+                  <div className={styles.walletList} onClick={connect}>
+                    <Image
+                      src="/metamask.png"
+                      width={40}
+                      height={40}
+                      alt="imagelogo"
+                    />
+                    <span>Metamask</span>
+                  </div>
+                  <div className={styles.walletList} onClick={connect}>
+                    <Image
+                      src="/tokenpock.png"
+                      width={40}
+                      height={40}
+                      alt="imagelogo"
+                    />
+                    <span>TokenPocket</span>
+                  </div>
+                  <div className={styles.walletList} onClick={connectWC}>
+                    <Image
+                      src="/walletcon2.png"
+                      width={40}
+                      height={40}
+                      alt="imagelogo"
+                    />
+                    <span>WalletConnect</span>
+                  </div>
+                  <div className={styles.walletList} onClick={connect}>
+                    <Image
+                      src="/ku.jpg"
+                      width={40}
+                      height={40}
+                      alt="imagelogo"
+                    />
+                    <span>KuWallet</span>
                   </div>
                 </div>
-                <div className={styles.tutorial}>
-                  <Link href="https://docs.distant.finance">
-                    <a>Setting up a wallet for the first time?</a>
-                  </Link>
-                </div>
+              </div>
+              <div className={styles.tutorial}>
+                <Link href="https://docs.distant.finance">
+                  <a>Beginners wallet setup!</a>
+                </Link>
               </div>
             </div>
           </div>
@@ -209,26 +210,41 @@ export default function Connect() {
       )}
       {disconnectModal && (
         <div className={styles.board}>
-          <div>
+          <div className={styles.smallBoard}>
+            {" "}
+            <h2 className={styles.head}>Disconnect your Wallet</h2>
             <div
               className={styles.closeModal}
               onClick={() => setDisconnectModal(false)}
             >
-              <IoIosCloseCircleOutline />
+              <AiOutlineCloseCircle />
             </div>
-            <div className={styles.smallBoard}>
-              <Link href={`https://scan.kcc.io/address/${account}`}>
-                <a>
-                  <p>
-                    {`${account.slice(0, 5)}...${account.slice(39, 42)}`}{" "}
-                    <BsBoxArrowUpRight />
-                  </p>
-                </a>
-              </Link>
-              <p>KCS balance: {kcsBalance}</p>
-              <p>USDT balance: {usdtBalance}</p>
-              <button onClick={disconnect}>Disconnect</button>
+            <p className={styles.text}>
+              Disconnect from Metamask to fully disconnect
+            </p>
+            <div className={styles.userDetails}>
+              <div className={styles.address}>
+                <div>
+                  {" "}
+                  {`${account.slice(0, 5)}...${account.slice(39, 42)}`}{" "}
+                </div>
+                <div className={styles.icons}>
+                  <BsClipboard className={styles.clipboard} onClick={copy} />
+                  <Link href={`https://scan.kcc.io/address/${account}`}>
+                    <a>
+                      <BsBoxArrowUpRight className={styles.explorer} />
+                    </a>
+                  </Link>
+                </div>
+              </div>
+              <p className={styles.balance}>
+                KCS Balance: <span> {kcsBalance} KCS</span>
+              </p>
+              <p className={styles.balances}>
+                USDT Balance: <span> {usdtBalance} USDT</span>
+              </p>
             </div>
+            <button onClick={disconnect}>Disconnect Wallet</button>
           </div>
         </div>
       )}

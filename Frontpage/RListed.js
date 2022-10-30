@@ -1,6 +1,5 @@
 import styles from "./styles/RListed.module.css";
 import Image from "next/image";
-import SupportedCollections from "../SupportedCollections";
 import { useWeb3React } from "@web3-react/core";
 import { useState, useEffect } from "react";
 import { Contract, utils } from "ethers";
@@ -27,12 +26,13 @@ const RListed = () => {
       const recentListings = [];
       try {
         const contract = contracts.contractInstance;
-        for (let i = 0; i < SupportedCollections.length; i++) {
+        const collections = await contract.collections();
+        for (let i = 0; i < collections.length; i++) {
           const listings = await contract.availableListings(
-            SupportedCollections[i].collectionAddress
+            collections[i].collectionAddress
           );
           const instance = new Contract(
-            SupportedCollections[i].collectionAddress,
+            collections[i].collectionAddress,
             nftABI,
             contracts.provider
           );
@@ -58,7 +58,7 @@ const RListed = () => {
               : image;
             const obj = {
               tokenId: tokenId,
-              collectionAddress: SupportedCollections[i].collectionAddress,
+              collectionAddress: collections[i].collectionAddress,
               address: listings[1][dat][0],
               price: value,
               name: name,
