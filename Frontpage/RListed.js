@@ -26,13 +26,11 @@ const RListed = () => {
       const recentListings = [];
       try {
         const contract = contracts.contractInstance;
-        const collections = await contract.collections();
+        const collections = await contract.supportedCollections();
         for (let i = 0; i < collections.length; i++) {
-          const listings = await contract.availableListings(
-            collections[i].collectionAddress
-          );
+          const listings = await contract.availableListings(collections[i]);
           const instance = new Contract(
-            collections[i].collectionAddress,
+            collections[i],
             nftABI,
             contracts.provider
           );
@@ -82,7 +80,7 @@ const RListed = () => {
 
       <div className={styles.SliderContainer}>
         <div className={styles.cards}>
-          {data ? (
+          {data !== null ? (
             data.map((nft, i) => (
               <Link
                 key={i}
