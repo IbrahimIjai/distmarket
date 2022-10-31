@@ -30,9 +30,9 @@ const Hero = () => {
             </a>
           </Link>
         </aside>
-        <div className={styles.heroImage}>
+        {/* <div className={styles.heroImage}>
             <Carosel/>
-        </div>
+        </div> */}
       </main>
     </div>
   );

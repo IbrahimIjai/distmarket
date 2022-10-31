@@ -1,15 +1,14 @@
 .main {
   background-image: url(../img/mobile-black.png);
-  height: max(100vh, 700px);
+  height: 75vh;
   background-color: black;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   color: white;
-  gap: 15px;
   padding: 2vw;
 }
 .main aside {
@@ -171,21 +170,20 @@
   .main {
     justify-content: center;
     background-image: url("../img/desktop-black.png");
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: 20px;
-    grid-row-gap: 20px;
-    justify-items: stretch;
+    display: flex;
     align-items: stretch;
+    align-items: center;
   }
   .main aside {
-    align-items: flex-start;
+    text-align: center;
+  }
+  .main aside p {
+    text-align: center;
   }
   .main aside .center .mid {
     text-align: left;
   }
   .main aside p {
-    text-align: left;
     margin: 10px 0 30px 0;
   }
   .main .heroImage {
