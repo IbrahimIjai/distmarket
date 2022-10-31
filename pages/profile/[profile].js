@@ -21,6 +21,7 @@ account(id: $address){
 `;
 
 export default function Profile({ profile, objectData, indexValue, code }) {
+  console.log(profile, objectData, indexValue, code);
   let nftCount = null;
   Object.keys(objectData).length === 0
     ? (nftCount = null)
@@ -40,7 +41,6 @@ export default function Profile({ profile, objectData, indexValue, code }) {
           const link = await fetch(url)
             .then((res) => res.json())
             .catch((err) => console.log(err));
-          // const link = await content.json();
           const image =
             link && link.image.includes("ipfs://", 0)
               ? link.image.replace(
@@ -74,6 +74,7 @@ export default function Profile({ profile, objectData, indexValue, code }) {
     };
     indexValue !== null && main();
   }, []);
+  console.log(allData);
   return (
     <main className={styles.main}>
       <div className={styles.container}>
