@@ -56,7 +56,7 @@ const RListed = () => {
               : image;
             const obj = {
               tokenId: tokenId,
-              collectionAddress: collections[i].collectionAddress,
+              collectionAddress: collections[i],
               address: listings[1][dat][0],
               price: value,
               name: name,
@@ -72,6 +72,7 @@ const RListed = () => {
     };
     main();
   }, [runEffect]);
+  console.log(data)
   return (
     <main className={styles.main}>
       <div className={styles.text}>
