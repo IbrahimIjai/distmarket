@@ -19,7 +19,7 @@ account(id: $address){
 }
 }
 `;
-
+// profile, objectData, indexValue, code
 export default function Profile({ profile, objectData, indexValue, code }) {
   let nftCount = null;
   Object.keys(objectData).length === 0
@@ -188,6 +188,7 @@ export async function getServerSideProps({ params }) {
         },
       })
       .then((data) => {
+        console.log(data);
         let temp = data.data.account.tokens;
         objectData = temp;
       })
