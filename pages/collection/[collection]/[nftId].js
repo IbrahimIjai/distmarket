@@ -197,8 +197,8 @@ export default function NftId({
         setErrorModal(true);
         setTimeout(() => {
           setErrorModal(false);
-        }, 2000);
-        setErrorMessage("Balance is too low to execute transaction");
+        }, 5000);
+        setErrorMessage("Balance is too low to execute transaction!");
       }
     } catch (error) {
       if (Number(userBalance) > Number(salePrice)) {
@@ -206,7 +206,7 @@ export default function NftId({
         setTimeout(() => {
           setErrorModal(false);
         }, 2000);
-        setErrorMessage("An unknown error occured. Try again: Approve USDT");
+        setErrorMessage("An unknown error occured. Try again: Approving USDT!");
       }
       console.log(error);
     }
@@ -228,7 +228,7 @@ export default function NftId({
       }, 2000);
       setCreateListing(false);
       setErrorMessage(
-        `An unknown error occured. Try again: Approving ${ipfsData[2]}`
+        `An unknown error occured. Try again: Approving ${ipfsData[2]}!`
       );
       console.log(error);
     }
@@ -251,7 +251,7 @@ export default function NftId({
         setTimeout(() => {
           setErrorModal(false);
         }, 2000);
-        setErrorMessage("Connect wallet to execute transaction");
+        setErrorMessage("Connect wallet to execute transaction!");
         return;
       }
       if (addressApprovedToSellNft !== marketContract) {
@@ -259,14 +259,14 @@ export default function NftId({
         setTimeout(() => {
           setErrorModal(false);
         }, 2000);
-        setErrorMessage("Marketplace is not approved to trade NFT");
+        setErrorMessage("Marketplace is not approved to trade NFT!");
         return;
       }
       setErrorModal(true);
       setTimeout(() => {
         setErrorModal(false);
       }, 2000);
-      setErrorMessage("An unknown error occured. Try again");
+      setErrorMessage("An unknown error occured. Try again!");
       console.log(error);
     }
   };
@@ -288,7 +288,7 @@ export default function NftId({
         setErrorModal(false);
       }, 2000);
       setCreateListing(false);
-      setErrorMessage("An unknown error occured. Try again");
+      setErrorMessage("An unknown error occured. Try again!");
       console.log(error);
     }
   };
@@ -306,7 +306,7 @@ export default function NftId({
       setTimeout(() => {
         setErrorModal(false);
       }, 2000);
-      setErrorMessage("An unknown error occured. Try again");
+      setErrorMessage("An unknown error occured. Try again!");
       console.log(err);
     }
   };
@@ -331,7 +331,7 @@ export default function NftId({
         setErrorModal(false);
       }, 2000);
       setUpdateListingModal(false);
-      setErrorMessage("An unknown error occured. Try again");
+      setErrorMessage("An unknown error occured. Try again!");
       console.log(error);
     }
   };
@@ -360,8 +360,8 @@ export default function NftId({
           setErrorModal(true);
           setTimeout(() => {
             setErrorModal(false);
-          }, 2000);
-          setErrorMessage("Insufficient Balance for approval");
+          }, 5000);
+          setErrorMessage("Insufficient Balance for approval!");
           setCreateOfferModal(false);
           return;
         }
@@ -379,7 +379,7 @@ export default function NftId({
         }, 2000);
         setCreateOfferModal(false);
         setErrorMessage(
-          "Please connect your wallet to execute this transaction"
+          "Please connect your wallet to execute this transaction!"
         );
       }
     } catch (error) {
@@ -388,7 +388,7 @@ export default function NftId({
         setErrorModal(false);
       }, 2000);
       setCreateOfferModal(false);
-      setErrorMessage("An unknown error occured. Try again");
+      setErrorMessage("An unknown error occured. Try again!");
       console.log(error);
     }
   };
@@ -413,8 +413,8 @@ export default function NftId({
         setErrorModal(true);
         setTimeout(() => {
           setErrorModal(false);
-        }, 2000);
-        setErrorMessage("New offer value is below Balance");
+        }, 5000);
+        setErrorMessage("New offer value is below Balance!");
         setUpdateOfferModal(false);
       }
       const contract = new Contract(marketContract, marketplaceABI, signer);
@@ -429,7 +429,7 @@ export default function NftId({
       setTimeout(() => {
         setErrorModal(false);
       }, 2000);
-      setErrorMessage("An unknown error occured. Try again");
+      setErrorMessage("An unknown error occured. Try again!");
       console.log(error);
     }
   };
@@ -447,7 +447,7 @@ export default function NftId({
       setTimeout(() => {
         setErrorModal(false);
       }, 2000);
-      setErrorMessage("An unknown error occured. Try again");
+      setErrorMessage("An unknown error occured. Try again!");
       console.log(error);
     }
   };
@@ -469,9 +469,9 @@ export default function NftId({
         setErrorModal(true);
         setTimeout(() => {
           setErrorModal(false);
-        }, 2000);
+        }, 3000);
         setErrorMessage(
-          "Offer Initiator has insufficient funds/approval for this Transaction. Try someone else"
+          "Offer Initiator has insufficient funds/approval for this Transaction. Try someone else!"
         );
         return;
       }
@@ -490,7 +490,7 @@ export default function NftId({
       setTimeout(() => {
         setErrorModal(false);
       }, 2000);
-      setErrorMessage("An unknown error occured. Try again");
+      setErrorMessage("An unknown error occured. Try again!");
       console.log(error);
     }
   };
@@ -509,9 +509,9 @@ export default function NftId({
         setErrorModal(true);
         setTimeout(() => {
           setErrorModal(false);
-        }, 2000);
+        }, 3000);
         setErrorMessage(
-          "Offer Initiator has insufficient funds/approval for this Transaction. Try someone else"
+          "Offer Initiator has insufficient funds/approval for this Transaction. Try someone else!"
         );
         return;
       }
@@ -526,7 +526,7 @@ export default function NftId({
       setTimeout(() => {
         setErrorModal(false);
       }, 2000);
-      setErrorMessage("An unknown error occured. Try again");
+      setErrorMessage("An unknown error occured. Try again!");
       console.log(error);
     }
   };
@@ -542,7 +542,7 @@ export default function NftId({
                 active && (
                   <span>
                     {" "}
-                    Buy on{" "}
+                    Buy USDT on{" "}
                     <Link href="https://app.mojitoswap.finance/swap">
                       <a
                         className={styles.dexLink}
@@ -850,7 +850,7 @@ export default function NftId({
                             className={styles.input}
                             placeholder="Set Offer Value"
                           />
-                          <div onClick={makeOffer}>
+                          <div onClick={makeOffer} className={styles.cta}>
                             <span>Create Offer</span>
                           </div>
                         </div>
@@ -1008,7 +1008,7 @@ export default function NftId({
                     className={styles.input}
                     placeholder="Set New Offer Value"
                   />
-                  <div onClick={updateOffer}>
+                  <div onClick={updateOffer} className={styles.cta}>
                     <span>Create New Offer</span>
                   </div>
                 </div>
