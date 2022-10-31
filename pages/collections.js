@@ -2,9 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/allCollections.module.css";
 import banner from "../assets/banner.png";
-import { Contract, ethers } from "ethers";
-import { marketplaceABI, contracts, nftABI } from "../constants/ABIs";
-import { useEffect, useState } from "react";
+import { contracts } from "../constants/ABIs";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
 const nftData = `
@@ -101,7 +99,7 @@ export async function getServerSideProps() {
       uri: contracts.queryUrl,
       cache: new InMemoryCache(),
     });
-    client
+    await client
       .query({
         query: gql(nftData),
         variables: {
@@ -114,8 +112,7 @@ export async function getServerSideProps() {
       })
       .catch((err) => console.log("Error fetching data: ", err));
   }
-  const res = await contracts.contractInstance.maxFees();
-  await arrayData;
+  // const res = await contracts.contractInstance.maxFees();
   const data = [];
   for (let i = 0; i < arrayData.length; i++) {
     const links = await contracts.fetchCollection(arrayData[i].id);

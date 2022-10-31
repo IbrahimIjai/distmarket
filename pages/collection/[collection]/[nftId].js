@@ -75,7 +75,7 @@ export default function NftId({
       }
       const nftContract = new Contract(collection, nftABI, contracts.provider);
       const nftApproved = await nftContract.getApproved(nftId);
-      setAddressApprovedToSellNft(nftApproved);
+      setAddressApprovedToSellNft(nftApproved.toLowerCase());
     };
     main();
   }, [runEffect]);

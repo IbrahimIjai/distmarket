@@ -192,14 +192,11 @@ export async function getServerSideProps({ params }) {
       })
       .catch((err) => console.log("Error fetching data: ", err));
   }
-  const Host = await contracts.contractInstance.supportedCollections();
-  console.log(objectData) 
   let indexValue = null;
   if (Object.keys(objectData).length > 0) {
     const index = Math.floor(Math.random() * objectData.length);
     indexValue = index;
   }
-  console.log(objectData)
   return {
     props: {
       profile: profile,
