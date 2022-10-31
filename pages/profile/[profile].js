@@ -19,9 +19,9 @@ account(id: $address){
 }
 }
 `;
-
+// profile, objectData, indexValue, code
 export default function Profile({ profile, objectData, indexValue, code }) {
-  console.log(profile, objectData, indexValue, code);
+  console.log(objectData);
   let nftCount = null;
   Object.keys(objectData).length === 0
     ? (nftCount = null)
@@ -68,8 +68,8 @@ export default function Profile({ profile, objectData, indexValue, code }) {
             // offerTrue: offerTrue,
           };
           array.push(obj);
-          setAllData(array);
         }
+          setAllData(array);
       }
     };
     indexValue !== null && main();
@@ -188,6 +188,7 @@ export async function getServerSideProps({ params }) {
         },
       })
       .then((data) => {
+        console.log(data)
         let temp = data.data.account.tokens;
         objectData = temp;
       })
