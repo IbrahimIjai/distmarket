@@ -21,7 +21,6 @@ account(id: $address){
 `;
 // profile, objectData, indexValue, code
 export default function Profile({ profile, objectData, indexValue, code }) {
-  console.log(objectData);
   let nftCount = null;
   Object.keys(objectData).length === 0
     ? (nftCount = null)
@@ -47,7 +46,7 @@ export default function Profile({ profile, objectData, indexValue, code }) {
                   "ipfs://",
                   "https://ipfsfiles.distant.finance/ipfs/"
                 )
-              : link && link.image;
+              : link.image;
           // const listingExists = await contracts.contractInstance.sellNFT(
           //   objectData[i].collection.id,
           //   objectData[i].identifier
@@ -61,7 +60,7 @@ export default function Profile({ profile, objectData, indexValue, code }) {
           // const offerTrue = offersExists[0].length > 0 ? true : false;
           const obj = {
             name: link ? link.name : "NFT",
-            image: link ? image : "/1960.jpeg",
+            image: link ? image : "",
             tokenId: objectData[i].identifier,
             collection: objectData[i].collection.id,
             // listingTrue: listingTrue,
@@ -69,12 +68,12 @@ export default function Profile({ profile, objectData, indexValue, code }) {
           };
           array.push(obj);
         }
-          setAllData(array);
       }
+      setAllData(array);
     };
     indexValue !== null && main();
   }, []);
-  console.log(allData);
+  nftCount = allData.length;
   return (
     <main className={styles.main}>
       <div className={styles.container}>
@@ -82,10 +81,11 @@ export default function Profile({ profile, objectData, indexValue, code }) {
           <div className={styles.profile}>
             <div className={styles.banner}>
               <Image
-                src="/bannerProfile.png"
+                src="/defaultBanner.png"
                 objectFit="cover"
                 layout="fill"
                 alt="banner"
+                priority
               />
             </div>
             <div className={styles.profileImage}>
@@ -93,7 +93,7 @@ export default function Profile({ profile, objectData, indexValue, code }) {
                 src={
                   allData[indexValue] !== undefined
                     ? allData[indexValue].image
-                    : "/1960.jpeg"
+                    : "/defaultImage.png"
                 }
                 objectFit="cover"
                 alt="profile"
@@ -102,7 +102,7 @@ export default function Profile({ profile, objectData, indexValue, code }) {
             </div>
           </div>
           {profile && (
-            <Link href={`https://explorer.kcc.io/en/tokentxns/${profile}`}>
+            <Link href={`https://explorer.kcc.io/en/address/${profile}`}>
               <a>
                 <h1>{`${profile.slice(0, 5)}...${profile.slice(38, 42)}`}</h1>
               </a>
@@ -135,7 +135,7 @@ export default function Profile({ profile, objectData, indexValue, code }) {
                       <div>
                         {" "}
                         <Image
-                          src={nft.image ? nft.image : "/2818"}
+                          src={nft.image ? nft.image : "/defaultImage.png"}
                           alt={nft.name}
                           layout="fill"
                           objectFit="cover"
@@ -188,7 +188,7 @@ export async function getServerSideProps({ params }) {
         },
       })
       .then((data) => {
-        console.log(data)
+        console.log(data);
         let temp = data.data.account.tokens;
         objectData = temp;
       })

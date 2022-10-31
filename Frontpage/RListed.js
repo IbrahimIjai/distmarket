@@ -72,7 +72,6 @@ const RListed = () => {
     };
     main();
   }, [runEffect]);
-  console.log(data)
   return (
     <main className={styles.main}>
       <div className={styles.text}>
