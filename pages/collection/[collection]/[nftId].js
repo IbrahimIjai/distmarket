@@ -78,7 +78,7 @@ export default function NftId({
       setAddressApprovedToSellNft(nftApproved.toLowerCase());
     };
     main();
-  }, [runEffect]);
+  }, [runEffect, userBalance]);
   // Contracts and constant addresses
   const marketContract = contracts.marketplace;
   const tokenContract = contracts.token;

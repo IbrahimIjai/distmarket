@@ -8,7 +8,7 @@ const Mint = () => {
     <main className={styles.main}>
       <div className={styles.container}>
         <div className={styles.imageContainer}>
-          <Image src={art} layout="fill" objectFit="cover" />
+          <Image src={art} layout="fill" objectFit="cover" priority />
         </div>
         <div className={styles.textContainer}>
           <div className={styles.headText}>

@@ -10,19 +10,12 @@ const Hero = () => {
       <main className={styles.main}>
         <aside>
           <div className={styles.center}>
-            <h1>
-              A <span> Haven</span> for{" "}
-              <div>
-                <div className={styles.mid}>
-                  your <span>NFTs</span>
-                </div>
-              </div>
-            </h1>{" "}
+            <h1>Decentralized, Permissionless!</h1>{" "}
           </div>
           <p>
             {" "}
             Discover a community-centric platform offering limitless connections
-            for NFT creators and collectors.{" "}
+            for NFT creators and collectors on KCC.{" "}
           </p>
           <Link href="/collections">
             <a>
