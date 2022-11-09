@@ -1,45 +1,41 @@
 import styles from "../../styles/profile.module.css";
 import Image from "next/image";
 import { contracts } from "../../constants/ABIs";
+import { useWeb3React } from "@web3-react/core";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
-const addressQuery = `
-query addressQuery($address: ID){
-account(id: $address){
-  id
-  tokens{
-    identifier
-    tokenURI
-    collection{
-      id
+const dataQuery = `
+ query queryData($address: ID, $collections: String) {
+  account(id: $address) {
+    tokens(where: {collection: $collections}) {
+      identifier
+      tokenURI
+      collection{
+        id
+      }
     }
   }
-}
-}
-`;
-// profile, objectData, indexValue, code
-export default function Profile({ profile, objectData, indexValue, code }) {
-  let nftCount = null;
-  Object.keys(objectData).length === 0
-    ? (nftCount = null)
-    : (nftCount = Object.keys(objectData).length);
+}`;
+export default function Profile({ profile, dataArray, indexValue, code }) {
+  const { account } = useWeb3React();
+  const ownerProfile = account ? account.toLowerCase() : undefined;
   const [allData, setAllData] = useState([]);
   useEffect(() => {
     const main = async () => {
       const array = [];
-      for (let i = 0; i < objectData.length; i++) {
-        if (objectData[i].tokenURI !== null) {
-          const url = objectData[i].tokenURI.includes("ipfs://", 0)
-            ? objectData[i].tokenURI.replace(
+      for (let i = 0; i < dataArray.length; i++) {
+        if (dataArray[i].tokenURI !== null) {
+          const url = dataArray[i].tokenURI.includes("ipfs://", 0)
+            ? dataArray[i].tokenURI.replace(
                 "ipfs://",
                 "https://ipfsfiles.distant.finance/ipfs/"
               )
-            : objectData[i].tokenURI;
+            : dataArray[i].tokenURI;
           const link = await fetch(url)
             .then((res) => res.json())
-            .catch((err) => console.log(err));
+            .catch((err) => console.log(err, "Error fetching"));
           const image =
             link && link.image.includes("ipfs://", 0)
               ? link.image.replace(
@@ -48,12 +44,12 @@ export default function Profile({ profile, objectData, indexValue, code }) {
                 )
               : link.image;
           // const listingExists = await contracts.contractInstance.sellNFT(
-          //   objectData[i].collection.id,
-          //   objectData[i].identifier
+          //   dataArray[i].collection.id,
+          //   dataArray[i].identifier
           // );
           // const offersExists = await contracts.contractInstance.availableOffers(
-          //   objectData[i].collection.id,
-          //   objectData[i].identifier
+          //   dataArray[i].collection.id,
+          //   dataArray[i].identifier
           // );
           // const listingTrue =
           //   listingExists[0] === contracts.deadAddress ? false : true;
@@ -61,8 +57,8 @@ export default function Profile({ profile, objectData, indexValue, code }) {
           const obj = {
             name: link ? link.name : "NFT",
             image: link ? image : "",
-            tokenId: objectData[i].identifier,
-            collection: objectData[i].collection.id,
+            tokenId: dataArray[i].identifier,
+            collection: dataArray[i].collection.id,
             // listingTrue: listingTrue,
             // offerTrue: offerTrue,
           };
@@ -73,7 +69,6 @@ export default function Profile({ profile, objectData, indexValue, code }) {
     };
     indexValue !== null && main();
   }, []);
-  nftCount = allData.length;
   return (
     <main className={styles.main}>
       <div className={styles.container}>
@@ -110,20 +105,23 @@ export default function Profile({ profile, objectData, indexValue, code }) {
           )}
 
           <p>
-            Total NFTs owned: <span>{nftCount ? nftCount : "0"}</span>
+            Total NFTs owned:{" "}
+            <span>{dataArray.length > 0 ? dataArray.length : "0"}</span>
           </p>
-          {code === "0x" && !nftCount && (
-            <i className={styles.promptBuy}>
-              <span>
-                Lets boost your Profile <i>🤩</i>
-              </span>
-              <span>
-                <Link href="/collections">
-                  <a>Purchase your first NFT</a>
-                </Link>
-              </span>
-            </i>
-          )}
+          {code === "0x" &&
+            dataArray.length === 0 &&
+            ownerProfile === profile.toLowerCase() && (
+              <i className={styles.promptBuy}>
+                <span>
+                  Lets boost your Profile <i>🤩</i>
+                </span>
+                <span>
+                  <Link href="/collections">
+                    <a>Purchase your first NFT</a>
+                  </Link>
+                </span>
+              </i>
+            )}
         </div>
         {code === "0x" ? (
           <div className={styles.ownedItems}>
@@ -174,35 +172,38 @@ export default function Profile({ profile, objectData, indexValue, code }) {
 export async function getServerSideProps({ params }) {
   const profile = params.profile;
   const code = await contracts.provider.getCode(profile);
-  let objectData = {};
+  const collections = await contracts.contractInstance.supportedCollections();
+  const dataArray = [];
   if (code === "0x") {
-    const client = new ApolloClient({
-      uri: contracts.queryUrl,
-      cache: new InMemoryCache(),
-    });
-    await client
-      .query({
-        query: gql(addressQuery),
-        variables: {
-          address: profile.toLowerCase(),
-        },
-      })
-      .then((data) => {
-        console.log(data);
-        let temp = data.data.account.tokens;
-        objectData = temp;
-      })
-      .catch((err) => console.log("Error fetching data: ", err));
+    for (let i = 0; i < collections.length; i++) {
+      const client = new ApolloClient({
+        uri: contracts.queryUrl,
+        cache: new InMemoryCache(),
+      });
+      await client
+        .query({
+          query: gql(dataQuery),
+          variables: {
+            address: profile.toLowerCase(),
+            collections: collections[i].toLowerCase(),
+          },
+        })
+        .then((data) => {
+          let temp = data.data.account.tokens;
+          temp.length > 0 && dataArray.push(...temp);
+        })
+        .catch((err) => console.log("Error fetching data: ", err));
+    }
   }
   let indexValue = null;
-  if (Object.keys(objectData).length > 0) {
-    const index = Math.floor(Math.random() * objectData.length);
+  if (dataArray.length > 0) {
+    const index = Math.floor(Math.random() * dataArray.length);
     indexValue = index;
   }
   return {
     props: {
       profile: profile,
-      objectData: objectData,
+      dataArray: JSON.parse(JSON.stringify(dataArray)),
       indexValue: indexValue,
       code: code,
     },
