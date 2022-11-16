@@ -25,13 +25,7 @@ import {
 import { useWeb3React } from "@web3-react/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
-export default function NftId({
-  offerInfo,
-  nftSaleInfo,
-  ipfsData,
-  collectionInfo,
-  extraListings,
-}) {
+export default function NftId({ nftSaleInfo, ipfsData, params }) {
   //Contract functions
   const { account, library, active } = useWeb3React();
   const router = useRouter();
@@ -42,7 +36,6 @@ export default function NftId({
     margin: "0 auto",
     borderColor: "red",
   };
-  ``;
   let highestOfferInitiator = "";
   const [verificationDisplay, setVerificationDisplay] = useState(false);
   const [runEffect, setRunEffect] = useState(false);
@@ -50,10 +43,13 @@ export default function NftId({
   const [addressApprovedToSellNft, setAddressApprovedToSellNft] =
     useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [load, setLoad] = useState(false);
-  const loadSite = setTimeout(() => {
-    setLoad(true);
-  }, 3300);
+  const [loading, setLoading] = useState(false);
+  const [offer, setOffer] = useState(null);
+  const [offerCreatorAddress, setOfferCreatorAddress] = useState(null);
+  const [highestOffer, setHighestOffer] = useState(null);
+  const [collectionInfo, setCollectionInfo] = useState(null);
+  const [extraListings, setExtraListings] = useState(null);
+  const [reload, setReload] = useState(false);
   // Array dependency function
   const init = setTimeout(() => {
     setRunEffect(true);
@@ -63,7 +59,6 @@ export default function NftId({
       setRunEffect(false);
     }, 2000);
     clearTimeout(init);
-    clearTimeout(loadSite);
   }
   //Get User balance
   useEffect(() => {
@@ -78,13 +73,13 @@ export default function NftId({
       setAddressApprovedToSellNft(nftApproved.toLowerCase());
     };
     main();
-  }, [runEffect, userBalance]);
+  }, [runEffect, userBalance, loading, account]);
   // Contracts and constant addresses
   const marketContract = contracts.marketplace;
   const tokenContract = contracts.token;
   const deadAddress = contracts.deadAddress;
   const genericAmount = "1000000000000000000000";
-  // Constant States
+  // Constant States for expanding divs
   const [state, setState] = useState(false);
   const [attr, setAttr] = useState(false);
   const [desc, setDesc] = useState(false);
@@ -92,46 +87,49 @@ export default function NftId({
   const sellingPrice = BigNumber.from(nftSaleInfo[1].hex);
   const salePrice = utils.formatEther(sellingPrice);
   //Offers section
-  const offerer = [];
-  const offerValue = [];
-  offerInfo &&
-    offerInfo.map((offer) => {
-      offerer.push(offer[0]);
-      offerValue.push(parseInt(offer[1].hex, 16).toString());
-    });
-  const priceDifference = [];
-  const percentageDifference = () => {
-    const values = offerValue.map((val) => Number(utils.formatEther(val)));
-    const saleValue = Number(salePrice);
-    values.map((val) => {
-      if (val > saleValue) {
-        priceDifference.push((val / saleValue) * 100 - 100);
-      } else if (val < saleValue) {
-        priceDifference.push(-Math.abs((saleValue / val) * 100 - 100));
-      } else {
-        priceDifference.push(val - saleValue);
-      }
-    });
-  };
-  offerInfo && percentageDifference();
-  const offer = [];
-  for (let i = 0; i < offerer.length; i++) {
-    let object = {
-      address: offerer[i],
-      value: Number(utils.formatEther(offerValue[i])),
-      floorDifference: priceDifference[i].toPrecision(4),
+  useEffect(() => {
+    const dataCallingFunction = async () => {
+      const offerData = await fetch(
+        "http://localhost:3000/api/blockchain/nftid/offersinfo",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nftId: nftId,
+            salePrice: salePrice,
+            collection: collection,
+          }),
+        }
+      )
+        .then((res) => res.json())
+        .catch((err) => console.log(err));
+      setOffer(offerData.offer);
+      setCollectionInfo(offerData.collectionInfo);
+      setHighestOffer(offerData.highestOffer);
+      setOfferCreatorAddress(offerData.offerCreatorAddress);
+      const extraListingsData = await fetch(
+        "http://localhost:3000/api/blockchain/nftid/extralistings",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nftId: nftId,
+            collection: collection,
+          }),
+        }
+      )
+        .then((res) => res.json())
+        .catch((err) => console.log(err));
+      setExtraListings(extraListingsData);
     };
-    offer.push(object);
-  }
-  const bestOffers =
-    offerInfo && offerValue.map((value) => utils.formatEther(value));
-  const highestOffer =
-    bestOffers.length > 0 &&
-    bestOffers.reduce((acc, cur) =>
-      Number(acc) > Number(cur) ? Number(acc) : Number(cur)
-    );
+
+    dataCallingFunction();
+  }, [runEffect]);
   // State values for watching modals and inputs
-  const [loading, setLoading] = useState(false);
   const [createOfferValue, setCreateOfferValue] = useState();
   const [updateOfferValue, setUpdateOfferValue] = useState();
   const [listingValue, setListingValue] = useState();
@@ -551,6 +549,16 @@ export default function NftId({
                       >
                         MojitoSwap
                       </a>
+                    </Link>{" "}
+                    |{" "}
+                    <Link href="https://app.kuswap.finance/#/swap">
+                      <a
+                        className={styles.dexLink}
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        KuSwap
+                      </a>
                     </Link>
                   </span>
                 )}
@@ -576,28 +584,30 @@ export default function NftId({
                   <Link href={`/collection/${collection}`}>
                     <a>{ipfsData[4]} </a>
                   </Link>
-                  <span
-                    className={styles.verified}
-                    onMouseOver={() => setVerificationDisplay(true)}
-                    onMouseOut={() => setVerificationDisplay(false)}
-                  >
-                    {deadAddress !== collectionInfo[0] &&
-                    collectionInfo[2] === 0 ? (
-                      <MdOutlineVerifiedUser />
-                    ) : (
-                      <CgDanger />
-                    )}{" "}
-                    {verificationDisplay ? (
-                      deadAddress !== collectionInfo[0] &&
+                  {collectionInfo && (
+                    <span
+                      className={styles.verified}
+                      onMouseOver={() => setVerificationDisplay(true)}
+                      onMouseOut={() => setVerificationDisplay(false)}
+                    >
+                      {deadAddress !== collectionInfo[0] &&
                       collectionInfo[2] === 0 ? (
-                        <span>Collection Verified</span>
+                        <MdOutlineVerifiedUser />
                       ) : (
-                        <span>Unverified!</span>
-                      )
-                    ) : (
-                      ""
-                    )}
-                  </span>
+                        <CgDanger />
+                      )}{" "}
+                      {verificationDisplay ? (
+                        deadAddress !== collectionInfo[0] &&
+                        collectionInfo[2] === 0 ? (
+                          <span>Collection Verified</span>
+                        ) : (
+                          <span>Unverified!</span>
+                        )
+                      ) : (
+                        ""
+                      )}
+                    </span>
+                  )}
                 </p>
                 <h2>{ipfsData[2]}</h2>
               </div>
@@ -767,10 +777,12 @@ export default function NftId({
                     onClick={
                       account !== ipfsData[5] &&
                       deadAddress !== nftSaleInfo[0] &&
-                      !offerer.some((addr) => addr === account)
+                      offerCreatorAddress &&
+                      !offerCreatorAddress.some((addr) => addr === account)
                         ? createOfferModalPop
                         : account !== ipfsData[5] &&
-                          offerer.some((addr) => addr === account)
+                          offerCreatorAddress &&
+                          offerCreatorAddress.some((addr) => addr === account)
                         ? cancelOffer
                         : account === ipfsData[5] &&
                           deadAddress === nftSaleInfo[0]
@@ -811,17 +823,20 @@ export default function NftId({
                         deadAddress === nftSaleInfo[0]
                           ? "transparent"
                           : account !== ipfsData[5] &&
-                            offerer.some((addr) => addr === account)
+                            offerCreatorAddress &&
+                            offerCreatorAddress.some((addr) => addr === account)
                           ? "#e73434"
                           : "",
                     }}
                   >
                     {account !== ipfsData[5] &&
                     deadAddress !== nftSaleInfo[0] &&
-                    !offerer.some((addr) => addr === account)
+                    offerCreatorAddress &&
+                    !offerCreatorAddress.some((addr) => addr === account)
                       ? "Make an Offer"
                       : account !== ipfsData[5] &&
-                        offerer.some((addr) => addr === account)
+                        offerCreatorAddress &&
+                        offerCreatorAddress.some((addr) => addr === account)
                       ? "Cancel Offer"
                       : account === ipfsData[5] &&
                         deadAddress === nftSaleInfo[0]
@@ -906,85 +921,86 @@ export default function NftId({
                     <div className={styles.offerHead}>
                       <h4>Price</h4>
                       <h4>Floor</h4>
-                      <h4>Offerer</h4>
+                      <h4>offerCreatorAddress</h4>
                     </div>
-                    {offer.map((offers, i) => (
-                      <div className={styles.offerBody} key={i}>
-                        <p>${offers.value}</p>
-                        <p>
-                          {deadAddress === nftSaleInfo[0]
-                            ? "xx"
-                            : offers.floorDifference}
-                          %{" "}
-                          {Math.sign(offers.floorDifference) === -1 ? (
-                            <span>Below</span>
-                          ) : (
-                            <span>Above</span>
-                          )}
-                        </p>
-                        <div
-                          onClick={
-                            account === offers.address
-                              ? createUpdateOfferModalPop
-                              : account === ipfsData[5] &&
-                                deadAddress !== nftSaleInfo[0]
-                              ? () =>
-                                  acceptAvailableOffer(
-                                    offers.value,
-                                    offers.address
-                                  )
-                              : deadSwitch
-                          }
-                          style={{
-                            color:
-                              (account === ipfsData[5] &&
-                                deadAddress !== nftSaleInfo[0]) ||
-                              account === offers.address
-                                ? "white"
-                                : "",
-                            backgroundColor:
-                              (account === ipfsData[5] &&
-                                deadAddress !== nftSaleInfo[0]) ||
-                              account === offers.address
-                                ? "black"
-                                : "",
-                            borderRadius:
-                              account === ipfsData[5] &&
-                              deadAddress !== nftSaleInfo[0] &&
-                              account === offers.address
-                                ? ""
-                                : "8px",
-                            cursor:
-                              (account === ipfsData[5] &&
-                                deadAddress !== nftSaleInfo[0]) ||
-                              account === offers.address
-                                ? "pointer"
-                                : "",
-                            border:
-                              (account === ipfsData[5] &&
-                                deadAddress !== nftSaleInfo[0]) ||
-                              account === offers.address
-                                ? "2px solid #000"
-                                : "",
-                          }}
-                          className={styles.offersContainer}
-                        >
-                          <div className={styles.function}>
-                            {account === offers.address ? (
-                              "Update"
-                            ) : account === ipfsData[5] &&
-                              deadAddress !== nftSaleInfo[0] ? (
-                              "Accept"
+                    {offer &&
+                      offer.map((offers, i) => (
+                        <div className={styles.offerBody} key={i}>
+                          <p>${offers.value}</p>
+                          <p>
+                            {deadAddress === nftSaleInfo[0]
+                              ? "xx"
+                              : offers.floorDifference}
+                            %{" "}
+                            {Math.sign(offers.floorDifference) === -1 ? (
+                              <span>Below</span>
                             ) : (
-                              <span>{`${offers.address.slice(
-                                0,
-                                5
-                              )}...${offers.address.slice(38, 42)}`}</span>
+                              <span>Above</span>
                             )}
+                          </p>
+                          <div
+                            onClick={
+                              account === offers.address
+                                ? createUpdateOfferModalPop
+                                : account === ipfsData[5] &&
+                                  deadAddress !== nftSaleInfo[0]
+                                ? () =>
+                                    acceptAvailableOffer(
+                                      offers.value,
+                                      offers.address
+                                    )
+                                : deadSwitch
+                            }
+                            style={{
+                              color:
+                                (account === ipfsData[5] &&
+                                  deadAddress !== nftSaleInfo[0]) ||
+                                account === offers.address
+                                  ? "white"
+                                  : "",
+                              backgroundColor:
+                                (account === ipfsData[5] &&
+                                  deadAddress !== nftSaleInfo[0]) ||
+                                account === offers.address
+                                  ? "black"
+                                  : "",
+                              borderRadius:
+                                account === ipfsData[5] &&
+                                deadAddress !== nftSaleInfo[0] &&
+                                account === offers.address
+                                  ? ""
+                                  : "8px",
+                              cursor:
+                                (account === ipfsData[5] &&
+                                  deadAddress !== nftSaleInfo[0]) ||
+                                account === offers.address
+                                  ? "pointer"
+                                  : "",
+                              border:
+                                (account === ipfsData[5] &&
+                                  deadAddress !== nftSaleInfo[0]) ||
+                                account === offers.address
+                                  ? "2px solid #000"
+                                  : "",
+                            }}
+                            className={styles.offersContainer}
+                          >
+                            <div className={styles.function}>
+                              {account === offers.address ? (
+                                "Update"
+                              ) : account === ipfsData[5] &&
+                                deadAddress !== nftSaleInfo[0] ? (
+                                "Accept"
+                              ) : (
+                                <span>{`${offers.address.slice(
+                                  0,
+                                  5
+                                )}...${offers.address.slice(38, 42)}`}</span>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 )}
               </div>
@@ -1077,7 +1093,7 @@ export default function NftId({
           </div>
         </div>
         <div className={styles.footerContainer}>
-          {extraListings.length > 0 && (
+          {extraListings && extraListings.length > 0 && (
             <div className={styles.moreItems}>
               <h2>More Items from the {ipfsData[4]}</h2>
               <div className={styles.SliderContainer}>
@@ -1120,69 +1136,28 @@ export async function getServerSideProps({ params, res }) {
     "Cache-Control",
     "public, s-maxage=43200, stale-while-revalidate=60"
   );
-  const nftID = params.nftId;
-  const collection = params.collection;
-  const contract = contracts.contractInstance;
-  const nftSaleInfo = await contract.sellNFT(collection, nftID);
-  const offerInfo = await contract.availableOffers(collection, nftID);
-  const threeListings = await contract.availableListings(collection);
-  const collectionInfo = await contract.collection(collection);
-  const instance = new Contract(collection, nftABI, contracts.provider);
-  const nftListings = threeListings[0].slice(-2);
-  const listingDetails = threeListings[1].slice(-2);
-  const extraListings = [];
-  const numValue = nftListings.map((listing) => listing.toNumber());
-  const hex = listingDetails.map((hexVal) => hexVal[1]);
-  for (let i = 0; i < numValue.length; i++) {
-    if (numValue[i] !== Number(nftID)) {
-      const tokenDetails = await instance.tokenURI(numValue[i]);
-      const ipfsLink = tokenDetails.includes("ipfs://", 0)
-        ? tokenDetails.replace(
-            "ipfs://",
-            "https://ipfsfiles.distant.finance/ipfs/"
-          )
-        : tokenDetails;
-      const { image, name } = await fetch(ipfsLink).then((r) => r.json());
-      const imageUrl = image.includes("ipfs://", 0)
-        ? image.replace("ipfs://", "https://ipfsfiles.distant.finance/ipfs/")
-        : image;
-      const obj = {
-        image: imageUrl,
-        name: name,
-        value: utils.formatEther(hex[i]),
-        tokenId: numValue[i],
-      };
-      extraListings.push(obj);
+  const { nftId, collection } = params;
+  const data = await fetch(
+    "http://localhost:3000/api/blockchain/nftid/serverside",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nftId: nftId,
+        collection: collection,
+      }),
     }
-  }
-  const tokenDetails = await instance.tokenURI(nftID);
-  const owner = await instance.ownerOf(nftID);
-  const ipfsLink = tokenDetails.includes("ipfs://", 0)
-    ? tokenDetails.replace("ipfs://", "https://ipfsfiles.distant.finance/ipfs/")
-    : tokenDetails;
-  const { image, description, name, attributes } = await fetch(ipfsLink).then(
-    (r) => r.json()
-  );
-  const imageLink = image.includes("ipfs://", 0)
-    ? image.replace("ipfs://", "https://ipfsfiles.distant.finance/ipfs/")
-    : image;
-  const collectionName = await instance.name();
-  const ipfsData = [];
-  ipfsData.push(
-    imageLink,
-    description,
-    name,
-    attributes,
-    collectionName,
-    owner
-  );
+  )
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
+  const { ipfsData, nftSaleInfo } = data;
   return {
     props: {
       ipfsData: ipfsData,
       nftSaleInfo: JSON.parse(JSON.stringify(nftSaleInfo)),
-      offerInfo: JSON.parse(JSON.stringify(offerInfo[1])),
-      collectionInfo: JSON.parse(JSON.stringify(collectionInfo)),
-      extraListings: JSON.parse(JSON.stringify(extraListings)),
+      params: params,
     },
   };
 }

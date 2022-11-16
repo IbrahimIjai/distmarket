@@ -1956,7 +1956,8 @@ const queryUrl = "https://thegraph.kcc.network/subgraphs/name/mart";
 const deadAddress = "0x0000000000000000000000000000000000000000";
 
 const fetchCollection = async (address) => {
-  const link = collectionsHost + `/${address}.json`;
+  const collection = address.toLowerCase();
+  const link = collectionsHost + `/${collection}.json`;
   const data = await fetch(link).then((res) => res.json());
   return data;
 };

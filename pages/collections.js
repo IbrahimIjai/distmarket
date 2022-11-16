@@ -89,7 +89,7 @@ export default function Collections({ data }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const Kontract = contracts.contractInstance;
   const collections = await Kontract.supportedCollections();
   const arrayData = [];
@@ -112,7 +112,6 @@ export async function getServerSideProps() {
       })
       .catch((err) => console.log("Error fetching data: ", err));
   }
-  // const res = await contracts.contractInstance.maxFees();
   const data = [];
   for (let i = 0; i < arrayData.length; i++) {
     const links = await contracts.fetchCollection(arrayData[i].id);

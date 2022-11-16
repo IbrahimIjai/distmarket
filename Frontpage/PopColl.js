@@ -1,26 +1,10 @@
 import styles from "./styles/popcol.module.css";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { contracts, nftABI } from "../constants/ABIs";
 import Link from "next/link";
-import { utils, Contract } from "ethers";
-import { MdOutlineGppGood } from "react-icons/md";
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import MyLoader from "../components/Skeleton";
 import Shimmer from "../components/Shimmer";
 
-const collectionDataQuery = `
-query MyQuery ($address: ID){
-  collection(id: $address) {
-    id
-    name
-    totalSupply
-    totalVolume
-    totalSales
-    topSale
-  }
-}
-`;
 const PopularCollection = ({ address }) => {
   const [runEffect, setRunEffect] = useState(false);
   const init = setTimeout(() => {
@@ -35,62 +19,16 @@ const PopularCollection = ({ address }) => {
   const [topCollections, setTopCollections] = useState(null);
   useEffect(() => {
     const main = async () => {
-      const collectionsDetails = [];
-      for (let i = 0; i < address.length; i++) {
-        const instance = new Contract(address[i], nftABI, contracts.provider);
-        let object;
-        const client = new ApolloClient({
-          uri: contracts.queryUrl,
-          cache: new InMemoryCache(),
-        });
-        client
-          .query({
-            query: gql(collectionDataQuery),
-            variables: {
-              address: address[i].toLowerCase(),
-            },
-          })
-          .then((data) => (object = data.data.collection))
-          .catch((err) => console.log("Error fetching data: ", err));
-        const uri = await instance.tokenURI("1");
-        const url = uri.includes("ipfs://", 0)
-          ? uri.replace("ipfs://", "https://ipfsfiles.distant.finance/ipfs/")
-          : uri;
-        const data = await fetch(url).then((res) => res.json());
-        const image = data.image.includes("ipfs://", 0)
-          ? data.image.replace(
-              "ipfs://",
-              "https://ipfsfiles.distant.finance/ipfs/"
-            )
-          : data.image;
-        const results = await contracts.contractInstance.availableListings(
-          address[i]
-        );
-        const listings = results[1];
-        if (listings.length > 0) {
-          const prices = listings.map((listing) =>
-            utils.formatEther(listing[1])
-          );
-          const lowestValue =
-            prices.length > 0 &&
-            prices.reduce((acc, cur) =>
-              Number(acc) < Number(cur) ? acc : cur
-            );
-          const obj = {
-            image: image,
-            floor: lowestValue,
-            items: prices.length,
-            name: object.name,
-            address: object.id,
-            topSale: object.topSale,
-            totalSupply: object.totalSupply,
-            totalSales: object.totalSales,
-            totalVolume: object.totalVolume,
-          };
-          collectionsDetails.push(obj);
-        }
-      }
-      setTopCollections(collectionsDetails);
+      const data = await fetch("api/blockchain/topcollections", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(address),
+      })
+        .then((res) => res.json())
+        .catch((error) => console.log(error));
+      setTopCollections(data);
     };
     main();
   }, [runEffect]);
