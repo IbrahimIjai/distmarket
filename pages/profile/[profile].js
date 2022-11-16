@@ -12,7 +12,7 @@ export default function Profile({ profile, dataArray, indexValue, code }) {
   useEffect(() => {
     const main = async () => {
       const nftData = await fetch(
-        "http://localhost:3000/api/blockchain/profile/destructure",
+        "https://mart.distant.finance/api/blockchain/profile/destructure",
         {
           method: "POST",
           headers: {
@@ -27,7 +27,7 @@ export default function Profile({ profile, dataArray, indexValue, code }) {
       const tokenId = dataArray.map((data) => data.identifier);
       const collection = dataArray.map((data) => data.collection.id);
       const nftMarketState = await fetch(
-        "http://localhost:3000/api/blockchain/profile/marketstate",
+        "https://mart.distant.finance/api/blockchain/profile/marketstate",
         {
           method: "POST",
           headers: {
@@ -155,7 +155,7 @@ export default function Profile({ profile, dataArray, indexValue, code }) {
 export async function getServerSideProps({ params }) {
   const profile = params.profile;
   const profileData = await fetch(
-    "http://localhost:3000/api/blockchain/profile/serverside",
+    "https://mart.distant.finance/api/blockchain/profile/serverside",
     {
       method: "POST",
       headers: {

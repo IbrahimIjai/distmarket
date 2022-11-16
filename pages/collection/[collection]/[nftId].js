@@ -90,7 +90,7 @@ export default function NftId({ nftSaleInfo, ipfsData, params }) {
   useEffect(() => {
     const dataCallingFunction = async () => {
       const offerData = await fetch(
-        "http://localhost:3000/api/blockchain/nftid/offersinfo",
+        "https://mart.distant.finance/api/blockchain/nftid/offersinfo",
         {
           method: "POST",
           headers: {
@@ -110,7 +110,7 @@ export default function NftId({ nftSaleInfo, ipfsData, params }) {
       setHighestOffer(offerData.highestOffer);
       setOfferCreatorAddress(offerData.offerCreatorAddress);
       const extraListingsData = await fetch(
-        "http://localhost:3000/api/blockchain/nftid/extralistings",
+        "https://mart.distant.finance/api/blockchain/nftid/extralistings",
         {
           method: "POST",
           headers: {
@@ -1138,7 +1138,7 @@ export async function getServerSideProps({ params, res }) {
   );
   const { nftId, collection } = params;
   const data = await fetch(
-    "http://localhost:3000/api/blockchain/nftid/serverside",
+    "https://mart.distant.finance/api/blockchain/nftid/serverside",
     {
       method: "POST",
       headers: {

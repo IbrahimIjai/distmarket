@@ -16,7 +16,7 @@ export default function Home({ listings, obj, collection }) {
     const main = async () => {
       try {
         const collectionStats = await fetch(
-          "http://localhost:3000/api/blockchain/collection/collectionstats",
+          "https://mart.distant.finance/api/blockchain/collection/collectionstats",
           {
             method: "POST",
             headers: {
@@ -33,7 +33,7 @@ export default function Home({ listings, obj, collection }) {
         setStats(collectionStats);
         const { bestOffers } = collectionStats;
         const listedNfts = await fetch(
-          "http://localhost:3000/api/blockchain/collection/listednfts",
+          "https://mart.distant.finance/api/blockchain/collection/listednfts",
           {
             method: "POST",
             headers: {
@@ -267,7 +267,7 @@ export async function getServerSideProps({ params, res }) {
   let listingInfo = null;
   let obj = null;
   const results = await fetch(
-    "http://localhost:3000/api/blockchain/collection/nftslisted",
+    "https://mart.distant.finance/api/blockchain/collection/nftslisted",
     {
       method: "POST",
       headers: {
@@ -279,7 +279,7 @@ export async function getServerSideProps({ params, res }) {
     .then((res) => res.json())
     .catch((err) => console.log(err));
   obj = await fetch(
-    "http://localhost:3000/api/blockchain/collection/nftcollectiondetails",
+    "https://mart.distant.finance/api/blockchain/collection/nftcollectiondetails",
     {
       method: "POST",
       headers: {
