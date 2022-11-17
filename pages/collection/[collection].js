@@ -15,37 +15,33 @@ export default function Home({ listings, obj, collection }) {
   useEffect(() => {
     const main = async () => {
       try {
-        const collectionStats = await fetch(
-          "https://mart.distant.finance/api/blockchain/collection/collectionstats",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              listings,
-              collection,
-            }),
-          }
-        )
+        let url = "/api/blockchain/collection/collectionstats";
+        const collectionStats = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            listings,
+            collection,
+          }),
+        })
           .then((res) => res.json())
           .catch((err) => console.log(err));
         setStats(collectionStats);
         const { bestOffers } = collectionStats;
-        const listedNfts = await fetch(
-          "https://mart.distant.finance/api/blockchain/collection/listednfts",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              listings,
-              bestOffers,
-              collection,
-            }),
-          }
-        )
+        let uri = "/api/blockchain/collection/listednfts";
+        const listedNfts = await fetch(uri, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            listings,
+            bestOffers,
+            collection,
+          }),
+        })
           .then((res) => res.json())
           .catch((err) => console.log(err));
         setListedNFTs(listedNfts);
@@ -266,28 +262,24 @@ export async function getServerSideProps({ params, res }) {
   const collection = params.collection;
   let listingInfo = null;
   let obj = null;
-  const results = await fetch(
-    "https://mart.distant.finance/api/blockchain/collection/nftslisted",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ collection: collection }),
-    }
-  )
+  let url = "/api/blockchain/collection/nftslisted";
+  const results = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ collection: collection }),
+  })
     .then((res) => res.json())
     .catch((err) => console.log(err));
-  obj = await fetch(
-    "https://mart.distant.finance/api/blockchain/collection/nftcollectiondetails",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ collection: collection }),
-    }
-  )
+  let uri = "/api/blockchain/collection/nftcollectiondetails";
+  obj = await fetch(uri, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ collection: collection }),
+  })
     .then((res) => res.json())
     .catch((err) => console.log(err));
   results.length > 0 ? (listingInfo = results) : (listingInfo = null);

@@ -89,39 +89,35 @@ export default function NftId({ nftSaleInfo, ipfsData, params }) {
   //Offers section
   useEffect(() => {
     const dataCallingFunction = async () => {
-      const offerData = await fetch(
-        "https://mart.distant.finance/api/blockchain/nftid/offersinfo",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nftId: nftId,
-            salePrice: salePrice,
-            collection: collection,
-          }),
-        }
-      )
+      let url = "/api/blockchain/nftid/offersinfo";
+      const offerData = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nftId: nftId,
+          salePrice: salePrice,
+          collection: collection,
+        }),
+      })
         .then((res) => res.json())
         .catch((err) => console.log(err));
       setOffer(offerData.offer);
       setCollectionInfo(offerData.collectionInfo);
       setHighestOffer(offerData.highestOffer);
       setOfferCreatorAddress(offerData.offerCreatorAddress);
-      const extraListingsData = await fetch(
-        "https://mart.distant.finance/api/blockchain/nftid/extralistings",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nftId: nftId,
-            collection: collection,
-          }),
-        }
-      )
+      let uri = "/api/blockchain/nftid/extralistings";
+      const extraListingsData = await fetch(uri, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nftId: nftId,
+          collection: collection,
+        }),
+      })
         .then((res) => res.json())
         .catch((err) => console.log(err));
       setExtraListings(extraListingsData);
@@ -1137,19 +1133,17 @@ export async function getServerSideProps({ params, res }) {
     "public, s-maxage=43200, stale-while-revalidate=60"
   );
   const { nftId, collection } = params;
-  const data = await fetch(
-    "https://mart.distant.finance/api/blockchain/nftid/serverside",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nftId: nftId,
-        collection: collection,
-      }),
-    }
-  )
+  let url = "/api/blockchain/nftid/serverside";
+  const data = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      nftId: nftId,
+      collection: collection,
+    }),
+  })
     .then((res) => res.json())
     .catch((err) => console.log(err));
   const { ipfsData, nftSaleInfo } = data;

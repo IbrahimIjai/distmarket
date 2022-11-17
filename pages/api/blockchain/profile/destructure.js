@@ -1,7 +1,8 @@
 import { createClient } from "redis";
+import { contracts } from "../../../../constants/ABIs";
 export default async function (req, res) {
   const { data, profile } = req.body;
-  const redis = createClient();
+  const redis = createClient({ url: contracts.redis });
   await redis.connect();
   const nftdata = await redis.get(`${profile}/nftData`);
   if (nftdata) {

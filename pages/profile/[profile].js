@@ -11,35 +11,31 @@ export default function Profile({ profile, dataArray, indexValue, code }) {
   const [nftState, setNftState] = useState([]);
   useEffect(() => {
     const main = async () => {
-      const nftData = await fetch(
-        "https://mart.distant.finance/api/blockchain/profile/destructure",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ data: dataArray, profile: profile }),
-        }
-      )
+      let url = "/api/blockchain/profile/destructure";
+      const nftData = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data: dataArray, profile: profile }),
+      })
         .then((res) => res.json())
         .catch((err) => console.log(err));
       setAllData(nftData);
       const tokenId = dataArray.map((data) => data.identifier);
       const collection = dataArray.map((data) => data.collection.id);
-      const nftMarketState = await fetch(
-        "https://mart.distant.finance/api/blockchain/profile/marketstate",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            collection: collection,
-            tokenId: tokenId,
-            profile: profile,
-          }),
-        }
-      )
+      let uri = "/api/blockchain/profile/marketstate";
+      const nftMarketState = await fetch(uri, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          collection: collection,
+          tokenId: tokenId,
+          profile: profile,
+        }),
+      })
         .then((res) => res.json())
         .catch((err) => console.log(err));
       setNftState(nftMarketState);
@@ -154,16 +150,14 @@ export default function Profile({ profile, dataArray, indexValue, code }) {
 
 export async function getServerSideProps({ params }) {
   const profile = params.profile;
-  const profileData = await fetch(
-    "https://mart.distant.finance/api/blockchain/profile/serverside",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ profile: profile }),
-    }
-  )
+  let url = "/api/blockchain/profile/serverside";
+  const profileData = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ profile: profile }),
+  })
     .then((res) => res.json())
     .catch((err) => console.log(err));
   const { dataArray, indexValue, code } = profileData;

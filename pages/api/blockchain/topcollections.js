@@ -16,7 +16,9 @@ query MyQuery ($address: ID){
 }
 `;
 export default async function (req, res) {
-  const redis = createClient();
+  const redis = createClient({
+    url: contracts.redis,
+  });
   redis.on("error", (err) =>
     console.log("Redis Client Error in Top Collections", err)
   );

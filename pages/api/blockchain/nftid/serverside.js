@@ -1,9 +1,9 @@
 import { contracts, nftABI } from "../../../../constants/ABIs";
-import { Contract, utils } from "ethers";
+import { Contract } from "ethers";
 import { createClient } from "redis";
 export default async function (req, res) {
   const { nftId, collection } = req.body;
-  const redis = createClient();
+  const redis = createClient({ url: contracts.redis });
   redis.on("error", (err) => {
     console.log("Redis Client Error in NFT ID Server Side", err);
     throw new Error("Errors too much");

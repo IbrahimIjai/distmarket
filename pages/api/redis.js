@@ -1,15 +1,6 @@
 import { createClient } from "redis";
+import { contracts } from "../../constants/ABIs";
 
-// const redis = createClient({
-//   url: `redis://default:${process.env.REACT_REDISKEY}@redis-19871.c258.us-east-1-4.ec2.cloud.redislabs.com:19871`,
-// });
-// export async function (req, res) {
-// redis.on("error", (err) => console.log("Redis Client Error", err));
-//   await redis.connect();
-//   await redis.set("newName", req.body.name);
-//   await redis.disconnect();
-//   res.json(req.body.name);
-// }
 const scheme = {
   story: "Tales of the fox",
   author: "Chinua Achebe",
@@ -26,16 +17,20 @@ const fetchData = () => {
   return data;
 };
 export default async function (req, res) {
-  const redislabs = createClient();
+  const redislabs = createClient({
+    url: contracts.redis,
+  });
   await redislabs.connect();
   const response = await redislabs.get("key");
   if (response) {
     let data = JSON.parse(response);
+    console.log("Cache Hit");
     res.json(data);
   } else {
     let data = fetchData();
     await stall(6000);
     await redislabs.setEx("key", 2000, JSON.stringify(data));
+    console.log("Cache Miss");
     res.json(data);
   }
   await redislabs.disconnect();

@@ -3,7 +3,7 @@ import { Contract, utils } from "ethers";
 import { createClient } from "redis";
 export default async function (req, res) {
   const { nftId, collection } = req.body;
-  const redis = createClient();
+  const redis = createClient({ url: contracts.redis });
   redis.on("error", (err) =>
     console.log("Redis Client Error in Extra Listings", err)
   );

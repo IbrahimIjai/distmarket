@@ -1954,6 +1954,7 @@ const collectionsHost =
   "https://ipfsfiles.distant.finance/ipfs/Qmc6rfqRsswqzsJV9nDoLbvQy2yk8hCDQteaGt86iAs1Hy";
 const queryUrl = "https://thegraph.kcc.network/subgraphs/name/mart";
 const deadAddress = "0x0000000000000000000000000000000000000000";
+const redis = `redis://default:${process.env.REACT_REDISKEY}@redis-19871.c258.us-east-1-4.ec2.cloud.redislabs.com:19871`;
 
 const fetchCollection = async (address) => {
   const collection = address.toLowerCase();
@@ -1972,6 +1973,7 @@ const contracts = {
   contractInstance,
   tokenInstance,
   fetchCollection,
+  redis,
 };
 
 export { marketplaceABI, nftABI, tokenABI, contracts };

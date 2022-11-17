@@ -19,7 +19,8 @@ const PopularCollection = ({ address }) => {
   const [topCollections, setTopCollections] = useState(null);
   useEffect(() => {
     const main = async () => {
-      const data = await fetch("api/blockchain/topcollections", {
+      const url = "/api/blockchain/topcollections";
+      const data = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

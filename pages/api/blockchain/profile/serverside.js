@@ -16,7 +16,9 @@ const dataQuery = `
 }`;
 export default async function (req, res) {
   const profile = req.body.profile;
-  const redis = createClient();
+  const redis = createClient({
+    url: contracts.redis,
+  });
   await redis.connect();
   const profileData = await redis.get(`${profile}/profiledata`);
   if (profileData) {

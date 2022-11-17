@@ -3,7 +3,7 @@ import { Contract } from "ethers";
 import { createClient } from "redis";
 export default async function (req, res) {
   const { listings, bestOffers, collection } = req.body;
-  const redis = createClient();
+  const redis = createClient({ url: contracts.redis });
   await redis.connect();
   const dataNfts = await redis.get(`${collection}/listedNfts`);
   if (dataNfts) {

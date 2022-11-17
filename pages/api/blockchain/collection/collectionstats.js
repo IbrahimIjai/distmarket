@@ -3,7 +3,7 @@ import { BigNumber, utils } from "ethers";
 import { createClient } from "redis";
 export default async function (req, res) {
   const { listings, collection } = req.body;
-  const redis = createClient();
+  const redis = createClient({ url: contracts.redis });
   await redis.connect();
   const data = await redis.get(`${collection}/collectionstats`);
   if (data) {
