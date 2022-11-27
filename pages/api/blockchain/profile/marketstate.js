@@ -1,6 +1,6 @@
 import { contracts } from "../../../../constants/ABIs";
 import { createClient } from "redis";
-export default async function (req, res) {
+export default async function handler(req, res) {
   const { collection, tokenId, profile } = req.body;
   const redis = createClient({
     url: `redis://default:${process.env.REACT_REDISKEY}@redis-19871.c258.us-east-1-4.ec2.cloud.redislabs.com:19871`,

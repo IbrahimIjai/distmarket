@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useWeb3React } from "@web3-react/core";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { contracts } from "../../constants/ABIs";
 
 export default function Profile({ profile, dataArray, indexValue, code }) {
   const { account } = useWeb3React();
@@ -11,7 +12,7 @@ export default function Profile({ profile, dataArray, indexValue, code }) {
   const [nftState, setNftState] = useState([]);
   useEffect(() => {
     const main = async () => {
-      let url = "/api/blockchain/profile/destructure";
+      let url = `${contracts.queryHost}/api/blockchain/profile/destructure`;
       const nftData = await fetch(url, {
         method: "POST",
         headers: {
@@ -24,7 +25,7 @@ export default function Profile({ profile, dataArray, indexValue, code }) {
       setAllData(nftData);
       const tokenId = dataArray.map((data) => data.identifier);
       const collection = dataArray.map((data) => data.collection.id);
-      let uri = "/api/blockchain/profile/marketstate";
+      let uri = `${contracts.queryHost}/api/blockchain/profile/marketstate`;
       const nftMarketState = await fetch(uri, {
         method: "POST",
         headers: {
@@ -150,7 +151,8 @@ export default function Profile({ profile, dataArray, indexValue, code }) {
 
 export async function getServerSideProps({ params }) {
   const profile = params.profile;
-  let url = "/api/blockchain/profile/serverside";
+
+  let url = `${contracts.queryHost}/api/blockchain/profile/serverside`;
   const profileData = await fetch(url, {
     method: "POST",
     headers: {

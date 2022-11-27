@@ -16,7 +16,7 @@ const fetchData = () => {
   data = scheme;
   return data;
 };
-export default async function (req, res) {
+export default async function handler(req, res) {
   const redislabs = createClient({
     url: contracts.redis,
   });

@@ -1,7 +1,7 @@
 import { contracts } from "../../../../constants/ABIs";
 import { BigNumber, utils } from "ethers";
 import { createClient } from "redis";
-export default async function (req, res) {
+export default async function handler(req, res) {
   const { listings, collection } = req.body;
   const redis = createClient({ url: contracts.redis });
   await redis.connect();

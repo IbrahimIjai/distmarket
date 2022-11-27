@@ -14,7 +14,7 @@ const dataQuery = `
     }
   }
 }`;
-export default async function (req, res) {
+export default async function handler(req, res) {
   const profile = req.body.profile;
   const redis = createClient({
     url: contracts.redis,

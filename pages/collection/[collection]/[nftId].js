@@ -89,7 +89,7 @@ export default function NftId({ nftSaleInfo, ipfsData, params }) {
   //Offers section
   useEffect(() => {
     const dataCallingFunction = async () => {
-      let url = "/api/blockchain/nftid/offersinfo";
+      let url = `${contracts.queryHost}/api/blockchain/nftid/offersinfo`;
       const offerData = await fetch(url, {
         method: "POST",
         headers: {
@@ -107,7 +107,7 @@ export default function NftId({ nftSaleInfo, ipfsData, params }) {
       setCollectionInfo(offerData.collectionInfo);
       setHighestOffer(offerData.highestOffer);
       setOfferCreatorAddress(offerData.offerCreatorAddress);
-      let uri = "/api/blockchain/nftid/extralistings";
+      let uri = `${contracts.queryHost}/api/blockchain/nftid/extralistings`;
       const extraListingsData = await fetch(uri, {
         method: "POST",
         headers: {
@@ -1133,7 +1133,7 @@ export async function getServerSideProps({ params, res }) {
     "public, s-maxage=43200, stale-while-revalidate=60"
   );
   const { nftId, collection } = params;
-  let url = "/api/blockchain/nftid/serverside";
+  let url = `${contracts.queryHost}/api/blockchain/nftid/serverside`;
   const data = await fetch(url, {
     method: "POST",
     headers: {

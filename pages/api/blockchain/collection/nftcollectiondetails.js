@@ -10,7 +10,7 @@ const collectionDataQuery = `
     }
   }
 `;
-export default async function (req, res) {
+export default async function handler(req, res) {
   const collection = req.body.collection;
   const redis = createClient({ url: contracts.redis });
   await redis.connect();

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { BsThreeDots, BsGlobe, BsTwitter, BsTelegram } from "react-icons/bs";
 import Link from "next/link";
 import Shimmer from "../../components/Shimmer";
+import { contracts } from "../../constants/ABIs";
 
 export default function Home({ listings, obj, collection }) {
   // States
@@ -15,7 +16,7 @@ export default function Home({ listings, obj, collection }) {
   useEffect(() => {
     const main = async () => {
       try {
-        let url = "/api/blockchain/collection/collectionstats";
+        let url = `${contracts.queryHost}/api/blockchain/collection/collectionstats`;
         const collectionStats = await fetch(url, {
           method: "POST",
           headers: {
@@ -30,7 +31,7 @@ export default function Home({ listings, obj, collection }) {
           .catch((err) => console.log(err));
         setStats(collectionStats);
         const { bestOffers } = collectionStats;
-        let uri = "/api/blockchain/collection/listednfts";
+        let uri = `${contracts.queryHost}/api/blockchain/collection/listednfts`;
         const listedNfts = await fetch(uri, {
           method: "POST",
           headers: {
@@ -262,7 +263,7 @@ export async function getServerSideProps({ params, res }) {
   const collection = params.collection;
   let listingInfo = null;
   let obj = null;
-  let url = "/api/blockchain/collection/nftslisted";
+  let url = `${contracts.queryHost}/api/blockchain/collection/nftslisted`;
   const results = await fetch(url, {
     method: "POST",
     headers: {
@@ -272,7 +273,7 @@ export async function getServerSideProps({ params, res }) {
   })
     .then((res) => res.json())
     .catch((err) => console.log(err));
-  let uri = "/api/blockchain/collection/nftcollectiondetails";
+  let uri = `${contracts.queryHost}/api/blockchain/collection/nftcollectiondetails`;
   obj = await fetch(uri, {
     method: "POST",
     headers: {

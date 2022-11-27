@@ -1951,11 +1951,11 @@ const provider = new ethers.providers.JsonRpcProvider(mumbai);
 const contractInstance = new Contract(marketplace, marketplaceABI, provider);
 const tokenInstance = new Contract(token, tokenABI, provider);
 const collectionsHost =
-  "https://ipfsfiles.distant.finance/ipfs/Qmc6rfqRsswqzsJV9nDoLbvQy2yk8hCDQteaGt86iAs1Hy";
+  "https://ipfsfiles.distant.finance/ipfs/QmRZVGwcAPp9gDUX1LDzRaDhZEpTqAAA8Jg6rzcrv3pdBZ";
 const queryUrl = "https://thegraph.kcc.network/subgraphs/name/mart";
 const deadAddress = "0x0000000000000000000000000000000000000000";
 const redis = `redis://default:${process.env.REACT_REDISKEY}@redis-19871.c258.us-east-1-4.ec2.cloud.redislabs.com:19871`;
-const queryHost = "http://localhost:3000";
+const queryHost = "https://beta.distant.finance";
 const fetchCollection = async (address) => {
   const collection = address.toLowerCase();
   const link = collectionsHost + `/${collection}.json`;

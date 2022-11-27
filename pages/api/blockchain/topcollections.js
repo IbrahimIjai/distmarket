@@ -15,7 +15,7 @@ query MyQuery ($address: ID){
   }
 }
 `;
-export default async function (req, res) {
+export default async function handler(req, res) {
   const redis = createClient({
     url: contracts.redis,
   });

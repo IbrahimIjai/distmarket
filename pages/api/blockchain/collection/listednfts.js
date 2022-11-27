@@ -1,7 +1,7 @@
 import { contracts, nftABI } from "../../../../constants/ABIs";
 import { Contract } from "ethers";
 import { createClient } from "redis";
-export default async function (req, res) {
+export default async function handler(req, res) {
   const { listings, bestOffers, collection } = req.body;
   const redis = createClient({ url: contracts.redis });
   await redis.connect();
