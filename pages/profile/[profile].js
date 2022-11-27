@@ -22,6 +22,7 @@ export default function Profile({ profile, dataArray, indexValue, code }) {
       })
         .then((res) => res.json())
         .catch((err) => console.log(err));
+      console.log(nftData);
       setAllData(nftData);
       const tokenId = dataArray.map((data) => data.identifier);
       const collection = dataArray.map((data) => data.collection.id);
@@ -41,7 +42,7 @@ export default function Profile({ profile, dataArray, indexValue, code }) {
         .catch((err) => console.log(err));
       setNftState(nftMarketState);
     };
-    indexValue !== null && main();
+    main();
   }, []);
   return (
     <main className={styles.main}>
@@ -60,7 +61,7 @@ export default function Profile({ profile, dataArray, indexValue, code }) {
             <div className={styles.profileImage}>
               <Image
                 src={
-                  allData[indexValue] !== undefined
+                  allData && allData[indexValue] !== undefined
                     ? allData[indexValue].image
                     : "/defaultImage.png"
                 }
