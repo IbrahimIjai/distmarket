@@ -1951,7 +1951,7 @@ const provider = new ethers.providers.JsonRpcProvider(mumbai);
 const contractInstance = new Contract(marketplace, marketplaceABI, provider);
 const tokenInstance = new Contract(token, tokenABI, provider);
 const collectionsHost =
-  "https://ipfsfiles.distant.finance/ipfs/QmRZVGwcAPp9gDUX1LDzRaDhZEpTqAAA8Jg6rzcrv3pdBZ";
+  "https://ipfsfiles.distant.finance/ipfs/QmSNxKjzmJoYtGajE9UwLimkbBb3gvcfuw1pmPQHDCBPZJ";
 const queryUrl = "https://thegraph.kcc.network/subgraphs/name/mart";
 const deadAddress = "0x0000000000000000000000000000000000000000";
 const redis = `redis://default:iEWR1FHnlHpT8Ay8ZHdP4yBP1hSRTxCK@redis-19871.c258.us-east-1-4.ec2.cloud.redislabs.com:19871`;
