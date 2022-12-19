@@ -1955,7 +1955,8 @@ const collectionsHost =
 const queryUrl = "https://thegraph.kcc.network/subgraphs/name/mart";
 const deadAddress = "0x0000000000000000000000000000000000000000";
 const redis = `redis://default:iEWR1FHnlHpT8Ay8ZHdP4yBP1hSRTxCK@redis-19871.c258.us-east-1-4.ec2.cloud.redislabs.com:19871`;
-const queryHost = "https://beta.distant.finance";
+// const queryHost = "https://beta.distant.finance";
+const queryHost = "http://localhost:3000";
 const fetchCollection = async (address) => {
   const collection = address.toLowerCase();
   const link = collectionsHost + `/${collection}.json`;
